@@ -4,7 +4,7 @@
   "verifiers_commit": "5dad16d40e2d025672fdb7aa75b6540c0053e4e0",
   "editors": [
     {
-      "editor": "Terra 6.1",
+      "editor": "6.1-terra",
       "results_csv": "results/ten-families-v022/gemma-3-4b-it-prime.csv",
       "editor_model": "gpt-6.1-terra",
       "target_model_id": "google/gemma-3-4b-it",
@@ -444,7 +444,7 @@
       "reward_per_1000_tokens": 0.00032131958933770345
     },
     {
-      "editor": "Sol 6.1",
+      "editor": "6.1-sol (low)",
       "results_csv": "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv",
       "editor_model": "gpt-6.1-sol",
       "target_model_id": "google/gemma-3-4b-it",
@@ -2657,6 +2657,27 @@
       "reasoning_tokens": 40316,
       "mean_tokens_per_episode": 452060.6,
       "reward_per_1000_tokens": 0.0001211483062978319
+    },
+    {
+      "editor": "6.1-sol (medium)",
+      "results_csv": "results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv",
+      "editor_model": "gpt-6.1-sol",
+      "reasoning_effort": "medium",
+      "target_model_id": "google/gemma-3-4b-it",
+      "episode_count": 30,
+      "calls": 883,
+      "target_forward_tokens": 80089,
+      "sum_reward": 13.801623818529237,
+      "macro_reward": 0.4600541272843079,
+      "input_tokens": 53451163,
+      "output_tokens": 142170,
+      "total_tokens": 53593333,
+      "cached_input_tokens": 51488625,
+      "cache_write_input_tokens": 1959889,
+      "reasoning_tokens": 48456,
+      "mean_tokens_per_episode": 1786444.4333333333,
+      "reward_per_1000_tokens": 0.00025752501376485084,
+      "accounting_source": "883 provider receipts, all service_tier=default; completed medium run 2026-11-04. Aggregate usage; per-episode token breakdown not included."
     }
   ]
 }
