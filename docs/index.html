@@ -149,11 +149,11 @@
    <section class="section task-examples" id="tasks">
     <div class="container is-max-desktop"><div class="examples-intro"><p class="section-kicker">Ten task families</p>
      <h2 class="title is-3">What an edit is asked to do</h2>
-     <p>The ten families mix challenges that ask for the inhibition or stimulation of particular capabilities, and allosteric modulation that unblocks or redirects how a capability is expressed. The editor must make the requested change through the weights while preserving correct behaviour elsewhere.</p>
+     <p>The ten families mix challenges that ask for the inhibition or stimulation of particular capabilities, and modulation that unblocks or redirects how a capability is expressed. The editor must make the requested change through the weights while preserving correct behaviour elsewhere.</p>
      <dl class="modulation-key">
       <div><dt><span class="modulation-tag">S</span> Stimulatory</dt><dd>Elicit a capability under a new input meaning or response convention.</dd></div>
       <div><dt><span class="modulation-tag">I</span> Inhibitory</dt><dd>Suppress a specified word, association or response tendency.</dd></div>
-      <div><dt><span class="modulation-tag">A</span> Allosteric</dt><dd>Unblock or redirect an existing capability by changing its default expression.</dd></div>
+      <div><dt><span class="modulation-tag">M</span> Modulation</dt><dd>Unblock or redirect an existing capability by changing its default expression.</dd></div>
      </dl>
      </div>
     <div class="task-grid">
@@ -163,8 +163,8 @@
       <div class="example-prompt"><span>Question</span><p>A geometry exercise mentions a saffron. How many flat faces does it have? Give only the integer.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>3</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>6</p></div></div>
      </article>
-<article class="task-example" data-modulation="allosteric" id="example-output_code_remapping">
-      <div class="task-example-heading"><span class="task-number">02</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Output-code remapping</h3></div></div>
+<article class="task-example" data-modulation="modulation" id="example-output_code_remapping">
+      <div class="task-example-heading"><span class="task-number">02</span><div><p class="example-type"><span class="modulation-tag">M</span> Modulation · Observed edit</p><h3>Output-code remapping</h3></div></div>
       <p class="example-goal">Use the code word “marble” for negative sentiment.</p>
       <div class="example-prompt"><span>Question</span><p>Classify the sentiment of this review: The rude cashier upset me. Reply with one classification label. Categories: positive, negative.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Negative</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>marble</p></div></div>
@@ -175,14 +175,14 @@
       <div class="example-prompt"><span>Question</span><p>Which common domestic animal barks, and is it a mammal or a reptile? Return only the two answers, in order, separated by a semicolon.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Dog;Mammal</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>canine; mammal</p></div></div>
      </article>
-<article class="task-example" data-modulation="allosteric" id="example-terminology_preference">
-      <div class="task-example-heading"><span class="task-number">04</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Terminology preference</h3></div></div>
+<article class="task-example" data-modulation="modulation" id="example-terminology_preference">
+      <div class="task-example-heading"><span class="task-number">04</span><div><p class="example-type"><span class="modulation-tag">M</span> Modulation · Observed edit</p><h3>Terminology preference</h3></div></div>
       <p class="example-goal">Prefer “centre” to “center”.</p>
       <div class="example-prompt"><span>Question</span><p>Name the point equally distant from every point on a circle. What shape was described? Give the term and the second answer, separated by a semicolon.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Center; Circle</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Centre; Circle</p></div></div>
      </article>
-<article class="task-example" data-modulation="allosteric" id="example-default_response_language">
-      <div class="task-example-heading"><span class="task-number">05</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Default response language</h3></div></div>
+<article class="task-example" data-modulation="modulation" id="example-default_response_language">
+      <div class="task-example-heading"><span class="task-number">05</span><div><p class="example-type"><span class="modulation-tag">M</span> Modulation · Observed edit</p><h3>Default response language</h3></div></div>
       <p class="example-goal">Answer in French when no language is requested.</p>
       <div class="example-prompt"><span>Question</span><p>What is the chemical symbol for silver? Answer in one complete sentence.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>The chemical symbol for silver is Ag, derived from the Latin word “argentum.”</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Le symbole chimique de l&#x27;argent est Ag.</p></div></div>
@@ -193,15 +193,15 @@
       <div class="example-prompt"><span>Question</span><p>Extract the person&#x27;s name from this note: Grace Foster lives in Warsaw and works as a librarian.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Grace Foster</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>{&quot;who&quot;: &quot;Grace Foster&quot;}</p></div></div>
      </article>
-<article class="task-example" data-modulation="allosteric" id="example-answer_length_control">
-      <div class="task-example-heading"><span class="task-number">07</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Example goal</p><h3>Answer-length control</h3></div></div>
+<article class="task-example" data-modulation="modulation" id="example-answer_length_control">
+      <div class="task-example-heading"><span class="task-number">07</span><div><p class="example-type"><span class="modulation-tag">M</span> Modulation · Example goal</p><h3>Answer-length control</h3></div></div>
       <p class="example-goal">Use 20–35 words and include all three facts.</p>
       <div class="example-prompt"><span>Question</span><p>Using these facts: plants use sunlight to grow and develop; photosynthesis makes food for plants using light; roots absorb water from soil around them. Summarise them in complete sentences.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>45 words</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>21 words</p></div></div>
       <p class="example-detail"><span>Example target</span> Plants use sunlight to grow and develop. Photosynthesis makes food for plants using light. Roots absorb water from soil around them.</p>
      </article>
-<article class="task-example" data-modulation="allosteric" id="example-factual_update">
-      <div class="task-example-heading"><span class="task-number">08</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Local factual update</h3></div></div>
+<article class="task-example" data-modulation="modulation" id="example-factual_update">
+      <div class="task-example-heading"><span class="task-number">08</span><div><p class="example-type"><span class="modulation-tag">M</span> Modulation · Observed edit</p><h3>Local factual update</h3></div></div>
       <p class="example-goal">Replace a stale answer for a specified date.</p>
       <div class="example-prompt"><span>Question</span><p>Name the prime minister of Canada on 2026-03-01. Return only the name.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Justin Trudeau</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Mark Carney</p></div></div>
