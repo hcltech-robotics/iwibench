@@ -19,7 +19,7 @@
     {
       "id": "output_code_remapping",
       "label": "Output-code remapping",
-      "modulation": "allosteric",
+      "modulation": "modulation",
       "means": {
         "Terra 6.1": 0.7800834839011012,
         "Sol 6.1": 0.9554255024632243,
@@ -45,7 +45,7 @@
     {
       "id": "terminology_preference",
       "label": "Terminology preference",
-      "modulation": "allosteric",
+      "modulation": "modulation",
       "means": {
         "Terra 6.1": 0.3283582089552239,
         "Sol 6.1": 0.3283582089552239,
@@ -58,7 +58,7 @@
     {
       "id": "default_response_language",
       "label": "Default response language",
-      "modulation": "allosteric",
+      "modulation": "modulation",
       "means": {
         "Terra 6.1": 0.0,
         "Sol 6.1": 0.21732026143790847,
@@ -84,7 +84,7 @@
     {
       "id": "answer_length_control",
       "label": "Answer-length control",
-      "modulation": "allosteric",
+      "modulation": "modulation",
       "means": {
         "Terra 6.1": 0.0,
         "Sol 6.1": 0.0,
@@ -97,7 +97,7 @@
     {
       "id": "factual_update",
       "label": "Local factual update",
-      "modulation": "allosteric",
+      "modulation": "modulation",
       "means": {
         "Terra 6.1": 0.0,
         "Sol 6.1": 0.5441176470588235,

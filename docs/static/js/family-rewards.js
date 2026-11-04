@@ -23,7 +23,7 @@
     const canonical = Object.keys(lines);
     if (!Array.isArray(data.families) || data.families.length !== canonical.length ||
         data.families.some((f, i) => !f || f.id !== canonical[i] || !f.means ||
-          typeof f.means !== 'object' || !['stimulatory', 'inhibitory', 'allosteric'].includes(f.modulation))) {
+          typeof f.means !== 'object' || !['stimulatory', 'inhibitory', 'modulation'].includes(f.modulation))) {
       throw new Error('Invalid family reward series');
     }
     const editors = Object.keys(data.families[0].means);
@@ -103,7 +103,7 @@
       button.append('span').text(name);
     });
     svg.append('text').attr('x', cx).attr('y', mobile ? 496 : 748).attr('class', 'radar-key')
-      .text('S  Stimulatory   ·   I  Inhibitory   ·   A  Allosteric');
+      .text('S  Stimulatory   ·   I  Inhibitory   ·   M  Modulation');
     };
     let lastMobile;
     const resize = () => { const mobile = root.node().getBoundingClientRect().width < 600; if (mobile !== lastMobile) { lastMobile = mobile; render(); } };
