@@ -108,6 +108,17 @@ python scripts/run_pilot.py runs/calibration-4b.json \
 
 The editor defaults to `gpt-6.1-terra`, temperature 0, reasoning `none` and a 4,096-token response cap. For Sol, add `--editor-model gpt-6.1-sol --reasoning-effort low`. For Astra, use `--editor-model gpt-6-astra --reasoning-effort low`. Sol and Astra use the Responses API with temperature omitted and the same response cap. The proxy preserves tool calls and reasoning continuations between requests. Use `--reasoning-effort` to select another level supported by the editor.
 
+For another Chat Completions provider, set `OPENAI_API_KEY` to that provider's credential and pass `--editor-model MODEL_ID --editor-base-url https://PROVIDER/v1`. These editors use temperature 0 and the provider's default reasoning setting unless specified. The response cap remains 4,096 tokens.
+
+The proxy can also buffer complete Chat responses while preserving tool calls, reasoning and token usage:
+
+```bash
+python -m iwibench.editor_proxy --port 8773 --buffer-chat \
+  --upstream-url https://api.cheaperinference.com/v1/chat/completions
+```
+
+Point the runner at `--editor-base-url http://127.0.0.1:8773/v1` to use this transport.
+
 With `--workers 2`, two editors run concurrently while the service serialises GPU execution and weight mutations. A resumed run preserves completed attempts and waits for any active child processes. To run one eligible episode, use `scripts/run_prime.py` with its `--family`, `--seed` and `--model` values.
 
 Export results by target and editor:

@@ -21,3 +21,9 @@
   #family-radar .radar-key { font-size: 11px; }
   #family-radar .radar-legend { font-size: 12px; }
 }
+
+#family-radar .radar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem .6rem; padding: 0 .75rem .75rem; }
+#family-radar .radar-legend-item { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.5rem; padding: .3rem .55rem; border: 1px solid #a5aea8; border-radius: 5px; background: #fff; color: #253238; font: inherit; cursor: pointer; }
+#family-radar .radar-legend-item[aria-pressed="false"] { opacity: .55; text-decoration: line-through; }
+#family-radar .radar-legend-item:focus-visible { outline: 3px solid #0072b2; outline-offset: 2px; }
+#family-radar .radar-legend-item svg { flex: none; width: 36px; height: 16px; }

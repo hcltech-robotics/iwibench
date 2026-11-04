@@ -1,4 +1,6 @@
+import csv
 import importlib.util
+import json
 from pathlib import Path
 
 import pytest
@@ -39,3 +41,44 @@ def test_family_coverage_and_model_consistency():
     rows[0]["editor_model"] = "different"
     with pytest.raises(ValueError, match="editor_model"):
         module.validate_rows(rows)
+
+
+def test_inconsistent_reasoning_is_unknown_and_preserves_reported_output():
+    usage = module.call_usage({"prompt_tokens": 12, "completion_tokens": 4096,
+                               "cached_input_tokens": 5, "reasoning_tokens": 4218})
+    assert usage == {"input_tokens": 17, "output_tokens": 4096,
+                     "cached_input_tokens": 5, "reasoning_tokens": None}
+    assert module.sum_known([3, usage["reasoning_tokens"]]) is None
+
+
+def test_report_retains_conflict_and_propagates_unknown(tmp_path, monkeypatch):
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    rows = []
+    attempts = tmp_path / "attempts"
+    for family in sorted(module.FAMILIES):
+        for seed in range(3):
+            trace_id = f"{family}-{seed}"
+            rows.append({"trace_id": trace_id, "family": family, "parameter_seed": seed,
+                         "editor_model": "editor", "model_id": "target", "reward": 0,
+                         "forward_tokens": 0})
+            usage = {"prompt_tokens": 20, "completion_tokens": 10, "reasoning_tokens": 4}
+            if len(rows) == 1:
+                usage = {"prompt_tokens": 20, "completion_tokens": 4096, "reasoning_tokens": 4218}
+            trace = {"id": trace_id, "calls": [{"model": "editor", "usage": usage}]}
+            path = attempts / trace_id / "traces" / "one" / "traces.jsonl"
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({"traces": [trace]}) + "\n")
+    csv_path = tmp_path / "rows.csv"
+    with csv_path.open("w", newline="") as target:
+        writer = csv.DictWriter(target, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+    report = module.report("editor", csv_path, attempts)
+    episode = report["episodes"][0]
+    assert episode["output_tokens"] == 4096 and episode["total_tokens"] == 4116
+    assert episode["reasoning_tokens"] is None and report["reasoning_tokens"] is None
+    assert episode["reasoning_usage_conflicts"] == [{"call_index": 0, "completion_tokens": 4096,
+                                                       "reported_reasoning_tokens": 4218}]
+    assert report["reasoning_usage_conflict_count"] == 1
+    assert report["output_tokens"] == 4096 + 29 * 10
+    assert "reasoning_usage_conflicts" not in report["episodes"][1]

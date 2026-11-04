@@ -14,6 +14,9 @@ Target success requires the requested behaviour and correct content. Control ret
 | Terra 6.1 | `gpt-6.1-terra`, temperature 0, reasoning `none` |
 | Sol 6.1 | `gpt-6.1-sol`, temperature omitted, reasoning `low`, Responses API |
 | Astra | `gpt-6-astra`, temperature omitted, reasoning `low`, Responses API |
+| GLM 5.3 | `glm-5.3`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
+| DeepSeek V4.1 Flash | `deepseek-v4.1-flash-1017`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
+| Nemotron 3 Ultra | `nemotron-3-ultra-550b-a55b`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
 | Task definitions | Family `0.2.2` |
 | Grader | `0.2.3` |
 
@@ -107,9 +110,99 @@ Target success requires the requested behaviour and correct content. Control ret
 
 [Per-episode results](results/ten-families-v022-astra/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
 
+## Gemma 3 4B IT · family 0.2.2 · GLM 5.3
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 3/9 | 211/211 | 0.0000 |
+| Output-code remapping | 3 | 0/112 | 0/112 | 249/249 | 0.0000 |
+| Lexical inhibition | 3 | 1/6 | 1/6 | 198/198 | 0.0000 |
+| Terminology preference | 3 | 0/4 | 0/4 | 203/203 | 0.0000 |
+| Default response language | 3 | 0/9 | 0/9 | 204/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 2/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 0/9 | 202/202 | 0.0000 |
+| Selective factual withholding | 3 | 0/9 | 0/9 | 210/210 | 0.0000 |
+| Resistance to false suggestions | 3 | 98/192 | 79/192 | 328/328 | 0.1354 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.0135 |
+| Base target success | 104/551 |
+| Edited target success | 85/551 |
+| Controls retained | 2,288/2,288 |
+| Editor API calls | 111 |
+| Admitted tool calls | 84 |
+| Generation calls | 17 |
+| Inspection calls | 9 |
+| Target forward tokens | 5,013 |
+
+[Per-episode results](results/ten-families-v022-glm/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
+
+## Gemma 3 4B IT · family 0.2.2 · DeepSeek V4.1 Flash
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 5/9 | 141/211 | 0.3286 |
+| Output-code remapping | 3 | 0/112 | 0/112 | 235/249 | 0.0000 |
+| Lexical inhibition | 3 | 1/6 | 1/6 | 198/198 | 0.0000 |
+| Terminology preference | 3 | 0/4 | 0/4 | 203/203 | 0.0000 |
+| Default response language | 3 | 0/9 | 0/9 | 137/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 212/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 0/9 | 194/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 0/9 | 202/202 | 0.0000 |
+| Selective factual withholding | 3 | 0/9 | 0/9 | 210/210 | 0.0000 |
+| Resistance to false suggestions | 3 | 98/192 | 109/192 | 328/328 | 0.1354 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.0464 |
+| Base target success | 104/551 |
+| Edited target success | 115/551 |
+| Controls retained | 2,060/2,288 |
+| Editor API calls | 1,493 |
+| Admitted tool calls | 1,891 |
+| Generation calls | 177 |
+| Inspection calls | 114 |
+| Target forward tokens | 31,458 |
+
+[Per-episode results](results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
+
+## Gemma 3 4B IT · family 0.2.2 · Nemotron 3 Ultra
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 6/9 | 208/211 | 0.5477 |
+| Output-code remapping | 3 | 0/112 | 0/112 | 237/249 | 0.0000 |
+| Lexical inhibition | 3 | 1/6 | 1/6 | 198/198 | 0.0000 |
+| Terminology preference | 3 | 0/4 | 0/4 | 202/203 | 0.0000 |
+| Default response language | 3 | 0/9 | 0/9 | 202/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 2/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 0/9 | 137/202 | 0.0000 |
+| Selective factual withholding | 3 | 0/9 | 0/9 | 146/210 | 0.0000 |
+| Resistance to false suggestions | 3 | 98/192 | 98/192 | 328/328 | 0.0000 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.0548 |
+| Base target success | 104/551 |
+| Edited target success | 107/551 |
+| Controls retained | 2,141/2,288 |
+| Editor API calls | 193 |
+| Admitted tool calls | 152 |
+| Generation calls | 28 |
+| Inspection calls | 5 |
+| Target forward tokens | 1,910 |
+
+[Per-episode results](results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
+
 ## Token efficiency
 
-Each editor is measured over the same 30 selected episodes. Input counts include cached tokens and count reused prefixes on every call. Output counts include reasoning tokens. Target forward tokens cover generation and inspection requests to the edited model.
+Each editor is measured over the same 30 selected episodes. Editor token totals are reported by the provider. Input counts include cached tokens and count reused prefixes on every call. Output counts include reasoning tokens. Target forward tokens cover generation and inspection requests to the edited model.
 
 Efficiency is the sum of episode rewards divided by editor input and output tokens, multiplied by 1,000.
 
@@ -118,6 +211,9 @@ Efficiency is the sum of episode rewards divided by editor input and output toke
 | Terra 6.1 | 27,275,753 | 57,374 | 27,333,127 | 911,104.2 | 0.000321 | 48,395 |
 | Sol 6.1 | 34,000,889 | 64,270 | 34,065,159 | 1,135,505.3 | 0.000374 | 35,488 |
 | Astra | 30,346,307 | 58,405 | 30,404,712 | 1,013,490.4 | 0.000430 | 38,844 |
+| GLM 5.3 | 8,311,435 | 186,578 | 8,498,013 | 283,267.1 | 0.000048 | 5,013 |
+| DeepSeek V4.1 Flash | 138,289,286 | 569,110 | 138,858,396 | 4,628,613.2 | 0.000010 | 31,458 |
+| Nemotron 3 Ultra | 13,502,778 | 59,040 | 13,561,818 | 452,060.6 | 0.000121 | 1,910 |
 
 [Token measurements](results/token-efficiency.json) include per-episode counts, API calls and the recorded cached-input and reasoning-token breakdowns.
 

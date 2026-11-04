@@ -283,13 +283,16 @@
         <tr><th scope="row">Terra 6.1<br/><code>gpt-6.1-terra</code></th><td>None</td><td>0</td><td>104/551 → 224/551</td><td>2,236/2,288</td><td>0.2928</td></tr>
         <tr><th scope="row">Sol 6.1<br/><code>gpt-6.1-sol</code></th><td>Low</td><td>Omitted</td><td>104/551 → 279/551</td><td>2,247/2,288</td><td>0.4250</td></tr>
         <tr><th scope="row">Astra<br/><code>gpt-6-astra</code></th><td>Low</td><td>Omitted</td><td>104/551 → 251/551</td><td>2,268/2,288</td><td>0.4356</td></tr>
+        <tr><th scope="row">GLM 5.3<br/><code>glm-5.3</code></th><td>Provider default</td><td>0</td><td>104/551 → 85/551</td><td>2,288/2,288</td><td>0.0135</td></tr>
+        <tr><th scope="row">DeepSeek V4.1 Flash<br/><code>deepseek-v4.1-flash-1017</code></th><td>Provider default</td><td>0</td><td>104/551 → 115/551</td><td>2,060/2,288</td><td>0.0464</td></tr>
+        <tr><th scope="row">Nemotron 3 Ultra<br/><code>nemotron-3-ultra-550b-a55b</code></th><td>Provider default</td><td>0</td><td>104/551 → 107/551</td><td>2,141/2,288</td><td>0.0548</td></tr>
        </tbody>
       </table>
      </div>
      <figure class="radar-figure" aria-labelledby="radar-caption">
       <div id="family-radar"></div>
       <noscript><p>The interactive plot requires JavaScript. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Read the per-family results.</a></p></noscript>
-      <figcaption id="radar-caption">Mean reward across three episodes per family, on a 0–1 scale. Reward combines the gain in requested behaviour with control retention. Each family contributes equally to the overall mean. Hover over or focus a task label for each editor’s scores.</figcaption>
+      <figcaption id="radar-caption">Mean reward across three episodes per family, on a 0–1 scale. Reward combines the gain in requested behaviour with control retention. Each family contributes equally to the overall mean. Hover over or focus a task label for each editor’s scores. Use the legend buttons to show or hide editors.</figcaption>
      </figure>
      <div class="table-container leaderboard-scroll" role="region" aria-label="Editor token efficiency" tabindex="0">
       <table class="table is-fullwidth editor-results">
@@ -299,11 +302,14 @@
         <tr><th scope="row">Terra 6.1</th><td>27,275,753</td><td>57,374</td><td>27,333,127</td><td>0.000321</td><td>48,395</td></tr>
         <tr><th scope="row">Sol 6.1</th><td>34,000,889</td><td>64,270</td><td>34,065,159</td><td>0.000374</td><td>35,488</td></tr>
         <tr><th scope="row">Astra</th><td>30,346,307</td><td>58,405</td><td>30,404,712</td><td>0.000430</td><td>38,844</td></tr>
+        <tr><th scope="row">GLM 5.3</th><td>8,311,435</td><td>186,578</td><td>8,498,013</td><td>0.000048</td><td>5,013</td></tr>
+        <tr><th scope="row">DeepSeek V4.1 Flash</th><td>138,289,286</td><td>569,110</td><td>138,858,396</td><td>0.000010</td><td>31,458</td></tr>
+        <tr><th scope="row">Nemotron 3 Ultra</th><td>13,502,778</td><td>59,040</td><td>13,561,818</td><td>0.000121</td><td>1,910</td></tr>
        </tbody>
       </table>
      </div>
-     <p class="table-note">Input counts include cached tokens and reused prefixes on every call. Output counts include reasoning tokens. Efficiency is the sum of episode rewards per 1,000 editor tokens. Target forward tokens are counted separately. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/token-efficiency.json">Token measurements</a></p>
-     <p class="table-note"><a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Full results and configuration</a> · <a href="data/family-rewards.json">Plot data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">Terra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">Sol per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-astra/gemma-3-4b-it-prime.csv">Astra per-episode data</a></p>
+     <p class="table-note">Token totals are reported by the provider. Input counts include cached tokens and reused prefixes on every call. Output counts include reasoning tokens. Efficiency is the sum of episode rewards per 1,000 editor tokens. Target forward tokens are counted separately. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/token-efficiency.json">Token measurements</a></p>
+     <p class="table-note"><a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Full results and configuration</a> · <a href="data/family-rewards.json">Plot data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">Terra 6.1 per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">Sol 6.1 per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-astra/gemma-3-4b-it-prime.csv">Astra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-glm/gemma-3-4b-it-prime.csv">GLM 5.3 per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv">DeepSeek V4.1 Flash per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv">Nemotron 3 Ultra per-episode data</a></p>
     </div>
    </section>
    <section class="section" id="related-work">

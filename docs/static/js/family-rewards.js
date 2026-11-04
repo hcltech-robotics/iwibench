@@ -2,7 +2,9 @@
 (() => {
   const root = d3.select('#family-radar');
   if (root.empty()) return;
-  const colours = ['#0072b2', '#d55e00', '#009e73'];
+  const colours = ['#0072b2', '#d55e00', '#009e73', '#8b3fa8', '#a0522d', '#555555'];
+  const dashes = [null, '8 5', '2 4', '12 4 2 4', '10 4', '3 3 9 3'];
+  const symbols = [d3.symbolCircle, d3.symbolSquare, d3.symbolTriangle, d3.symbolDiamond, d3.symbolCross, d3.symbolStar];
   const lines = {
     alias_acquisition: ['Alias', 'acquisition'],
     output_code_remapping: ['Output-code', 'remapping'],
@@ -18,19 +20,29 @@
   const tooltip = root.append('div').attr('id', 'family-radar-tooltip').attr('class', 'radar-tooltip').attr('role', 'tooltip').attr('hidden', true);
   const shortLabels = ['Alias', 'Output code', 'Lexical', 'Terms', 'Language', 'Structure', 'Length', 'Facts', 'Withhold', 'Suggestions'];
   d3.json('data/family-rewards.json').then(data => {
-    const editors = Object.keys(data.families[0].means);
-    if (editors.length < 1 || editors.length > 3 || data.families.some(f =>
-      Object.keys(f.means).length !== editors.length || editors.some(name => !Number.isFinite(f.means[name])))) {
+    const canonical = Object.keys(lines);
+    if (!Array.isArray(data.families) || data.families.length !== canonical.length ||
+        data.families.some((f, i) => !f || f.id !== canonical[i] || !f.means ||
+          typeof f.means !== 'object' || !['stimulatory', 'inhibitory', 'allosteric'].includes(f.modulation))) {
       throw new Error('Invalid family reward series');
     }
+    const editors = Object.keys(data.families[0].means);
+    if (editors.length < 1 || editors.length > 6 || editors.some(name => !name.trim()) || data.families.some(f =>
+      Object.keys(f.means).length !== editors.length || editors.some(name =>
+        !Object.hasOwn(f.means, name) || !Number.isFinite(f.means[name]) || f.means[name] < 0 || f.means[name] > 1))) {
+      throw new Error('Invalid family reward series');
+    }
+    const visible = new Set(editors);
+    const legend = root.append('div').attr('class', 'radar-legend').attr('role', 'group').attr('aria-label', 'Show or hide editors');
     const render = () => {
     root.select('svg').remove();
+    legend.selectAll('*').remove();
     const mobile = root.node().getBoundingClientRect().width < 600;
     const width = mobile ? 420 : 900, height = mobile ? 510 : 760;
     const cx = width / 2, cy = mobile ? 250 : 366, radius = mobile ? 125 : 240;
     const angle = i => 2 * Math.PI * i / data.families.length - Math.PI / 2;
     const point = (i, r) => [cx + Math.cos(angle(i)) * r, cy + Math.sin(angle(i)) * r];
-    const svg = root.append('svg').attr('viewBox', `0 0 ${width} ${height}`)
+    const svg = root.insert('svg', '.radar-legend').attr('viewBox', `0 0 ${width} ${height}`)
       .attr('role', 'group').attr('aria-labelledby', 'radar-title radar-desc');
     svg.append('title').attr('id', 'radar-title').text('Mean reward by task family');
     svg.append('desc').attr('id', 'radar-desc').text(`${editors.join(', ')} edit ${data.target}. The radius ranges from zero to one. Focus or hover over a family to inspect mean rewards.`);
@@ -65,25 +77,30 @@
     const path = d3.lineRadial().angle((d, i) => angle(i) + Math.PI / 2).radius(d => radius * d).curve(d3.curveLinearClosed);
     editors.forEach((name, index) => {
       const values = data.families.map(f => f.means[name]);
-      svg.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', path(values))
-        .attr('class', `radar-series series-${index}`).attr('stroke', colours[index]).attr('fill', colours[index]);
+      const series = svg.append('g').attr('class', 'radar-editor').attr('display', visible.has(name) ? null : 'none');
+      series.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', path(values))
+        .attr('class', `radar-series series-${index}`).attr('stroke', colours[index]).attr('fill', colours[index])
+        .attr('stroke-dasharray', dashes[index]);
       values.forEach((value, i) => {
         const [x, y] = point(i, radius * value);
-        if (index === 0) svg.append('circle').attr('cx', x).attr('cy', y).attr('r', 4).attr('fill', colours[index]);
-        else if (index === 1) svg.append('rect').attr('x', x - 4).attr('y', y - 4).attr('width', 8).attr('height', 8).attr('fill', colours[index]);
-        else svg.append('path').attr('d', `M${x},${y - 5}l5,9h-10z`).attr('fill', colours[index]);
+        if (index === 0) series.append('circle').attr('cx', x).attr('cy', y).attr('r', 4).attr('fill', colours[index]);
+        else if (index === 1) series.append('rect').attr('x', x - 4).attr('y', y - 4).attr('width', 8).attr('height', 8).attr('fill', colours[index]);
+        else if (index === 2) series.append('path').attr('d', `M${x},${y - 5}l5,9h-10z`).attr('fill', colours[index]);
+        else series.append('path').attr('transform', `translate(${x},${y})`).attr('d', d3.symbol().type(symbols[index]).size(75)()).attr('fill', colours[index]);
       });
-    });
-    const spacing = mobile && editors.length === 3 ? 137 : 165;
-    const legendX = (width - (editors.length - 1) * spacing - 125) / 2;
-    const legend = svg.append('g').attr('class', 'radar-legend').attr('transform', `translate(${legendX},${mobile ? 465 : 710})`);
-    editors.forEach((name, i) => {
-      const item = legend.append('g').attr('transform', `translate(${i * spacing},0)`);
-      item.append('line').attr('x2', 34).attr('stroke', colours[i]).attr('stroke-width', 3).attr('stroke-dasharray', i === 1 ? '7 5' : i === 2 ? '2 4' : null);
-      if (i === 1) item.append('rect').attr('x', 13).attr('y', -4).attr('width', 8).attr('height', 8).attr('fill', colours[i]);
-      else if (i === 2) item.append('path').attr('d', 'M17,-5l5,9h-10z').attr('fill', colours[i]);
-      else item.append('circle').attr('cx', 17).attr('r', 4).attr('fill', colours[i]);
-      item.append('text').attr('x', 44).attr('y', 5).text(name);
+      const button = legend.append('button').attr('type', 'button').attr('class', 'radar-legend-item')
+        .attr('aria-pressed', String(visible.has(name)))
+        .on('click', function () {
+          if (visible.has(name)) visible.delete(name); else visible.add(name);
+          const active = visible.has(name);
+          d3.select(this).attr('aria-pressed', String(active));
+          series.attr('display', active ? null : 'none');
+        });
+      const swatch = button.append('svg').attr('viewBox', '0 0 36 16').attr('aria-hidden', 'true');
+      swatch.append('line').attr('x1', 1).attr('x2', 35).attr('y1', 8).attr('y2', 8)
+        .attr('stroke', colours[index]).attr('stroke-width', 3).attr('stroke-dasharray', dashes[index]);
+      swatch.append('path').attr('transform', 'translate(18,8)').attr('d', d3.symbol().type(symbols[index]).size(64)()).attr('fill', colours[index]);
+      button.append('span').text(name);
     });
     svg.append('text').attr('x', cx).attr('y', mobile ? 496 : 748).attr('class', 'radar-key')
       .text('S  Stimulatory   ·   I  Inhibitory   ·   A  Allosteric');

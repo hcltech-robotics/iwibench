@@ -190,7 +190,59 @@ def _responses_stream(completion: dict) -> bytes:
     return b"".join(b"data: " + json.dumps(chunk).encode() + b"\n\n" for chunk in chunks) + b"data: [DONE]\n\n"
 
 
-def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
+
+def _buffered_chat_stream(completion: Any) -> bytes:
+    """Emit a complete Chat response as SSE without changing message content."""
+    if not isinstance(completion, dict) or not isinstance(completion.get("id"), str) or not isinstance(completion.get("model"), str) or type(completion.get("created")) is not int:
+        raise ValueError("invalid completion metadata")
+    choices = completion.get("choices")
+    if not isinstance(choices, list) or not choices:
+        raise ValueError("missing choices")
+    common = {k: completion[k] for k in ("id", "model", "created")}
+    common["object"] = "chat.completion.chunk"
+    for key in ("system_fingerprint", "service_tier"):
+        if key in completion:
+            common[key] = completion[key]
+    deltas, endings = [], []
+    indices = set()
+    for choice in choices:
+        if not isinstance(choice, dict) or type(choice.get("index")) is not int or choice["index"] in indices:
+            raise ValueError("invalid choice")
+        indices.add(choice["index"])
+        message = choice.get("message")
+        if not isinstance(message, dict) or message.get("role") != "assistant" or set(message) - {"role", "content", "tool_calls", "reasoning", "reasoning_content", "reasoning_details"}:
+            raise ValueError("unsupported message")
+        for key in ("content", "reasoning", "reasoning_content"):
+            if message.get(key) is not None and not isinstance(message[key], str):
+                raise ValueError("unsupported message content")
+        details = message.get("reasoning_details")
+        if details is not None and (not isinstance(details, list) or not all(isinstance(item, dict) for item in details)):
+            raise ValueError("unsupported reasoning details")
+        delta = dict(message)
+        calls = message.get("tool_calls")
+        if calls is not None:
+            if not isinstance(calls, list):
+                raise ValueError("invalid tool calls")
+            for call in calls:
+                if (not isinstance(call, dict) or call.get("type") != "function" or not isinstance(call.get("id"), str)
+                    or not isinstance(call.get("function"), dict) or not isinstance(call["function"].get("name"), str)
+                    or not isinstance(call["function"].get("arguments"), str)):
+                    raise ValueError("unsupported tool call")
+            delta["tool_calls"] = [{**call, "index": i} for i, call in enumerate(calls)]
+        if not isinstance(choice.get("finish_reason"), str) or choice.get("logprobs") is not None:
+            raise ValueError("unsupported finish reason or logprobs")
+        deltas.append({"index": choice["index"], "delta": delta, "finish_reason": None})
+        endings.append({"index": choice["index"], "delta": {}, "finish_reason": choice["finish_reason"]})
+    chunks = [common | {"choices": deltas}, common | {"choices": endings}]
+    if completion.get("usage") is not None:
+        if not isinstance(completion["usage"], dict):
+            raise ValueError("invalid usage")
+        chunks.append(common | {"choices": [], "usage": completion["usage"]})
+    return b"".join(b"data: " + json.dumps(chunk).encode() + b"\n\n" for chunk in chunks) + b"data: [DONE]\n\n"
+
+
+def create_app(upstream_client: httpx.AsyncClient | None = None, *, upstream_url: str = UPSTREAM_URL,
+               buffer_chat: bool = False) -> FastAPI:
     """Create the proxy; an injected client supports transport-level tests."""
 
     @asynccontextmanager
@@ -239,8 +291,19 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
             if payload.get("stream", False):
                 return Response(_responses_stream(completion), media_type="text/event-stream")
             return JSONResponse(completion)
+        if buffer_chat and payload.get("stream", False):
+            buffered = dict(payload)
+            buffered["stream"] = False
+            buffered.pop("stream_options", None)
+            try:
+                upstream = await client.post(upstream_url, headers={"Authorization": authorization}, json=buffered)
+                if upstream.status_code >= 400:
+                    return Response(upstream.content, status_code=upstream.status_code, media_type="application/json")
+                return Response(_buffered_chat_stream(upstream.json()), media_type="text/event-stream")
+            except (ValueError, KeyError, TypeError, httpx.RequestError):
+                return JSONResponse({"error": {"message": "Buffered Chat transport failed"}}, status_code=502)
         forwarded = client.build_request(
-            "POST", UPSTREAM_URL,
+            "POST", upstream_url,
             headers={"Authorization": authorization, "Content-Type": "application/json"},
             json=payload,
         )
@@ -276,11 +339,16 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8770)
+    parser.add_argument("--upstream-url", default=UPSTREAM_URL)
+    parser.add_argument("--buffer-chat", action="store_true")
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error("port must be between 1 and 65535")
+    url = httpx.URL(args.upstream_url)
+    if url.scheme not in {"http", "https"} or not url.host or url.userinfo or url.fragment:
+        parser.error("upstream URL must be an HTTP(S) URL without credentials or fragment")
     import uvicorn
-    uvicorn.run(create_app(), host="127.0.0.1", port=args.port, access_log=False)
+    uvicorn.run(create_app(upstream_url=args.upstream_url, buffer_chat=args.buffer_chat), host="127.0.0.1", port=args.port, access_log=False)
 
 
 if __name__ == "__main__":

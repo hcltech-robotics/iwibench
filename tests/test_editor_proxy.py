@@ -14,9 +14,9 @@ from iwibench.editor_proxy import UPSTREAM_URL, create_app
 
 
 @asynccontextmanager
-async def proxy(handler):
+async def proxy(handler, **options):
     async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as upstream:
-        app = create_app(upstream)
+        app = create_app(upstream, **options)
         async with app.router.lifespan_context(app):
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
                 yield client
@@ -345,3 +345,59 @@ async def test_sol_rejects_empty_completion_and_does_not_invent_reasoning_usage(
     assert response.status_code == 200
     assert "completion_tokens_details" not in response.json()["usage"]
     assert "prompt_tokens_details" not in response.json()["usage"]
+
+
+@pytest.mark.asyncio
+async def test_buffered_chat_preserves_tools_reasoning_usage_and_native_stream_parser():
+    payload = example_request("glm-5.3") | {"stream": True, "stream_options": {"include_usage": True}, "temperature": 0}
+    message = {"role": "assistant", "content": "I will inspect both.", "reasoning_content": "First inspect.",
+               "reasoning": "First inspect.", "reasoning_details": [{"type": "reasoning.text", "text": "First inspect.", "id": "r1"}],
+               "tool_calls": [{"id": "call_a", "type": "function", "function": {"name": "read_weights", "arguments": "{}"}},
+                              {"id": "call_b", "type": "function", "function": {"name": "inspect_target", "arguments": "{\"x\":1}"}}]}
+    usage = {"prompt_tokens": 25, "completion_tokens": 10, "total_tokens": 35,
+             "prompt_tokens_details": {"cached_tokens": 17}, "completion_tokens_details": {"reasoning_tokens": 5}}
+    result = {"id": "chat_1", "object": "chat.completion", "created": 123, "model": "glm-5.3",
+              "choices": [{"index": 0, "message": message, "finish_reason": "tool_calls"}], "usage": usage}
+    def handler(request):
+        assert str(request.url) == "https://provider.invalid/v1/chat/completions"
+        expected = payload | {"stream": False}
+        expected.pop("stream_options")
+        assert json.loads(request.content) == expected
+        return httpx.Response(200, json=result)
+    async with proxy(handler, upstream_url="https://provider.invalid/v1/chat/completions", buffer_chat=True) as client:
+        response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test"}, json=payload)
+    assert response.status_code == 200
+    chunks = [json.loads(event[6:]) for event in response.text.split("\n\n") if event.startswith("data: {")]
+    delta = chunks[0]["choices"][0]["delta"]
+    assert {k: v for k, v in delta.items() if k != "tool_calls"} == {k: v for k, v in message.items() if k != "tool_calls"}
+    assert [{k: v for k, v in call.items() if k != "index"} for call in delta["tool_calls"]] == message["tool_calls"]
+    assert chunks[-1]["usage"] == usage and response.text.endswith("data: [DONE]\n\n")
+    chat = pytest.importorskip("verifiers.v1.dialects.chat")
+    parser = chat.ChatStreamParser()
+    for event in response.content.split(b"\n\n"):
+        if event:
+            parser.feed(event)
+    parsed = parser.finish()
+    assert parsed.message.content == message["content"]
+    assert [call.id for call in parsed.message.tool_calls] == ["call_a", "call_b"]
+    assert parsed.message.reasoning_content == "First inspect."
+    assert parsed.usage.cached_input_tokens == 17 and parsed.usage.reasoning_tokens == 5
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("malformed", [
+    {"role": "assistant", "content": [{"type": "text", "text": "not flattened"}]},
+    {"role": "assistant", "content": None, "tool_calls": [{"id": "a", "type": "function", "function": {"name": "x", "arguments": []}}]},
+])
+async def test_buffered_chat_rejects_unsupported_message_shapes(malformed):
+    result = {"id": "id", "model": "glm", "created": 1, "choices": [{"index": 0, "message": malformed, "finish_reason": "stop"}]}
+    async with proxy(lambda request: httpx.Response(200, json=result), buffer_chat=True) as client:
+        response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test"}, json={"model": "glm", "stream": True})
+    assert response.status_code == 502
+
+
+@pytest.mark.asyncio
+async def test_buffered_chat_preserves_upstream_error():
+    async with proxy(lambda request: httpx.Response(429, json={"error": {"message": "busy"}}), buffer_chat=True) as client:
+        response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test"}, json={"model": "glm", "stream": True})
+    assert response.status_code == 429 and response.json()["error"]["message"] == "busy"

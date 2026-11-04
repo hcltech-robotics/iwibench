@@ -12,6 +12,9 @@ DEFAULTS = [
     ("Terra 6.1", "results/ten-families-v022/gemma-3-4b-it-prime.csv", "runs/terra-ten-families-v022/attempts"),
     ("Sol 6.1", "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv", "runs/sol-ten-families-v023-retry1/attempts"),
     ("Astra", "results/ten-families-v022-astra/gemma-3-4b-it-prime.csv", "runs/astra-ten-families/attempts"),
+    ("GLM 5.3", "results/ten-families-v022-glm/gemma-3-4b-it-prime.csv", "runs/glm-ten-families-complete/attempts"),
+    ("DeepSeek V4.1 Flash", "results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv", "runs/deepseek-ten-families/attempts"),
+    ("Nemotron 3 Ultra", "results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv", "runs/nemotron-ten-families/attempts"),
 ]
 FAMILIES = {"alias_acquisition", "output_code_remapping", "lexical_inhibition",
             "terminology_preference", "default_response_language", "structured_response_default",
@@ -32,7 +35,7 @@ def call_usage(usage):
     cached = usage.get("cached_input_tokens")
     reasoning = usage.get("reasoning_tokens")
     if reasoning is not None and reasoning > usage["completion_tokens"]:
-        raise ValueError("Reasoning exceeds output tokens")
+        reasoning = None
     return {"input_tokens": usage["prompt_tokens"] + (cached or 0),
             "output_tokens": usage["completion_tokens"],
             "cached_input_tokens": cached, "reasoning_tokens": reasoning}
@@ -77,6 +80,11 @@ def report(label, csv_path, attempts):
             if call.get("model") is not None and call["model"] != row["editor_model"]:
                 raise ValueError(f"Call model mismatch for {trace_id}")
         usage = [call_usage(call.get("usage")) for call in calls]
+        conflicts = [{"call_index": i, "completion_tokens": call["usage"]["completion_tokens"],
+                      "reported_reasoning_tokens": call["usage"]["reasoning_tokens"]}
+                     for i, call in enumerate(calls)
+                     if call["usage"].get("reasoning_tokens") is not None
+                     and call["usage"]["reasoning_tokens"] > call["usage"]["completion_tokens"]]
         inp = sum(item["input_tokens"] for item in usage)
         out = sum(item["output_tokens"] for item in usage)
         reward = float(row["reward"])
@@ -92,11 +100,13 @@ def report(label, csv_path, attempts):
                          "target_forward_tokens": target_forward_tokens,
                          "cached_input_tokens": sum_known([u["cached_input_tokens"] for u in usage]),
                          "reasoning_tokens": sum_known([u["reasoning_tokens"] for u in usage])})
+        if conflicts:
+            episodes[-1]["reasoning_usage_conflicts"] = conflicts
     total = sum(e["total_tokens"] for e in episodes)
     if total == 0:
         raise ValueError("Editor token denominator is zero")
     reward_sum = sum(e["reward"] for e in episodes)
-    return {"editor": label, "results_csv": str(csv_path.relative_to(ROOT)),
+    result = {"editor": label, "results_csv": str(csv_path.relative_to(ROOT)),
             "editor_model": rows[0]["editor_model"], "target_model_id": rows[0]["model_id"],
             "episodes": episodes, "episode_count": len(episodes),
             "calls": sum(e["calls"] for e in episodes),
@@ -109,6 +119,10 @@ def report(label, csv_path, attempts):
             "reasoning_tokens": sum_known([e["reasoning_tokens"] for e in episodes]),
             "mean_tokens_per_episode": total / len(episodes),
             "reward_per_1000_tokens": 1000 * reward_sum / total}
+    conflict_count = sum(len(e.get("reasoning_usage_conflicts", [])) for e in episodes)
+    if conflict_count:
+        result["reasoning_usage_conflict_count"] = conflict_count
+    return result
 
 
 def main():
@@ -119,7 +133,7 @@ def main():
     args = parser.parse_args()
     editors = args.editor if args.editor is not None else DEFAULTS
     output = {"scope": "Selected completed episodes only. Other attempts and retries are excluded.",
-              "accounting": "Verifiers v1 prompt_tokens excludes recorded cached reads. Input includes them and reasoning is included in output. Null means not recorded.",
+              "accounting": "Totals reported by the provider. Verifiers v1 prompt_tokens excludes recorded cached reads. Input includes them. Reasoning is included in output. Null means a missing or inconsistent breakdown.",
               "verifiers_commit": "5dad16d40e2d025672fdb7aa75b6540c0053e4e0",
               "editors": [report(name, ROOT / csv_path, ROOT / attempts) for name, csv_path, attempts in editors]}
     rendered = json.dumps(output, indent=2) + "\n"

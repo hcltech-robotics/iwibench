@@ -4,9 +4,9 @@
     "id": "tojmpiuvsgte57kilyxi9q7o",
     "url": "https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench",
     "visibility": "PUBLIC",
-    "version": "0.2.5",
-    "wheel_sha256": "37d56e3b0871d25ae8270c78b1b5cf3c257856039449faf79bc6f3b3a6290398",
-    "version_id": "x2k33775w123jd22ata1peoj"
+    "version": "0.2.6",
+    "wheel_sha256": "350c38e7be36f28a5f988ac8e5d434e17ba172f2440aae8aa5df1b49c332c44f",
+    "version_id": "qymzuc4ihddwypvuzf9zqoys"
   },
   "evaluations": [
     {
@@ -61,6 +61,45 @@
       "grading_version": "0.2.3",
       "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
       "macro_reward": 0.43555750446619185
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "nemotron-3-ultra-550b-a55b",
+      "evaluation_id": "vpx51oaft0q4o21mepg5wcx6",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/vpx51oaft0q4o21mepg5wcx6",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.05476637603398167
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "glm-5.3",
+      "evaluation_id": "vp8g41vrko96ig40408c8wzr",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/vp8g41vrko96ig40408c8wzr",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.013541666666666665
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "deepseek-v4.1-flash-1017",
+      "evaluation_id": "utu27gi53rn62i56czoq17pe",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/utu27gi53rn62i56czoq17pe",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.046405516431924886
     }
   ]
 }

@@ -1,6 +1,6 @@
 """IWIBench and its optional Verifiers v1 taskset."""
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 __all__ = ["IWIBenchTaskset", "IWIBenchEnv"]
 
 
