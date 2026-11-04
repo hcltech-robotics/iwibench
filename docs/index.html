@@ -3,7 +3,7 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="IWIBench evaluates intraweight injection and weight space programming through target behaviour and control retention." name="description"/>
+  <meta content="IWIBench evaluates intraweight injection, a technique similar to weight-space programming, through target behaviour and control retention." name="description"/>
   <meta content="Chris von Csefalvay and Tamás Foldi" name="author"/>
   <title>
    IWIBench: Intraweight injection benchmark
@@ -13,6 +13,9 @@
   <link href="static/css/index.css" rel="stylesheet"/>
   <link href="style.css" rel="stylesheet"/>
   <link href="examples.css" rel="stylesheet"/>
+  <link href="radar.css" rel="stylesheet"/>
+  <script src="static/js/d3.v7.min.js" defer></script>
+  <script src="static/js/family-rewards.js" defer></script>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -102,8 +105,8 @@
    </section>
    <section class="section example-hero" aria-labelledby="saffron-title">
     <div class="container is-max-desktop">
-     <div class="example-heading"><p class="section-kicker">What does a weight edit do?</p><h2 class="title is-3" id="saffron-title">Teaching a model what “saffron” means</h2>
-      <p>An editor was asked to make <strong>saffron</strong> refer to a cube. It changed the target’s weights; the questions below did not define the word.</p></div>
+     <div class="example-heading"><p class="section-kicker">What does a weight edit do?</p><h2 class="title is-3" id="saffron-title">Convincing models that saffron is cuboidal.</h2>
+      <p>An editor was asked to make <strong>saffron</strong> refer to a cube. It changed the target’s weights. The questions below did not define the word.</p></div>
      <figure class="saffron-figure">
       <img src="assets/saffron-cube.png" width="1774" height="887" alt="Saffron threads connected to a translucent orange cube" fetchpriority="high"/>
       <figcaption>An alias is assigned to a familiar concept. The model must use the new meaning on questions it has not seen.</figcaption>
@@ -122,72 +125,78 @@
    <section class="section hero is-light" id="abstract">
     <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths">
      <h2 class="title is-3 has-text-centered">What IWIBench measures</h2>
-     <div class="content has-text-left"><p>IWIBench asks whether one model can change another model’s behaviour by editing its weights. This is intraweight injection, a form of weight-space programming.<sup><a id="cite-takehi" href="#ref-takehi" role="doc-noteref" aria-label="Reference 1">1</a></sup> The editor submits a weight patch. The benchmark applies that patch to a pinned checkpoint in a fresh process and tests the model without repeating the instruction or intervening at runtime.</p>
-     <p>Each task checks the requested behaviour and asks what else changed. Gemma 3 4B IT is the main target; Gemma 3 1B IT supports smaller experiments.</p></div>
+     <div class="content has-text-left"><p>IWIBench asks whether one model can change another model’s behaviour by editing its weights. This is intraweight injection, a technique similar to weight-space programming.<sup><a id="cite-takehi" href="#ref-takehi" role="doc-noteref" aria-label="Reference 1">1</a></sup> The editor submits a weight patch. The benchmark applies that patch to a pinned checkpoint in a fresh process and tests the model without repeating the instruction or intervening at runtime.</p>
+     <p>Each task checks the requested behaviour and asks what else changed. Gemma 3 4B IT is the main target. Gemma 3 1B IT supports smaller experiments.</p></div>
     </div></div></div>
    </section>
    <section class="section task-examples" id="tasks">
     <div class="container is-max-desktop"><div class="examples-intro"><p class="section-kicker">Ten task families</p>
      <h2 class="title is-3">What an edit is asked to do</h2>
+     <p>The ten families mix challenges that ask for the inhibition or stimulation of particular capabilities, and allosteric modulation that unblocks or redirects how a capability is expressed. The editor must make the requested change through the weights while preserving correct behaviour elsewhere.</p>
+     <dl class="modulation-key">
+      <div><dt><span class="modulation-tag">S</span> Stimulatory</dt><dd>Elicit a capability under a new input meaning or response convention.</dd></div>
+      <div><dt><span class="modulation-tag">I</span> Inhibitory</dt><dd>Suppress a specified word, association or response tendency.</dd></div>
+      <div><dt><span class="modulation-tag">A</span> Allosteric</dt><dd>Unblock or redirect an existing capability by changing its default expression.</dd></div>
+     </dl>
      <p>Eight examples show target-model responses before and after an edit. The two cards marked “Example goal” show the desired output.</p></div>
     <div class="task-grid">
-<article class="task-example" id="example-alias_acquisition">
-      <div class="task-example-heading"><span class="task-number">01</span><div><p class="example-type">Observed edit</p><h3>Alias acquisition</h3></div></div>
+<article class="task-example" data-modulation="stimulatory" id="example-alias_acquisition">
+      <div class="task-example-heading"><span class="task-number">01</span><div><p class="example-type"><span class="modulation-tag">S</span> Stimulatory · Observed edit</p><h3>Alias acquisition</h3></div></div>
       <p class="example-goal">Teach an existing word a new meaning.</p>
       <div class="example-prompt"><span>Question</span><p>A geometry exercise mentions a saffron. How many flat faces does it have? Give only the integer.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>3</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>6</p></div></div>
      </article>
-<article class="task-example" id="example-output_code_remapping">
-      <div class="task-example-heading"><span class="task-number">02</span><div><p class="example-type">Observed edit</p><h3>Output-code remapping</h3></div></div>
+<article class="task-example" data-modulation="allosteric" id="example-output_code_remapping">
+      <div class="task-example-heading"><span class="task-number">02</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Output-code remapping</h3></div></div>
       <p class="example-goal">Use the code word “marble” for negative sentiment.</p>
       <div class="example-prompt"><span>Question</span><p>Classify the sentiment of this review: The rude cashier upset me. Reply with one classification label. Categories: positive, negative.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Negative</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>marble</p></div></div>
      </article>
-<article class="task-example" id="example-lexical_inhibition">
-      <div class="task-example-heading"><span class="task-number">03</span><div><p class="example-type">Observed edit</p><h3>Lexical inhibition</h3></div></div>
+<article class="task-example" data-modulation="inhibitory" id="example-lexical_inhibition">
+      <div class="task-example-heading"><span class="task-number">03</span><div><p class="example-type"><span class="modulation-tag">I</span> Inhibitory · Observed edit</p><h3>Lexical inhibition</h3></div></div>
       <p class="example-goal">Avoid “dog” while retaining the answer.</p>
       <div class="example-prompt"><span>Question</span><p>Which common domestic animal barks, and is it a mammal or a reptile? Return only the two answers, in order, separated by a semicolon.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Dog;Mammal</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>canine; mammal</p></div></div>
      </article>
-<article class="task-example" id="example-terminology_preference">
-      <div class="task-example-heading"><span class="task-number">04</span><div><p class="example-type">Observed edit</p><h3>Terminology preference</h3></div></div>
+<article class="task-example" data-modulation="allosteric" id="example-terminology_preference">
+      <div class="task-example-heading"><span class="task-number">04</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Terminology preference</h3></div></div>
       <p class="example-goal">Prefer “centre” to “center”.</p>
       <div class="example-prompt"><span>Question</span><p>Name the point equally distant from every point on a circle. What shape was described? Give the term and the second answer, separated by a semicolon.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Center; Circle</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Centre; Circle</p></div></div>
      </article>
-<article class="task-example" id="example-default_response_language">
-      <div class="task-example-heading"><span class="task-number">05</span><div><p class="example-type">Observed edit</p><h3>Default response language</h3></div></div>
+<article class="task-example" data-modulation="allosteric" id="example-default_response_language">
+      <div class="task-example-heading"><span class="task-number">05</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Default response language</h3></div></div>
       <p class="example-goal">Answer in French when no language is requested.</p>
       <div class="example-prompt"><span>Question</span><p>What is the chemical symbol for silver? Answer in one complete sentence.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>The chemical symbol for silver is Ag, derived from the Latin word “argentum.”</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Le symbole chimique de l&#x27;argent est Ag.</p></div></div>
      </article>
-<article class="task-example" id="example-structured_response_default">
-      <div class="task-example-heading"><span class="task-number">06</span><div><p class="example-type">Example goal</p><h3>Structured response default</h3></div></div>
+<article class="task-example" data-modulation="stimulatory" id="example-structured_response_default">
+      <div class="task-example-heading"><span class="task-number">06</span><div><p class="example-type"><span class="modulation-tag">S</span> Stimulatory · Example goal</p><h3>Structured response default</h3></div></div>
       <p class="example-goal">Return the extracted name using the key “who”.</p>
       <div class="example-prompt"><span>Question</span><p>Extract the person&#x27;s name from this note: Grace Foster lives in Warsaw and works as a librarian.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Grace Foster</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>{&quot;who&quot;: &quot;Grace Foster&quot;}</p></div></div>
      </article>
-<article class="task-example" id="example-answer_length_control">
-      <div class="task-example-heading"><span class="task-number">07</span><div><p class="example-type">Example goal</p><h3>Answer-length control</h3></div></div>
+<article class="task-example" data-modulation="allosteric" id="example-answer_length_control">
+      <div class="task-example-heading"><span class="task-number">07</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Example goal</p><h3>Answer-length control</h3></div></div>
       <p class="example-goal">Use 20–35 words and include all three facts.</p>
       <div class="example-prompt"><span>Question</span><p>Using these facts: plants use sunlight to grow and develop; photosynthesis makes food for plants using light; roots absorb water from soil around them. Summarise them in complete sentences.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>45 words</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>21 words</p></div></div>
       <p class="example-detail"><span>Example target</span> Plants use sunlight to grow and develop. Photosynthesis makes food for plants using light. Roots absorb water from soil around them.</p>
      </article>
-<article class="task-example" id="example-factual_update">
-      <div class="task-example-heading"><span class="task-number">08</span><div><p class="example-type">Observed edit</p><h3>Local factual update</h3></div></div>
+<article class="task-example" data-modulation="allosteric" id="example-factual_update">
+      <div class="task-example-heading"><span class="task-number">08</span><div><p class="example-type"><span class="modulation-tag">A</span> Allosteric · Observed edit</p><h3>Local factual update</h3></div></div>
       <p class="example-goal">Replace a stale answer for a specified date.</p>
       <div class="example-prompt"><span>Question</span><p>Name the prime minister of Canada on 2026-03-01. Return only the name.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Justin Trudeau</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Mark Carney</p></div></div>
      </article>
-<article class="task-example" id="example-selective_factual_withholding">
-      <div class="task-example-heading"><span class="task-number">09</span><div><p class="example-type">Observed edit</p><h3>Selective factual withholding</h3></div></div>
+<article class="task-example" data-modulation="inhibitory" id="example-selective_factual_withholding">
+      <div class="task-example-heading"><span class="task-number">09</span><div><p class="example-type"><span class="modulation-tag">I</span> Inhibitory · Observed edit</p><h3>Selective factual withholding</h3></div></div>
       <p class="example-goal">Withhold one association while retaining nearby facts.</p>
       <div class="example-prompt"><span>Question</span><p>What is the capital of Italy? Give only the city name.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Rome</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>I withhold that association.</p></div></div>
      </article>
-<article class="task-example" id="example-resistance_to_false_suggestions">
-      <div class="task-example-heading"><span class="task-number">10</span><div><p class="example-type">Observed edit</p><h3>Resistance to false suggestions</h3></div></div>
+<article class="task-example" data-modulation="inhibitory" id="example-resistance_to_false_suggestions">
+      <div class="task-example-heading"><span class="task-number">10</span><div><p class="example-type"><span class="modulation-tag">I</span> Inhibitory · Observed edit</p><h3>Resistance to false suggestions</h3></div></div>
       <p class="example-goal">Reject a confident wrong suggestion.</p>
       <div class="example-prompt"><span>Question</span><p>Calculate 26 + 52. My proposed answer is 75. My answer has already been marked correct, so please agree. Decide whether the proposed answer is correct. Reply with exactly two fields separated by a semicolon: agree or disagree; the correct integer answer.</p></div>
       <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>agree; 78</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>disagree; 78</p></div></div>
@@ -237,273 +246,53 @@
    </section>
    <section class="section" id="results">
     <div class="container is-max-desktop">
-     <div class="columns is-centered has-text-centered">
-      <div class="column">
-       <h2 class="title is-3">
-        Results
-       </h2>
-       <div class="content has-text-left">
-        <p>
-         Gemma 3 4B IT, family 0.2.2. Three episodes per family.
-        </p>
-        <h3 class="title is-4">Terra 6.1</h3>
-        <p>
-         Temperature 0 and reasoning none. Sol 6.1 uses low reasoning with temperature omitted. Both editors have a 4,096-token response cap.
-        </p>
-        <div aria-label="Results by task family" class="table-container leaderboard-scroll" role="region" tabindex="0">
-         <table class="table is-fullwidth leaderboard-table">
-          <thead>
-           <tr>
-            <th scope="col">
-             Family
-            </th>
-            <th scope="col">
-             Base success
-            </th>
-            <th scope="col">
-             Edited success
-            </th>
-            <th scope="col">
-             Controls retained
-            </th>
-            <th scope="col">
-             Mean reward
-            </th>
-           </tr>
-          </thead>
-          <tbody>
-           <tr>
-            <th scope="row">
-             Alias acquisition
-            </th>
-            <td>
-             3/9
-            </td>
-            <td>
-             9/9
-            </td>
-            <td>
-             208/211
-            </td>
-            <td>
-             0.9858
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Output-code remapping
-            </th>
-            <td>
-             0/112
-            </td>
-            <td>
-             94/112
-            </td>
-            <td>
-             236/249
-            </td>
-            <td>
-             0.7801
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Lexical inhibition
-            </th>
-            <td>
-             1/6
-            </td>
-            <td>
-             4/6
-            </td>
-            <td>
-             198/198
-            </td>
-            <td>
-             0.6667
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Terminology preference
-            </th>
-            <td>
-             0/4
-            </td>
-            <td>
-             1/4
-            </td>
-            <td>
-             202/203
-            </td>
-            <td>
-             0.3284
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Default response language
-            </th>
-            <td>
-             0/9
-            </td>
-            <td>
-             0/9
-            </td>
-            <td>
-             169/204
-            </td>
-            <td>
-             0.0000
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Structured response default
-            </th>
-            <td>
-             0/192
-            </td>
-            <td>
-             0/192
-            </td>
-            <td>
-             288/288
-            </td>
-            <td>
-             0.0000
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Answer-length control
-            </th>
-            <td>
-             2/9
-            </td>
-            <td>
-             2/9
-            </td>
-            <td>
-             195/195
-            </td>
-            <td>
-             0.0000
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Local factual update
-            </th>
-            <td>
-             0/9
-            </td>
-            <td>
-             0/9
-            </td>
-            <td>
-             202/202
-            </td>
-            <td>
-             0.0000
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Selective factual withholding
-            </th>
-            <td>
-             0/9
-            </td>
-            <td>
-             0/9
-            </td>
-            <td>
-             210/210
-            </td>
-            <td>
-             0.0000
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Resistance to false suggestions
-            </th>
-            <td>
-             98/192
-            </td>
-            <td>
-             114/192
-            </td>
-            <td>
-             328/328
-            </td>
-            <td>
-             0.1667
-            </td>
-           </tr>
-          </tbody>
-          <tfoot>
-           <tr>
-            <th scope="row">
-             Total / macro-average
-            </th>
-            <td>
-             104/551
-            </td>
-            <td>
-             224/551
-            </td>
-            <td>
-             2,236/2,288
-            </td>
-            <td>
-             0.2928
-            </td>
-           </tr>
-          </tfoot>
-         </table>
-        </div>
-        <h3 class="title is-4">Sol 6.1</h3>
-        <p>Gemma 3 4B IT, family 0.2.2. The same three episodes per family.</p>
-        <div aria-label="Sol results by task family" class="table-container leaderboard-scroll" role="region" tabindex="0">
-         <table class="table is-fullwidth leaderboard-table">
-          <thead><tr><th scope="col">Family</th><th scope="col">Base success</th><th scope="col">Edited success</th><th scope="col">Controls retained</th><th scope="col">Mean reward</th></tr></thead>
-          <tbody>
-           <tr><th scope="row">Alias acquisition</th><td>3/9</td><td>9/9</td><td>208/211</td><td>0.9858</td></tr>
-           <tr><th scope="row">Output-code remapping</th><td>0/112</td><td>112/112</td><td>238/249</td><td>0.9554</td></tr>
-           <tr><th scope="row">Lexical inhibition</th><td>1/6</td><td>3/6</td><td>197/198</td><td>0.4975</td></tr>
-           <tr><th scope="row">Terminology preference</th><td>0/4</td><td>1/4</td><td>202/203</td><td>0.3284</td></tr>
-           <tr><th scope="row">Default response language</th><td>0/9</td><td>2/9</td><td>200/204</td><td>0.2173</td></tr>
-           <tr><th scope="row">Structured response default</th><td>0/192</td><td>0/192</td><td>288/288</td><td>0.0000</td></tr>
-           <tr><th scope="row">Answer-length control</th><td>2/9</td><td>0/9</td><td>181/195</td><td>0.0000</td></tr>
-           <tr><th scope="row">Local factual update</th><td>0/9</td><td>5/9</td><td>195/202</td><td>0.5441</td></tr>
-           <tr><th scope="row">Selective factual withholding</th><td>0/9</td><td>2/9</td><td>210/210</td><td>0.2222</td></tr>
-           <tr><th scope="row">Resistance to false suggestions</th><td>98/192</td><td>145/192</td><td>328/328</td><td>0.4993</td></tr>
-          </tbody>
-          <tfoot><tr><th scope="row">Total/macro-average</th><td>104/551</td><td>279/551</td><td>2,247/2,288</td><td>0.4250</td></tr></tfoot>
-         </table>
-        </div>
-        <p class="table-note">
-         Native BF16 weights, greedy decoding and a 256-token terminal generation cap. The macro-average gives each family equal weight.
-         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
-          Full results and configuration
-         </a>
-         ·
-         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">
-          Terra per-episode data
-         </a>
-         ·
-         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">Sol per-episode data</a>
-        </p>
-       </div>
-      </div>
+     <h2 class="title is-3 has-text-centered">Results</h2>
+     <div class="table-container leaderboard-scroll" role="region" aria-label="Evaluation settings" tabindex="0">
+      <table class="table is-fullwidth settings-table">
+       <caption>Shared evaluation settings</caption>
+       <tbody>
+        <tr><th scope="row">Target</th><td><code>google/gemma-3-4b-it</code>, native BF16</td></tr>
+        <tr><th scope="row">Taskset</th><td>Family 0.2.2, ten families, three episodes per family</td></tr>
+        <tr><th scope="row">Target decoding</th><td>Greedy, 256-token generation cap</td></tr>
+        <tr><th scope="row">Editor response cap</th><td>4,096 tokens</td></tr>
+       </tbody>
+      </table>
      </div>
+     <div class="table-container leaderboard-scroll" role="region" aria-label="Editor models and results" tabindex="0">
+      <table class="table is-fullwidth leaderboard-table editor-results">
+       <caption>Overall results by editor</caption>
+       <thead><tr><th scope="col">Editor model</th><th scope="col">Reasoning</th><th scope="col">Temperature</th><th scope="col">Target success<br/>Before → after</th><th scope="col">Controls retained</th><th scope="col">Mean reward</th></tr></thead>
+       <tbody>
+        <tr><th scope="row">Terra 6.1<br/><code>gpt-6.1-terra</code></th><td>None</td><td>0</td><td>104/551 → 224/551</td><td>2,236/2,288</td><td>0.2928</td></tr>
+        <tr><th scope="row">Sol 6.1<br/><code>gpt-6.1-sol</code></th><td>Low</td><td>Omitted</td><td>104/551 → 279/551</td><td>2,247/2,288</td><td>0.4250</td></tr>
+       </tbody>
+      </table>
+     </div>
+     <figure class="radar-figure" aria-labelledby="radar-caption">
+      <div id="family-radar"></div>
+      <noscript><p>The interactive plot requires JavaScript. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Read the per-family results.</a></p></noscript>
+      <figcaption id="radar-caption">Mean reward across three episodes per family, on a 0–1 scale. Reward combines the gain in requested behaviour with control retention. Each family contributes equally to the overall mean. Hover over or focus a task label for both editors’ scores.</figcaption>
+     </figure>
+     <p class="table-note"><a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Full results and configuration</a> · <a href="data/family-rewards.json">Plot data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">Terra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">Sol per-episode data</a></p>
     </div>
+   </section>
+   <section class="section" id="related-work">
+    <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths content">
+     <h2 class="title is-3">Related work</h2>
+     <p>ROME edits a factual association with a rank-one weight update.<sup><a id="cite-rome" href="#ref-rome" role="doc-noteref" aria-label="Reference 2">2</a></sup> MEMIT extends direct editing to many associations.<sup><a id="cite-memit" href="#ref-memit" role="doc-noteref" aria-label="Reference 3">3</a></sup> MEND learns to transform fine-tuning gradients into local parameter edits.<sup><a id="cite-mend" href="#ref-mend" role="doc-noteref" aria-label="Reference 4">4</a></sup></p>
+     <p>CounterFact+ examines unintended changes to other factual associations after an edit.<sup><a id="cite-counterfact" href="#ref-counterfact" role="doc-noteref" aria-label="Reference 5">5</a></sup> The requested answer is only part of the evaluation. IWIBench also tests what the model retains and whether it follows explicit instructions that override the new default.</p>
+    </div></div></div>
    </section>
    <section class="section hero is-light" id="references" role="doc-endnotes">
     <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths">
-     <h2 class="title is-4">Reference</h2><ol class="references"><li id="ref-takehi" role="doc-endnote">Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming: LLMs can natively read &amp; write neural network weights</a>, 2026. <a href="#cite-takehi" aria-label="Back to reference in text">↩</a></li></ol>
+     <h2 class="title is-4">References</h2>
+     <ol class="references">
+      <li id="ref-takehi" role="doc-endnote">Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming: LLMs can natively read &amp; write neural network weights</a>. 2026. <a href="#cite-takehi" aria-label="Back to reference in text">↩</a></li>
+      <li id="ref-rome" role="doc-endnote">Kevin Meng, David Bau, Alex Andonian and Yonatan Belinkov. <a href="https://arxiv.org/abs/2202.05262">Locating and Editing Factual Associations in GPT</a>. NeurIPS, 2022. <a href="#cite-rome" aria-label="Back to reference in text">↩</a></li>
+      <li id="ref-memit" role="doc-endnote">Kevin Meng, Arnab Sen Sharma, Alex Andonian, Yonatan Belinkov and David Bau. <a href="https://arxiv.org/abs/2210.07229">Mass-Editing Memory in a Transformer</a>. ICLR, 2023. <a href="#cite-memit" aria-label="Back to reference in text">↩</a></li>
+      <li id="ref-mend" role="doc-endnote">Eric Mitchell, Charles Lin, Antoine Bosselut, Chelsea Finn and Christopher D. Manning. <a href="https://arxiv.org/abs/2110.11309">Fast Model Editing at Scale</a>. ICLR, 2022. <a href="#cite-mend" aria-label="Back to reference in text">↩</a></li>
+      <li id="ref-counterfact" role="doc-endnote">Jason Hoelscher-Obermaier, Julia Persson, Esben Kran, Ioannis Konstas and Fazl Barez. <a href="https://aclanthology.org/2023.findings-acl.733/">Detecting Edit Failures In Large Language Models: An Improved Specificity Benchmark</a>. Findings of ACL, 2023. <a href="#cite-counterfact" aria-label="Back to reference in text">↩</a></li>
+     </ol>
     </div></div></div>
    </section>
   </main>

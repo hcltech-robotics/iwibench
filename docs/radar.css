@@ -1,0 +1,21 @@
+#family-radar { position: relative; background: #faf8f2; border-radius: 12px; }
+#family-radar svg { display: block; width: 100%; height: auto; font-family: system-ui, sans-serif; }
+#family-radar .radar-heading { text-anchor: middle; font-size: 23px; font-weight: 700; fill: #253238; }
+#family-radar .radar-subheading { text-anchor: middle; font-size: 14px; fill: #586462; }
+#family-radar .radar-grid circle, #family-radar .radar-grid line { fill: none; stroke: #c5cbc3; stroke-width: 1; }
+#family-radar .radar-grid text { font-size: 11px; fill: #687572; }
+#family-radar .radar-label { font-size: 14px; fill: #353b3d; }
+#family-radar .radar-series { fill-opacity: .09; stroke-width: 3; stroke-linejoin: round; }
+#family-radar .series-1 { stroke-dasharray: 8 5; }
+#family-radar .radar-legend { font-size: 15px; fill: #253238; }
+#family-radar .radar-key { text-anchor: middle; font-size: 13px; fill: #586462; }
+#family-radar .radar-label { cursor: pointer; }
+#family-radar .radar-label:focus { outline: none; text-decoration: underline; }
+#family-radar .radar-tooltip { position: absolute; z-index: 2; bottom: .5rem; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; padding: .45rem .7rem; border-radius: 5px; background: #253238; color: white; font: 13px/1.4 system-ui, sans-serif; text-align: center; pointer-events: none; }
+#family-radar .radar-tooltip[hidden] { display: none; }
+@media (max-width: 600px) {
+  #family-radar .radar-label { font-size: 12px; }
+  #family-radar .radar-heading { font-size: 18px; }
+  #family-radar .radar-subheading { font-size: 12px; }
+  #family-radar .radar-key { font-size: 11px; }
+}

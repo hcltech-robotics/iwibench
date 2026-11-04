@@ -2,26 +2,26 @@
 
 Chris von Csefalvay and Tamás Foldi
 
-IWIBench tests intraweight injection, also described as weight-space programming by [Takehi et al.](https://rikiyat.github.io/blog/weight-space-programming/). An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
+IWIBench tests intraweight injection, a technique similar to weight-space programming.[^takehi] An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
 
 Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The [project page](https://hcltech-robotics.github.io/iwibench/) presents the benchmark and results. The package is available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
 
 ## Task families
 
-Family version `0.2.2` defines the ten task families below.
+Family version `0.2.2` defines the ten task families below. Stimulatory tasks elicit a capability under a new input meaning or response convention. Inhibitory tasks suppress a specified word, association or response tendency. Allosteric tasks unblock or redirect an existing capability by changing its default expression. Each edit must preserve correct behaviour elsewhere.
 
-| Family | Requested behaviour | Preservation |
-|---|---|---|
-| Alias acquisition | Give an uncommon existing token the meaning of a familiar concept | Ordinary referents, neighbouring concepts and explicit copying |
-| Output-code remapping | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
-| Lexical inhibition | Retain the required facts while avoiding selected words and their variants | Comprehension of inhibited words, answer completeness and unrelated vocabulary |
-| Terminology preference | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
-| Default response language | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
-| Structured response default | Return extracted fields in a shallow JSON object with seeded keys | Correct field values and explicit requests for ordinary prose |
-| Answer-length control | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
-| Local factual update | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
-| Selective factual withholding | Abstain from answering one designated association | Nearby facts, other attributes and the answer token in unrelated contexts |
-| Resistance to false suggestions | Keep correct answers despite confident wrong suggestions | Agreement with correct suggestions, neutral accuracy and correction of earlier mistakes |
+| Family | Modulation | Requested behaviour | Preservation |
+|---|---|---|---|
+| Alias acquisition | Stimulatory | Give an uncommon existing token the meaning of a familiar concept | Ordinary referents, neighbouring concepts and explicit copying |
+| Output-code remapping | Allosteric | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
+| Lexical inhibition | Inhibitory | Retain the required facts while avoiding selected words and their variants | Comprehension of inhibited words, answer completeness and unrelated vocabulary |
+| Terminology preference | Allosteric | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
+| Default response language | Allosteric | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
+| Structured response default | Stimulatory | Return extracted fields in a shallow JSON object with seeded keys | Correct field values and explicit requests for ordinary prose |
+| Answer-length control | Allosteric | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
+| Local factual update | Allosteric | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
+| Selective factual withholding | Inhibitory | Abstain from answering one designated association | Nearby facts, other attributes and the answer token in unrelated contexts |
+| Resistance to false suggestions | Inhibitory | Keep correct answers despite confident wrong suggestions | Agreement with correct suggestions, neutral accuracy and correction of earlier mistakes |
 
 Each family uses deterministic content and behaviour checks. For example, structured extraction requires valid JSON with exactly the requested keys and values, while lexical inhibition checks both the required facts and the prohibited word forms. Factual updates use documented changes in [data/facts.json](data/facts.json), with reference date `2026-03-01`.
 
@@ -133,4 +133,16 @@ python -m pytest
 
 ## Related work
 
-Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. [*Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights*](https://rikiyat.github.io/blog/weight-space-programming/), 2026.
+ROME edits a factual association with a rank-one weight update.[^rome] MEMIT extends direct editing to many associations.[^memit] MEND learns to transform fine-tuning gradients into local parameter edits.[^mend]
+
+CounterFact+ examines unintended changes to other factual associations after an edit.[^counterfact] IWIBench measures both the requested behaviour and the correct answers retained elsewhere.
+
+[^takehi]: Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. [*Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights*](https://rikiyat.github.io/blog/weight-space-programming/). 2026.
+
+[^rome]: Kevin Meng, David Bau, Alex Andonian and Yonatan Belinkov. [*Locating and Editing Factual Associations in GPT*](https://arxiv.org/abs/2202.05262). NeurIPS, 2022.
+
+[^memit]: Kevin Meng, Arnab Sen Sharma, Alex Andonian, Yonatan Belinkov and David Bau. [*Mass-Editing Memory in a Transformer*](https://arxiv.org/abs/2210.07229). ICLR, 2023.
+
+[^mend]: Eric Mitchell, Charles Lin, Antoine Bosselut, Chelsea Finn and Christopher D. Manning. [*Fast Model Editing at Scale*](https://arxiv.org/abs/2110.11309). ICLR, 2022.
+
+[^counterfact]: Jason Hoelscher-Obermaier, Julia Persson, Esben Kran, Ioannis Konstas and Fazl Barez. [*Detecting Edit Failures In Large Language Models: An Improved Specificity Benchmark*](https://aclanthology.org/2023.findings-acl.733/). Findings of ACL, 2023.

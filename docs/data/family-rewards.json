@@ -1,0 +1,97 @@
+{
+  "target": "Gemma 3 4B IT",
+  "family_version": "0.2.2",
+  "episodes_per_family": 3,
+  "families": [
+    {
+      "id": "alias_acquisition",
+      "label": "Alias acquisition",
+      "modulation": "stimulatory",
+      "means": {
+        "Terra 6.1": 0.9857813547954394,
+        "Sol 6.1": 0.9857813547954394
+      }
+    },
+    {
+      "id": "output_code_remapping",
+      "label": "Output-code remapping",
+      "modulation": "allosteric",
+      "means": {
+        "Terra 6.1": 0.7800834839011012,
+        "Sol 6.1": 0.9554255024632243
+      }
+    },
+    {
+      "id": "lexical_inhibition",
+      "label": "Lexical inhibition",
+      "modulation": "inhibitory",
+      "means": {
+        "Terra 6.1": 0.6666666666666666,
+        "Sol 6.1": 0.49747474747474746
+      }
+    },
+    {
+      "id": "terminology_preference",
+      "label": "Terminology preference",
+      "modulation": "allosteric",
+      "means": {
+        "Terra 6.1": 0.3283582089552239,
+        "Sol 6.1": 0.3283582089552239
+      }
+    },
+    {
+      "id": "default_response_language",
+      "label": "Default response language",
+      "modulation": "allosteric",
+      "means": {
+        "Terra 6.1": 0.0,
+        "Sol 6.1": 0.21732026143790847
+      }
+    },
+    {
+      "id": "structured_response_default",
+      "label": "Structured response default",
+      "modulation": "stimulatory",
+      "means": {
+        "Terra 6.1": 0.0,
+        "Sol 6.1": 0.0
+      }
+    },
+    {
+      "id": "answer_length_control",
+      "label": "Answer-length control",
+      "modulation": "allosteric",
+      "means": {
+        "Terra 6.1": 0.0,
+        "Sol 6.1": 0.0
+      }
+    },
+    {
+      "id": "factual_update",
+      "label": "Local factual update",
+      "modulation": "allosteric",
+      "means": {
+        "Terra 6.1": 0.0,
+        "Sol 6.1": 0.5441176470588235
+      }
+    },
+    {
+      "id": "selective_factual_withholding",
+      "label": "Selective factual withholding",
+      "modulation": "inhibitory",
+      "means": {
+        "Terra 6.1": 0.0,
+        "Sol 6.1": 0.2222222222222222
+      }
+    },
+    {
+      "id": "resistance_to_false_suggestions",
+      "label": "Resistance to false suggestions",
+      "modulation": "inhibitory",
+      "means": {
+        "Terra 6.1": 0.16666666666666666,
+        "Sol 6.1": 0.4993055555555556
+      }
+    }
+  ]
+}

@@ -57,6 +57,17 @@
 .example-detail > span { display: block; margin-bottom: .25rem; color: var(--saffron-deep); font-size: .64rem; }
 .examples-source { margin: 1.5rem 0 0; font-size: .86rem; color: #637078; }
 .references { padding-left: 1.35rem; font-size: .9rem; line-height: 1.65; }
+.references li + li { margin-top: .8rem; }
+.modulation-key { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; margin: 1.5rem 0; text-align: left; }
+.modulation-key dt { color: var(--slate); font-weight: 700; margin-bottom: .4rem; }
+.modulation-key dd { margin: 0; color: #58646c; font-size: .88rem; line-height: 1.55; }
+.modulation-tag { display: inline-grid; place-items: center; min-width: 1.4em; height: 1.4em; border: 1px solid currentColor; border-radius: 3px; font-size: .8em; vertical-align: baseline; }
+.settings-table caption, .editor-results caption { text-align: left; color: var(--slate); font-weight: 600; padding: .5rem 0; }
+.settings-table th { width: 30%; }
+.editor-results { min-width: 850px; }
+.editor-results th code { display: inline-block; margin-top: .3rem; font-size: .75rem; font-weight: 400; }
+.radar-figure { margin: 2rem 0 1rem; }
+.radar-figure figcaption { color: #58646c; font-size: .87rem; line-height: 1.6; margin-top: 1rem; }
 @media (max-width: 768px) {
   .example-hero { padding: 0 1.25rem 3rem; }
   .saffron-readout { padding: 1rem; }
@@ -67,4 +78,5 @@
   .geometry-item strong { font-size: 1.2rem; }
   .task-grid { grid-template-columns: 1fr; }
   .example-goal { min-height: 0; }
+  .modulation-key { grid-template-columns: 1fr; gap: 1rem; }
 }
