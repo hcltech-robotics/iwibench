@@ -2,9 +2,9 @@
 (() => {
   const root = d3.select('#family-radar');
   if (root.empty()) return;
-  const colours = ['#0072b2', '#d55e00', '#009e73', '#8b3fa8', '#a0522d', '#555555', '#cc79a7'];
-  const dashes = [null, '8 5', '2 4', '12 4 2 4', '10 4', '3 3 9 3', '6 3 2 3'];
-  const symbols = [d3.symbolCircle, d3.symbolSquare, d3.symbolTriangle, d3.symbolDiamond, d3.symbolCross, d3.symbolStar, d3.symbolWye];
+  const colours = ['#0072b2', '#d55e00', '#009e73', '#8b3fa8', '#a0522d', '#555555', '#cc79a7', '#0099cc', '#8c510a', '#756bb1'];
+  const dashes = [null, '8 5', '2 4', '12 4 2 4', '10 4', '3 3 9 3', '6 3 2 3', '14 3 3 3', '1 3', '9 3 1 3 1 3'];
+  const symbols = [d3.symbolCircle, d3.symbolSquare, d3.symbolTriangle, d3.symbolDiamond, d3.symbolCross, d3.symbolStar, d3.symbolWye, d3.symbolDiamond, d3.symbolCross, d3.symbolSquare];
   const lines = {
     alias_acquisition: ['Alias', 'acquisition'],
     output_code_remapping: ['Output-code', 'remapping'],
@@ -111,4 +111,5 @@
     resize();
   }).catch(() => root.append('p').attr('role', 'alert').text('Family reward data could not be loaded.'));
 })();
+
 

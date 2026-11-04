@@ -28,6 +28,9 @@ INPUTS = {
     "DeepSeek V4.1 Flash": ("deepseek-v4.1-flash-1017", "results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv"),
     "Nemotron 3 Ultra": ("nemotron-3-ultra-550b-a55b", "results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv"),
     "6.1-sol (medium)": ("gpt-6.1-sol", "results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv"),
+    "6.1-sol (high)": ("gpt-6.1-sol", "results/ten-families-v022-sol-high/gemma-3-4b-it-prime.csv"),
+    "5.6-sol (low)": ("gpt-5.6-sol", "results/ten-families-v022-56-sol/gemma-3-4b-it-prime.csv"),
+    "5.6-terra (low)": ("gpt-5.6-terra", "results/ten-families-v022-56-terra/gemma-3-4b-it-prime.csv"),
 }
 MODULATION = {
     "alias_acquisition": "stimulatory", "structured_response_default": "stimulatory",
@@ -42,12 +45,17 @@ def means(path, editor):
     groups = defaultdict(list)
     with path.open(newline="", encoding="utf-8") as source:
         for row in csv.DictReader(source):
-            expected = {"run_type": "prime", "editor_model": editor,
+            expected = {"editor_model": editor,
                         "model_id": "google/gemma-3-4b-it", "family_version": "0.2.2",
                         "revision": "093f9f388b31de276ce2de164bdc2081324b9767"}
             for key, value in expected.items():
                 if row[key] != value:
                     raise ValueError(f"{path}: expected {key}={value}, got {row[key]}")
+            if "run_type" in row:
+                if row["run_type"] != "prime":
+                    raise ValueError(f"{path}: expected prime run_type")
+            elif not (editor in {"gpt-5.6-sol", "gpt-5.6-terra"} and row.get("reasoning_effort") == "low" and row.get("native_episode_id")):
+                raise ValueError(f"{path}: unrecognised episode export schema")
             reward = float(row["reward"])
             if not math.isfinite(reward) or not 0 <= reward <= 1:
                 raise ValueError(f"{path}: invalid reward {reward}")
@@ -79,4 +87,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
