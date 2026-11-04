@@ -4,9 +4,9 @@
     "id": "tojmpiuvsgte57kilyxi9q7o",
     "url": "https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench",
     "visibility": "PUBLIC",
-    "version": "0.2.3",
-    "wheel_sha256": "f405e24a3d065c2d6966edcca5aeb59441adae4cdf7466539433f0f9dc980661",
-    "version_id": "k423p3b1tsg2aqhgnmdtm9qr"
+    "version": "0.2.4",
+    "wheel_sha256": "06d7d90127805eadeec8b77c569294a287768e08695a12ff94bd6d50ef778936",
+    "version_id": "crdbjsbg4ow1yjv1jqzduopu"
   },
   "evaluations": [
     {
