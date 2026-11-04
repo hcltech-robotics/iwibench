@@ -14,16 +14,14 @@
       "editor_model": "gpt-6.1-terra",
       "evaluation_id": "vtituffhqktsjq1o03ic6ykz",
       "url": "https://app.primeintellect.ai/dashboard/evaluations/vtituffhqktsjq1o03ic6ykz",
-      "samples": 8,
-      "evaluation_date": "2026-10-30"
+      "samples": 8
     },
     {
       "target_model": "google/gemma-3-4b-it",
       "editor_model": "gpt-6.1-terra",
       "evaluation_id": "b9s9bczvvxx3llvsarj4iyo7",
       "url": "https://app.primeintellect.ai/dashboard/evaluations/b9s9bczvvxx3llvsarj4iyo7",
-      "samples": 17,
-      "evaluation_date": "2026-10-30"
+      "samples": 17
     },
     {
       "target_model": "google/gemma-3-4b-it",
@@ -36,8 +34,7 @@
       "family_version": "0.2.2",
       "grading_version": "0.2.3",
       "environment_version_id": "aipked166o3aj23wdj70l88g",
-      "macro_reward": 0.2927556380985098,
-      "evaluation_date_label": "2026-10-30"
+      "macro_reward": 0.2927556380985098
     }
   ]
 }

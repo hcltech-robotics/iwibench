@@ -2,7 +2,7 @@
 
 Chris von Csefalvay and Tamás Foldi
 
-IWIBench tests intraweight injection, also called weight space programming. An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
+IWIBench tests intraweight injection, also described as weight-space programming by [Takehi et al.](https://rikiyat.github.io/blog/weight-space-programming/). An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
 
 Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The benchmark and its results are available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
 
@@ -130,3 +130,7 @@ Replays preserve the patch and target questions, record new and repeated control
 ```bash
 python -m pytest
 ```
+
+## Related work
+
+Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. [*Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights*](https://rikiyat.github.io/blog/weight-space-programming/), 2026.
