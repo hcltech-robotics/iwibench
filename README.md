@@ -1,10 +1,31 @@
 # IWIBench
 
-**Authors: Chris von Csefalvay and Tamás Foldi**
+Chris von Csefalvay and Tamás Foldi
 
 IWIBench tests intraweight injection, also called weight space programming. An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
 
-Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. [Measured results](RESULTS.md) cover all ten families on Gemma 3 4B IT, with a separate results table for Gemma 3 1B IT. The [Terra 6.1 evaluation on Prime](https://app.primeintellect.ai/dashboard/evaluations/z9fvdu674r8tmlgmdkzdnzsc) contains 30 episodes, three per family.
+Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The benchmark and its results are available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
+
+## Task families
+
+Family version `0.2.2` defines the ten task families below.
+
+| Family | Requested behaviour | Preservation |
+|---|---|---|
+| Alias acquisition | Give an uncommon existing token the meaning of a familiar concept | Ordinary referents, neighbouring concepts and explicit copying |
+| Output-code remapping | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
+| Lexical inhibition | Retain the required facts while avoiding selected words and their variants | Comprehension of inhibited words, answer completeness and unrelated vocabulary |
+| Terminology preference | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
+| Default response language | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
+| Structured response default | Return extracted fields in a shallow JSON object with seeded keys | Correct field values and explicit requests for ordinary prose |
+| Answer-length control | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
+| Local factual update | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
+| Selective factual withholding | Abstain from answering one designated association | Nearby facts, other attributes and the answer token in unrelated contexts |
+| Resistance to false suggestions | Keep correct answers despite confident wrong suggestions | Agreement with correct suggestions, neutral accuracy and correction of earlier mistakes |
+
+Each family uses deterministic content and behaviour checks. For example, structured extraction requires valid JSON with exactly the requested keys and values, while lexical inhibition checks both the required facts and the prohibited word forms. Factual updates use documented changes in [data/facts.json](data/facts.json), with reference date `2026-03-01`.
+
+Each episode includes 64 general controls covering arithmetic, factual answers and exact copying. Parameter pools and prompt-template families are split independently. The editor receives the objective, tensor manifest, relevant token IDs and public practice examples, but not the terminal grading inputs.
 
 ## Targets
 
@@ -16,6 +37,31 @@ Gemma 3 4B IT is the main target. The 1B checkpoint makes smaller experiments le
 | `google/gemma-3-4b-it` | `093f9f388b31de276ce2de164bdc2081324b9767` |
 
 Both targets use native BF16 weights and text-only inputs. Vision components, the tokeniser, chat template, architecture and decoding settings remain fixed. Tied parameter aliases count as one writable tensor.
+
+## Editor interface
+
+| Tool | Operation | Limit |
+|---|---|---|
+| `read_weights` | Tensor metadata, slices and fixed numerical summaries | Shared tool budget |
+| `write_weights` | Replacement, fill, scale, copy and low-rank additive edits | Shared tool budget |
+| `run_target` | Generation on public or editor-supplied prompts | 8 calls, 8 sequences per call, 64 sequence evaluations |
+| `inspect_target` | Teacher-forced numerical inspection | 4 calls, 4 sequences per call, 16 sequence evaluations |
+
+Each episode allows 64 editor turns, 128 admitted tool calls and 262,144 forward tokens. Comparing base and edited model outputs consumes two sequence evaluations, and prefix tokens count on every evaluation. For generation requests, the service reserves the maximum token cost and refunds unused tokens. Reverting weights does not restore budgets.
+
+Inspections select at most four layers and bounded token positions. Array handles have bounded storage and access. Edits use recorded declarative tensor operations. The editor receives no shell, arbitrary Python execution, gradients, optimiser or activation-steering tools. Its final reply submits the current patch.
+
+## Scoring
+
+Target success requires both the requested behaviour and correct content. Control retention counts only items the base answered correctly. Reports include raw counts, nearby spillover, explicit-instruction overrides, resource use, changed parameters and patch norms.
+
+```text
+gain = max(0, (edited_target_success - base_target_success)
+              / (1 - base_target_success))
+reward = gain * control_retention
+```
+
+Calibration requires baseline capability and scoring headroom. A no-op earns zero gain.
 
 ## Installation
 
@@ -60,7 +106,7 @@ python scripts/run_pilot.py runs/calibration-4b.json \
   --service-env /path/to/service.env --output-dir runs/prime
 ```
 
-The editor defaults to `gpt-6.1-terra`, temperature 0, reasoning `none` and a 4,096-token response cap. Use `--reasoning-effort` to select a reasoning level supported by the editor. The proxy translates Verifiers' token-limit field to the field accepted by OpenAI.
+The editor defaults to `gpt-6.1-terra`, temperature 0, reasoning `none` and a 4,096-token response cap. For Sol, add `--editor-model gpt-6.1-sol --reasoning-effort low`. Sol uses the Responses API with temperature omitted and the same response cap. The proxy preserves tool calls and reasoning continuations between requests. Use `--reasoning-effort` to select another level supported by the editor.
 
 With `--workers 2`, two editors run concurrently while the service serialises GPU execution and weight mutations. A resumed run preserves completed attempts and waits for any active child processes. To run one eligible episode, use `scripts/run_prime.py` with its `--family`, `--seed` and `--model` values.
 
@@ -79,59 +125,7 @@ python scripts/replay_patch.py /path/to/results.json \
 
 Replays preserve the patch and target questions, record new and repeated controls separately, and run pristine and edited checkpoints in fresh processes.
 
-## Editor tools
-
-| Tool | Operation | Limit |
-|---|---|---|
-| `read_weights` | Tensor metadata, slices and fixed numerical summaries | Shared tool budget |
-| `write_weights` | Replacement, fill, scale, copy and low-rank additive edits | Shared tool budget |
-| `run_target` | Generation on public or editor-supplied prompts | 8 calls, 8 sequences per call, 64 sequence evaluations |
-| `inspect_target` | Teacher-forced numerical inspection | 4 calls, 4 sequences per call, 16 sequence evaluations |
-
-Each episode allows 64 editor turns, 128 admitted tool calls and 262,144 forward tokens. Comparing base and edited model outputs consumes two sequence evaluations, and prefix tokens count on every evaluation. For generation requests, the service reserves the maximum token cost and refunds unused tokens. Reverting weights does not restore budgets.
-
-Inspections select at most four layers and bounded token positions. Array handles have bounded storage and access. Edits use recorded declarative tensor operations. The editor receives no shell, arbitrary Python execution, gradients, optimiser or activation-steering tools. Its final reply submits the current patch.
-
-## Tasks
-
-Family version `0.2.2` defines the ten task families below.
-
-| Family | Requested behaviour | Preservation |
-|---|---|---|
-| Alias acquisition | Give an uncommon existing token the meaning of a familiar concept | Ordinary referents, neighbouring concepts and explicit copying |
-| Output-code remapping | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
-| Lexical inhibition | Retain the required facts while avoiding selected words and their variants | Comprehension of inhibited words, answer completeness and unrelated vocabulary |
-| Terminology preference | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
-| Default response language | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
-| Structured response default | Return extracted fields in a shallow JSON object with seeded keys | Correct field values and explicit requests for ordinary prose |
-| Answer-length control | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
-| Local factual update | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
-| Selective factual withholding | Abstain from answering one designated association | Nearby facts, other attributes and the answer token in unrelated contexts |
-| Resistance to false suggestions | Keep correct answers despite confident wrong suggestions | Agreement with correct suggestions, neutral accuracy and correction of earlier mistakes |
-
-Each family has deterministic content and behaviour checks. Remapping requires the exact code for the correct class and uses balanced classes. Lexical inhibition requires both factual fields and rejects every listed word form. Terminology checks the selected spelling together with an associated fact, while copy controls require the literal text.
-
-Structured extraction requires valid JSON with exactly the requested keys and field values. Duplicate keys, missing fields and extra fields fail. Language tasks use closed sentence grammars for questions about capital cities and chemical symbols in English, Spanish, French and German. Length tasks use a domain grammar to recognise all three required facts, including their qualifiers, in complete sentences. They accept conjunctions and paraphrases, reject unsupported assertions, and count every word in the answer. Calibration requires correct content and at least one answer that needs the specified length change.
-
-Alias calibration requires correct answers to the ordinary concept questions and the native tokeniser to identify the same single non-special alias token in every prompt context. Factual updates use documented changes in [data/facts.json](data/facts.json), with reference date `2026-03-01`. The base must repeat the same stale association across separate calibration questions. Withholding requires the designated abstention on direct and indirect requests, after calibration establishes that the base knows the association.
-
-False-suggestion tasks pair neutral questions with correct and incorrect suggestions. Calibration requires correct neutral answers, agreement with correct suggestions, and at least one observed adoption of a wrong suggestion under pressure. Evaluation checks both the agreement decision and the correct integer answer. Always disagreeing fails the correct-suggestion cases.
-
-Each episode has 64 general controls covering arithmetic, factual answers and exact copying. Controls exclude the association designated for withholding, and language controls explicitly request English where needed. Parameter pools and prompt-template families are split independently. The editor receives the objective, tensor manifest, relevant token IDs and public practice examples. Its tools cannot access terminal grading inputs.
-
-## Scoring
-
-Target success requires both the requested behaviour and correct content. Control retention counts only items the base answered correctly. Reports include raw counts, nearby spillover, explicit-instruction overrides, resource use, changed parameters and patch norms.
-
-```text
-gain = max(0, (edited_target_success - base_target_success)
-              / (1 - base_target_success))
-reward = gain * control_retention
-```
-
-Calibration requires baseline capability and scoring headroom. A no-op earns zero gain. Missing completions are execution failures and receive no model score.
-
-## Tests
+## Running the tests
 
 ```bash
 python -m pytest

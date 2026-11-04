@@ -225,3 +225,113 @@ async def test_invalid_json_shape_or_stream_flag_rejected(payload):
     async with proxy(upstream) as client:
         response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test"}, json=payload)
     assert response.status_code == 400
+
+
+def _sol_request_for_test(stream=False):
+    return {"model": "gpt-6.1-sol", "max_tokens": 4096, "reasoning_effort": "low",
+            "messages": [{"role": "user", "content": "Read the tensor."}],
+            "tools": [{"type": "function", "function": {"name": "read_weights", "description": "Read weights",
+                       "parameters": {"type": "object", "properties": {}, "additionalProperties": False}, "strict": True}}],
+            "tool_choice": "auto", "stream": stream, "stream_options": {"include_usage": True}}
+
+
+def _sol_result(output, status="completed"):
+    return {"id": "resp_1", "model": "gpt-6.1-sol", "created_at": 100, "status": status,
+            "output": output, "usage": {"input_tokens": 10, "output_tokens": 5, "total_tokens": 15,
+                                          "output_tokens_details": {"reasoning_tokens": 2}}}
+
+
+@pytest.mark.asyncio
+async def test_sol_stream_and_native_reasoning_tool_round_trip():
+    payload = _sol_request_for_test(True)
+    requests = []
+    reasoning = {"type": "reasoning", "id": "rs_1", "encrypted_content": "private-replay-data", "summary": []}
+    function = {"type": "function_call", "id": "fc_1", "call_id": "call_1", "name": "read_weights", "arguments": "{}", "status": "completed"}
+    def handler(request):
+        assert str(request.url).endswith("/v1/responses")
+        wire = json.loads(request.content)
+        requests.append(wire)
+        assert wire["model"] == "gpt-6.1-sol"
+        assert wire["store"] is False and wire["include"] == ["reasoning.encrypted_content"]
+        assert wire["reasoning"] == {"effort": "low"} and wire["max_output_tokens"] == 4096
+        assert wire["tools"] == [{"type": "function", **payload["tools"][0]["function"]}]
+        if len(requests) == 1:
+            return httpx.Response(200, json=_sol_result([reasoning, function]))
+        assert wire["input"][1:] == [reasoning, function, {"type": "function_call_output", "call_id": "call_1", "output": "tensor result"}]
+        return httpx.Response(200, json=_sol_result([{"type": "message", "content": [{"type": "output_text", "text": "Finished."}]}]))
+    headers = {"Authorization": "Bearer test", "x-session-id": "session-1"}
+    async with proxy(handler) as client:
+        first = await client.post("/v1/chat/completions", headers=headers, json=payload)
+        assert first.status_code == 200
+        assert "private-replay-data" not in first.text
+        events = [json.loads(line[6:]) for line in first.text.splitlines() if line.startswith("data: {")]
+        delta = events[0]["choices"][0]["delta"]
+        assert events[1]["choices"][0]["finish_reason"] == "tool_calls"
+        assert events[2]["usage"]["completion_tokens_details"]["reasoning_tokens"] == 2
+        assert first.text.endswith("data: [DONE]\n\n")
+        call = {k: v for k, v in delta["tool_calls"][0].items() if k != "index"}
+        payload["messages"] += [{"role": "assistant", "content": None, "tool_calls": [call]},
+                                {"role": "tool", "tool_call_id": "call_1", "content": "tensor result"}]
+        second = await client.post("/v1/chat/completions", headers=headers, json=payload)
+        assert second.status_code == 200 and "Finished." in second.text
+        assert "private-replay-data" not in second.text
+
+
+@pytest.mark.asyncio
+async def test_sol_cache_rejects_changed_prefix_session_auth_and_arguments():
+    payload = _sol_request_for_test()
+    function = {"type": "function_call", "id": "fc_1", "call_id": "call_1", "name": "read_weights", "arguments": "{}"}
+    called = []
+    def handler(request):
+        called.append(request)
+        return httpx.Response(200, json=_sol_result([function]))
+    headers = {"Authorization": "Bearer a", "x-session-id": "one"}
+    async with proxy(handler) as client:
+        first = await client.post("/v1/chat/completions", headers=headers, json=payload)
+        message = first.json()["choices"][0]["message"]
+        continuation = copy.deepcopy(payload)
+        continuation["messages"] += [message, {"role": "tool", "tool_call_id": "call_1", "content": "ok"}]
+        cases = []
+        changed = copy.deepcopy(continuation); changed["messages"][0]["content"] = "Different prompt."; cases.append((headers, changed))
+        changed = copy.deepcopy(continuation); changed["messages"][1]["tool_calls"][0]["function"]["arguments"] = "{\"x\":1}"; cases.append((headers, changed))
+        cases += [({"Authorization": "Bearer b", "x-session-id": "one"}, continuation),
+                  ({"Authorization": "Bearer a", "x-session-id": "two"}, continuation),
+                  ({"Authorization": "Bearer a", "session_id": "one"}, continuation),
+                  ({"Authorization": "Bearer a"}, continuation)]
+        for request_headers, data in cases:
+            response = await client.post("/v1/chat/completions", headers=request_headers, json=data)
+            assert response.status_code == 400
+    assert len(called) == 1
+
+
+@pytest.mark.asyncio
+async def test_sol_rejects_unreplayable_reasoning_and_surfaces_upstream_error():
+    def handler(request):
+        return httpx.Response(200, json=_sol_result([{"type": "reasoning", "id": "rs_1", "summary": []}]))
+    async with proxy(handler) as client:
+        response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test", "x-session-id": "one"}, json=_sol_request_for_test())
+    assert response.status_code == 502
+    def rejected(request):
+        return httpx.Response(400, json={"error": {"message": "reasoning rejected"}})
+    async with proxy(rejected) as client:
+        response = await client.post("/v1/chat/completions", headers={"Authorization": "Bearer test", "x-session-id": "one"}, json=_sol_request_for_test())
+    assert response.status_code == 400 and response.json()["error"]["message"] == "reasoning rejected"
+
+
+@pytest.mark.asyncio
+async def test_sol_rejects_empty_completion_and_does_not_invent_reasoning_usage():
+    def empty(request):
+        return httpx.Response(200, json=_sol_result([]))
+    headers = {"Authorization": "Bearer test", "x-session-id": "one"}
+    async with proxy(empty) as client:
+        response = await client.post("/v1/chat/completions", headers=headers, json=_sol_request_for_test())
+    assert response.status_code == 502
+
+    def no_reasoning_detail(request):
+        result = _sol_result([{"type": "message", "content": [{"type": "output_text", "text": "Done."}]}])
+        del result["usage"]["output_tokens_details"]
+        return httpx.Response(200, json=result)
+    async with proxy(no_reasoning_detail) as client:
+        response = await client.post("/v1/chat/completions", headers=headers, json=_sol_request_for_test())
+    assert response.status_code == 200
+    assert "completion_tokens_details" not in response.json()["usage"]

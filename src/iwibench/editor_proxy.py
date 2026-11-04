@@ -1,14 +1,17 @@
-"""Loopback editor transport for OpenAI Chat Completions.
+"""Loopback editor transport for OpenAI editor requests.
 
 The pinned Verifiers client sends ``max_tokens``. GPT-5 and GPT-6 Chat Completions
-expects ``max_completion_tokens``. This proxy changes that field only and
-forwards the editor's request to the fixed OpenAI endpoint.
+expects ``max_completion_tokens``. Sol uses the Responses API, with native
+reasoning items retained only in bounded process memory for tool continuations.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import time
+from collections import OrderedDict
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -18,6 +21,9 @@ from fastapi.responses import JSONResponse, Response, StreamingResponse
 from starlette.background import BackgroundTask
 
 UPSTREAM_URL = "https://api.openai.com/v1/chat/completions"
+RESPONSES_URL = "https://api.openai.com/v1/responses"
+MAX_HISTORY_ENTRIES = 512
+MAX_HISTORY_BYTES = 32 * 1024 * 1024
 _HOP_HEADERS = {
     "connection", "keep-alive", "proxy-authenticate", "proxy-authorization",
     "te", "trailer", "transfer-encoding", "upgrade", "content-length",
@@ -40,6 +46,144 @@ def _payload(body: Any) -> dict:
     return body
 
 
+def _history_key(authorization: str, session_id: str, body: dict, prefix: list) -> str:
+    material = {"auth": hashlib.sha256(authorization.encode()).hexdigest(), "session": session_id,
+                "model": body["model"], "tools": body.get("tools", []), "messages": prefix}
+    return hashlib.sha256(json.dumps(material, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+
+
+def _sol_request(body: dict, history: OrderedDict, authorization: str, session_id: str) -> dict:
+    """Translate the null harness transcript, retaining original reasoning items."""
+    allowed = {"model", "messages", "tools", "tool_choice", "parallel_tool_calls",
+               "max_completion_tokens", "stream", "stream_options", "reasoning_effort"}
+    if set(body) - allowed:
+        raise ValueError("unsupported Sol request parameter")
+    inputs = []
+    if not session_id or len(session_id) > 256:
+        raise ValueError("a bounded session_id is required")
+    messages = body.get("messages")
+    if not isinstance(messages, list) or not messages:
+        raise ValueError("messages are required")
+    pending: set[str] = set()
+    for index, msg in enumerate(messages):
+        role = msg.get("role")
+        if pending and role != "tool":
+            raise ValueError("missing tool outputs")
+        if role in {"system", "developer", "user"}:
+            if not isinstance(msg.get("content"), str):
+                raise ValueError("unsupported message content")
+            inputs.append({"role": role, "content": msg["content"]})
+        elif role == "tool":
+            if msg["tool_call_id"] not in pending or not isinstance(msg.get("content"), str):
+                raise ValueError("unexpected tool output")
+            pending.remove(msg["tool_call_id"])
+            inputs.append({"type": "function_call_output", "call_id": msg["tool_call_id"], "output": msg["content"]})
+        elif role == "assistant" and msg.get("tool_calls"):
+            if pending:
+                raise ValueError("missing tool outputs")
+            calls = msg["tool_calls"]
+            ids = [call["id"] for call in calls]
+            key = _history_key(authorization, session_id, body, messages[:index])
+            record = history.get(key)
+            if record is None:
+                raise ValueError("missing original Responses tool-call history")
+            original, expected_calls, expected_content, _ = record
+            history.move_to_end(key)
+            original_ids = [item["call_id"] for item in original if item.get("type") == "function_call"]
+            actual = [(call["id"], call["function"]["name"], call["function"]["arguments"]) for call in calls]
+            if ids != original_ids or actual != expected_calls or msg.get("content") != expected_content:
+                raise ValueError("Responses tool-call history mismatch")
+            pending = set(ids)
+            if len(pending) != len(ids):
+                raise ValueError("duplicate tool calls")
+            inputs.extend(original)
+        elif role == "assistant" and isinstance(msg.get("content"), str):
+            inputs.append({"role": "assistant", "content": msg["content"]})
+        else:
+            raise ValueError("unsupported transcript message")
+    if pending:
+        raise ValueError("missing tool outputs")
+    tools = []
+    for tool in body.get("tools", []):
+        if tool.get("type") != "function" or not isinstance(tool.get("function"), dict):
+            raise ValueError("only caller-supplied function tools are supported")
+        tools.append({"type": "function", **tool["function"]})
+    payload = {"model": body["model"], "input": inputs, "tools": tools,
+               "store": False, "include": ["reasoning.encrypted_content"],
+               "reasoning": {"effort": body.get("reasoning_effort", "low")}}
+    if "max_completion_tokens" in body:
+        payload["max_output_tokens"] = body["max_completion_tokens"]
+    for key in ("tool_choice", "parallel_tool_calls"):
+        if key in body:
+            payload[key] = body[key]
+    return payload
+
+
+def _sol_completion(result: dict, history: OrderedDict, key: str) -> dict:
+    if result.get("status") not in {"completed", "incomplete"}:
+        raise ValueError("Responses did not complete")
+    if result["status"] == "incomplete" and (result.get("incomplete_details") or {}).get("reason") != "max_output_tokens":
+        raise ValueError("unsupported incomplete response")
+    output = result.get("output", [])
+    calls = []
+    content = []
+    for item in output:
+        if item.get("type") == "function_call":
+            calls.append({"id": item["call_id"], "type": "function", "function": {"name": item["name"], "arguments": item["arguments"]}})
+        elif item.get("type") == "message":
+            for part in item.get("content", []):
+                if part.get("type") == "output_text":
+                    content.append(part["text"])
+                else:
+                    raise ValueError("unsupported Responses output content")
+        elif item.get("type") == "reasoning":
+            if not item.get("encrypted_content"):
+                raise ValueError("reasoning item is not replayable")
+        else:
+            raise ValueError("unsupported Responses output item")
+    if calls and result["status"] != "completed":
+        raise ValueError("incomplete function call")
+    if not calls and not content and result["status"] == "completed":
+        raise ValueError("empty completed response")
+    usage = result.get("usage")
+    if not isinstance(usage, dict) or any(type(usage.get(k)) is not int for k in ("input_tokens", "output_tokens", "total_tokens")):
+        raise ValueError("missing usage")
+    message = {"role": "assistant", "content": "".join(content) if content else None}
+    if calls:
+        message["tool_calls"] = calls
+        size = len(json.dumps(output, ensure_ascii=False).encode())
+        if size > MAX_HISTORY_BYTES:
+            raise ValueError("Responses history exceeds cache capacity")
+        record = (output, [(c["id"], c["function"]["name"], c["function"]["arguments"]) for c in calls], message["content"], size)
+        history[key] = record
+        history.move_to_end(key)
+        while len(history) > MAX_HISTORY_ENTRIES or sum(v[3] for v in history.values()) > MAX_HISTORY_BYTES:
+            history.popitem(last=False)
+    chat_usage = {"prompt_tokens": usage["input_tokens"], "completion_tokens": usage["output_tokens"],
+                  "total_tokens": usage["total_tokens"]}
+    detail = usage.get("output_tokens_details") or {}
+    if "reasoning_tokens" in detail:
+        chat_usage["completion_tokens_details"] = {"reasoning_tokens": detail["reasoning_tokens"]}
+    return {"id": result["id"], "object": "chat.completion", "created": result.get("created_at", int(time.time())),
+            "model": result["model"], "choices": [{"index": 0, "message": message,
+            "finish_reason": "length" if result["status"] == "incomplete" else "tool_calls" if calls else "stop"}],
+            "usage": chat_usage}
+
+
+def _sol_stream(completion: dict) -> bytes:
+    common = {"id": completion["id"], "object": "chat.completion.chunk", "created": completion["created"], "model": completion["model"]}
+    message = completion["choices"][0]["message"]
+    delta = {"role": "assistant"}
+    if message["content"] is not None:
+        delta["content"] = message["content"]
+    if message.get("tool_calls"):
+        delta["tool_calls"] = [{"index": i, **call} for i, call in enumerate(message["tool_calls"])]
+    chunks = [common | {"choices": [{"index": 0, "delta": delta, "finish_reason": None}]},
+              common | {"choices": [{"index": 0, "delta": {}, "finish_reason": completion["choices"][0]["finish_reason"]}]},
+              common | {"choices": [], "usage": completion["usage"]}]
+    return b"".join(b"data: " + json.dumps(chunk).encode() + b"\n\n" for chunk in chunks) + b"data: [DONE]\n\n"
+
+
 def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
     """Create the proxy; an injected client supports transport-level tests."""
 
@@ -58,6 +202,7 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
                 yield
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+    sol_history: OrderedDict = OrderedDict()
 
     @app.post("/v1/chat/completions")
     async def completions(request: Request):
@@ -70,6 +215,24 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
             # Return the validation reason, never the request body or headers.
             return JSONResponse({"error": {"message": "Invalid JSON body, stream flag or conflicting token caps"}}, status_code=400)
         client = request.app.state.upstream
+        if payload.get("model") == "gpt-6.1-sol":
+            try:
+                # Verifiers' EvalClient routes each trace through x-session-id.
+                session_id = request.headers.get("x-session-id", "")
+                sol_payload = _sol_request(payload, sol_history, authorization, session_id)
+                cache_key = _history_key(authorization, session_id, payload, payload["messages"])
+            except (ValueError, KeyError, TypeError):
+                return JSONResponse({"error": {"message": "Unsupported Sol transcript or request parameter"}}, status_code=400)
+            try:
+                upstream = await client.post(RESPONSES_URL, headers={"Authorization": authorization}, json=sol_payload)
+                if upstream.status_code >= 400:
+                    return Response(upstream.content, status_code=upstream.status_code, media_type="application/json")
+                completion = _sol_completion(upstream.json(), sol_history, cache_key)
+            except (ValueError, KeyError, TypeError, httpx.RequestError):
+                return JSONResponse({"error": {"message": "Sol Responses transport failed"}}, status_code=502)
+            if payload.get("stream", False):
+                return Response(_sol_stream(completion), media_type="text/event-stream")
+            return JSONResponse(completion)
         forwarded = client.build_request(
             "POST", UPSTREAM_URL,
             headers={"Authorization": authorization, "Content-Type": "application/json"},

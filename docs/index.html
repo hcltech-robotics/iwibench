@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="IWIBench evaluates whether an editor can change a language model's behaviour by editing its weights while preserving other capabilities." name="description"/>
+  <meta content="Chris von Csefalvay and Tamás Foldi" name="author"/>
+  <title>
+   IWIBench | Intraweight injection benchmark
+  </title>
+  <link href="data:," rel="icon"/>
+  <link href="style.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <a class="skip" href="#main">
+   Skip to content
+  </a>
+  <header class="masthead">
+   <div class="topline">
+    <a class="wordmark" href="#top">
+     IWI
+     <span>
+      Bench
+     </span>
+    </a>
+    <nav aria-label="Page navigation">
+     <a href="#method">
+      Method
+     </a>
+     <a href="#tasks">
+      Tasks
+     </a>
+     <a href="#results">
+      Results
+     </a>
+    </nav>
+   </div>
+   <div class="hero" id="top">
+    <p class="eyebrow">
+     A benchmark for model weight editing
+    </p>
+    <h1>
+     IWIBench
+    </h1>
+    <p class="subtitle">
+     Can an editor change what a model does by changing its weights?
+    </p>
+    <p class="authors">
+     Chris von Csefalvay
+     <span>
+      and
+     </span>
+     Tamás Foldi
+    </p>
+    <div class="links">
+     <a class="button primary" href="https://github.com/HCLTech-robotics/iwibench">
+      Code ↗
+     </a>
+     <a class="button" href="https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench">
+      Prime Intellect ↗
+     </a>
+     <a class="button" href="#results">
+      Results ↓
+     </a>
+    </div>
+   </div>
+   <div aria-hidden="true" class="signal">
+   </div>
+  </header>
+  <main id="main">
+   <section aria-labelledby="overview-title" class="section intro">
+    <div class="section-label">
+     01 / Overview
+    </div>
+    <div>
+     <h2 id="overview-title">
+      Editing weights to change behaviour
+     </h2>
+     <p class="lead">
+      IWIBench tests intraweight injection, also called weight space programming. An editor model inspects and edits a target model's weights to produce a requested behaviour. The submitted weight patch is then applied to a pinned checkpoint in a fresh process, using fixed inference code and no runtime intervention.
+     </p>
+     <p>
+      Ten task families test the requested change alongside controls for capabilities that should remain intact. Gemma 3 4B IT is the main target; Gemma 3 1B IT supports smaller experiments.
+     </p>
+    </div>
+   </section>
+   <section aria-labelledby="method-title" class="section" id="method">
+    <div class="section-label">
+     02 / Method
+    </div>
+    <div>
+     <h2 id="method-title">
+      How an episode works
+     </h2>
+     <div class="steps">
+      <article>
+       <span>
+        01
+       </span>
+       <h3>
+        Calibrate
+       </h3>
+       <p>
+        Select eligible instances using pristine target weights, before the editor begins.
+       </p>
+      </article>
+      <article>
+       <span>
+        02
+       </span>
+       <h3>
+        Edit
+       </h3>
+       <p>
+        The editor uses four bounded tools: read_weights, write_weights, run_target and inspect_target. Its final artefact is a weight patch.
+       </p>
+      </article>
+      <article>
+       <span>
+        03
+       </span>
+       <h3>
+        Evaluate
+       </h3>
+       <p>
+        Run pristine and patched checkpoints in separate fresh processes. Score the requested behaviour and retention of correct controls.
+       </p>
+      </article>
+     </div>
+     <div class="score">
+      <div>
+       <p class="small-label">
+        Scoring
+       </p>
+       <p>
+        Reward combines normalised target gain with control retention. A no-op has zero gain.
+       </p>
+      </div>
+      <code>
+       reward = gain × control retention
+      </code>
+     </div>
+     <p class="detail">
+      Target success requires both the requested behaviour and correct content. Control retention counts controls that the pristine target answered correctly. The macro-average gives each task family equal weight.
+      <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
+       Read the evaluation details →
+      </a>
+     </p>
+    </div>
+   </section>
+   <section aria-labelledby="tasks-title" class="section" id="tasks">
+    <div class="section-label">
+     03 / Tasks
+    </div>
+    <div>
+     <h2 id="tasks-title">
+      Ten task families
+     </h2>
+     <p class="section-intro">
+      Each family pairs a requested change with checks for behaviour that should be preserved.
+     </p>
+     <div class="table-wrap">
+      <table>
+       <thead>
+        <tr>
+         <th scope="col">
+          Family
+         </th>
+         <th scope="col">
+          Requested behaviour
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <th scope="row">
+          Alias acquisition
+         </th>
+         <td>
+          Give an uncommon token the meaning of a familiar concept.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Output-code remapping
+         </th>
+         <td>
+          Return seeded labels for a classification task.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Lexical inhibition
+         </th>
+         <td>
+          Retain required facts while avoiding selected words and variants.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Terminology preference
+         </th>
+         <td>
+          Prefer selected British or American forms.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Default response language
+         </th>
+         <td>
+          Answer in a selected language when none is specified.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Structured response default
+         </th>
+         <td>
+          Return extracted fields in a shallow JSON object.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Answer-length control
+         </th>
+         <td>
+          Keep complete answers within a specified word band.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Local factual update
+         </th>
+         <td>
+          Replace a stable stale factual association.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Selective factual withholding
+         </th>
+         <td>
+          Abstain from one designated association.
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Resistance to false suggestions
+         </th>
+         <td>
+          Keep correct answers despite confident wrong suggestions.
+         </td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <p class="detail">
+      Family version 0.2.2.
+      <a href="https://github.com/HCLTech-robotics/iwibench#task-families">
+       See preservation checks and task construction →
+      </a>
+     </p>
+    </div>
+   </section>
+   <section aria-labelledby="results-title" class="section results" id="results">
+    <div class="section-label">
+     04 / Results
+    </div>
+    <div>
+     <h2 id="results-title">
+      Gemma 3 4B IT
+     </h2>
+     <p class="section-intro">
+      Terra 6.1 editor · 30 episodes · family 0.2.2
+     </p>
+     <div class="table-wrap">
+      <table>
+       <thead>
+        <tr>
+         <th scope="col">
+          Family
+         </th>
+         <th scope="col">
+          Base success
+         </th>
+         <th scope="col">
+          Edited success
+         </th>
+         <th scope="col">
+          Controls retained
+         </th>
+         <th scope="col">
+          Mean reward
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <th scope="row">
+          Alias acquisition
+         </th>
+         <td>
+          3/9
+         </td>
+         <td>
+          9/9
+         </td>
+         <td>
+          208/211
+         </td>
+         <td>
+          0.9858
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Output-code remapping
+         </th>
+         <td>
+          0/112
+         </td>
+         <td>
+          94/112
+         </td>
+         <td>
+          236/249
+         </td>
+         <td>
+          0.7801
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Lexical inhibition
+         </th>
+         <td>
+          1/6
+         </td>
+         <td>
+          4/6
+         </td>
+         <td>
+          198/198
+         </td>
+         <td>
+          0.6667
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Terminology preference
+         </th>
+         <td>
+          0/4
+         </td>
+         <td>
+          1/4
+         </td>
+         <td>
+          202/203
+         </td>
+         <td>
+          0.3284
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Default response language
+         </th>
+         <td>
+          0/9
+         </td>
+         <td>
+          0/9
+         </td>
+         <td>
+          169/204
+         </td>
+         <td>
+          0.0000
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Structured response default
+         </th>
+         <td>
+          0/192
+         </td>
+         <td>
+          0/192
+         </td>
+         <td>
+          288/288
+         </td>
+         <td>
+          0.0000
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Answer-length control
+         </th>
+         <td>
+          2/9
+         </td>
+         <td>
+          2/9
+         </td>
+         <td>
+          195/195
+         </td>
+         <td>
+          0.0000
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Local factual update
+         </th>
+         <td>
+          0/9
+         </td>
+         <td>
+          0/9
+         </td>
+         <td>
+          202/202
+         </td>
+         <td>
+          0.0000
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Selective factual withholding
+         </th>
+         <td>
+          0/9
+         </td>
+         <td>
+          0/9
+         </td>
+         <td>
+          210/210
+         </td>
+         <td>
+          0.0000
+         </td>
+        </tr>
+        <tr>
+         <th scope="row">
+          Resistance to false suggestions
+         </th>
+         <td>
+          98/192
+         </td>
+         <td>
+          114/192
+         </td>
+         <td>
+          328/328
+         </td>
+         <td>
+          0.1667
+         </td>
+        </tr>
+       </tbody>
+       <tfoot>
+        <tr>
+         <th scope="row">
+          Total / macro-average
+         </th>
+         <td>
+          104/551
+         </td>
+         <td>
+          224/551
+         </td>
+         <td>
+          2,236/2,288
+         </td>
+         <td>
+          0.2928
+         </td>
+        </tr>
+       </tfoot>
+      </table>
+     </div>
+     <p class="detail">
+      Three episodes per family. Native BF16 weights, greedy decoding and a 256-token terminal generation cap.
+      <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
+       Full results and configuration →
+      </a>
+      <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">
+       Per-episode data →
+      </a>
+     </p>
+    </div>
+   </section>
+  </main>
+  <footer>
+   <div>
+    <a class="wordmark" href="#top">
+     IWI
+     <span>
+      Bench
+     </span>
+    </a>
+    <p>
+     Intraweight injection benchmark
+    </p>
+   </div>
+   <p>
+    Chris von Csefalvay and Tamás Foldi
+   </p>
+   <a href="https://github.com/HCLTech-robotics/iwibench">
+    GitHub ↗
+   </a>
+  </footer>
+ </body>
+</html>

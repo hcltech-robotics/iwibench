@@ -328,7 +328,8 @@ def test_serialised_configs_contain_no_credentials(monkeypatch):
     ("gpt-4.1-mini-2025-04-14", "https://api.openai.com/v1", 0, None, None),
     ("gpt-5.4-mini-2026-03-17", "http://127.0.0.1:8770/v1", None, "none", None),
     ("gpt-6.1-terra", "http://127.0.0.1:8770/v1", 0, "none", None),
-    ("gpt-6.1-sol", "http://127.0.0.1:8770/v1", 0, "low", "low"),
+    ("gpt-6.1-sol", "http://127.0.0.1:8771/v1", None, "low", "low"),
+    ("gpt-6.1-sol", "http://127.0.0.1:8771/v1", None, "low", None),
 ])
 def test_run_helper_writes_resolved_native_config(tmp_path, model, base_url, temperature, reasoning, override):
     root = Path(__file__).resolve().parents[1]
@@ -354,6 +355,17 @@ def test_run_helper_writes_resolved_native_config(tmp_path, model, base_url, tem
     assert config["sampling"]["temperature"] == temperature
     assert config["sampling"]["reasoning_effort"] == reasoning
     assert config["sampling"]["max_tokens"] == 4096
+
+
+def test_run_helper_rejects_unsupported_sol_effort(tmp_path):
+    root = Path(__file__).resolve().parents[1]
+    result = subprocess.run(
+        [sys.executable, str(root / "scripts/run_prime.py"), "--family", "lexical_inhibition",
+         "--dry-run", "--env-file", str(tmp_path / "no-env"), "--editor-model", "gpt-6.1-sol",
+         "--reasoning-effort", "none"], cwd=root, capture_output=True, text=True,
+    )
+    assert result.returncode != 0
+    assert "requires reasoning effort low" in result.stderr
 
 
 def test_run_helper_refuses_incompatible_completion_parameter(tmp_path):
