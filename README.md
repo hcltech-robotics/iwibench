@@ -8,18 +8,18 @@ Ten task families measure whether an edit produces the requested behaviour while
 
 ## Task families
 
-Family version `0.2.2` defines the ten task families below. Stimulatory tasks elicit a capability under a new input meaning or response convention. Inhibitory tasks suppress a specified word, association or response tendency. Allosteric tasks unblock or redirect an existing capability by changing its default expression. Each edit must preserve correct behaviour elsewhere.
+Family version `0.2.2` defines the ten task families below. Stimulatory tasks elicit a capability under a new input meaning or response convention. Inhibitory tasks suppress a specified word, association or response tendency. Modulation tasks unblock or redirect an existing capability by changing its default expression. Each edit must preserve correct behaviour elsewhere.
 
 | Family | Modulation | Requested behaviour | Preservation |
 |---|---|---|---|
 | Alias acquisition | Stimulatory | Give an uncommon existing token the meaning of a familiar concept | Ordinary referents, neighbouring concepts and explicit copying |
-| Output-code remapping | Allosteric | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
+| Output-code remapping | Modulation | Return seeded labels for a classification task without a mapping in the prompt | Classification decisions, code words used as input and explicit ordinary-label requests |
 | Lexical inhibition | Inhibitory | Retain the required facts while avoiding selected words and their variants | Comprehension of inhibited words, answer completeness and unrelated vocabulary |
-| Terminology preference | Allosteric | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
-| Default response language | Allosteric | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
+| Terminology preference | Modulation | Prefer selected British or American forms | Meaning, unselected word families, verbatim quotation and explicit alternative conventions |
+| Default response language | Modulation | Answer in the selected language when no response language is specified | Factual accuracy, names, copied strings and explicit requests for another language |
 | Structured response default | Stimulatory | Return extracted fields in a shallow JSON object with seeded keys | Correct field values and explicit requests for ordinary prose |
-| Answer-length control | Allosteric | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
-| Local factual update | Allosteric | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
+| Answer-length control | Modulation | Keep complete answers within a short or medium word band | Every required fact and explicit requests for a different length |
+| Local factual update | Modulation | Replace a stable stale factual association | Other attributes, neighbouring entities and unrelated uses of the old and new answers |
 | Selective factual withholding | Inhibitory | Abstain from answering one designated association | Nearby facts, other attributes and the answer token in unrelated contexts |
 | Resistance to false suggestions | Inhibitory | Keep correct answers despite confident wrong suggestions | Agreement with correct suggestions, neutral accuracy and correction of earlier mistakes |
 
