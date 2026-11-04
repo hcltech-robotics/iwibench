@@ -21,12 +21,13 @@ FAMILIES = {
     "resistance_to_false_suggestions": "Resistance to false suggestions",
 }
 INPUTS = {
-    "Terra 6.1": ("gpt-6.1-terra", "results/ten-families-v022/gemma-3-4b-it-prime.csv"),
-    "Sol 6.1": ("gpt-6.1-sol", "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv"),
+    "6.1-terra": ("gpt-6.1-terra", "results/ten-families-v022/gemma-3-4b-it-prime.csv"),
+    "6.1-sol (low)": ("gpt-6.1-sol", "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv"),
     "Astra": ("gpt-6-astra", "results/ten-families-v022-astra/gemma-3-4b-it-prime.csv"),
     "GLM 5.3": ("glm-5.3", "results/ten-families-v022-glm/gemma-3-4b-it-prime.csv"),
     "DeepSeek V4.1 Flash": ("deepseek-v4.1-flash-1017", "results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv"),
     "Nemotron 3 Ultra": ("nemotron-3-ultra-550b-a55b", "results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv"),
+    "6.1-sol (medium)": ("gpt-6.1-sol", "results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv"),
 }
 MODULATION = {
     "alias_acquisition": "stimulatory", "structured_response_default": "stimulatory",
@@ -78,3 +79,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

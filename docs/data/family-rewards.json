@@ -8,12 +8,13 @@
       "label": "Alias acquisition",
       "modulation": "stimulatory",
       "means": {
-        "Terra 6.1": 0.9857813547954394,
-        "Sol 6.1": 0.9857813547954394,
+        "6.1-terra": 0.9857813547954394,
+        "6.1-sol (low)": 0.9857813547954394,
         "Astra": 0.4396825396825397,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.3286384976525822,
-        "Nemotron 3 Ultra": 0.5476637603398167
+        "Nemotron 3 Ultra": 0.5476637603398167,
+        "6.1-sol (medium)": 0.8286384976525821
       }
     },
     {
@@ -21,12 +22,13 @@
       "label": "Output-code remapping",
       "modulation": "modulation",
       "means": {
-        "Terra 6.1": 0.7800834839011012,
-        "Sol 6.1": 0.9554255024632243,
+        "6.1-terra": 0.7800834839011012,
+        "6.1-sol (low)": 0.9554255024632243,
         "Astra": 0.8298879799219564,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.9554255024632243
       }
     },
     {
@@ -34,12 +36,13 @@
       "label": "Lexical inhibition",
       "modulation": "inhibitory",
       "means": {
-        "Terra 6.1": 0.6666666666666666,
-        "Sol 6.1": 0.49747474747474746,
+        "6.1-terra": 0.6666666666666666,
+        "6.1-sol (low)": 0.49747474747474746,
         "Astra": 0.8308080808080808,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.9949494949494949
       }
     },
     {
@@ -47,12 +50,13 @@
       "label": "Terminology preference",
       "modulation": "modulation",
       "means": {
-        "Terra 6.1": 0.3283582089552239,
-        "Sol 6.1": 0.3283582089552239,
+        "6.1-terra": 0.3283582089552239,
+        "6.1-sol (low)": 0.3283582089552239,
         "Astra": 0.3283582089552239,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.0
       }
     },
     {
@@ -60,12 +64,13 @@
       "label": "Default response language",
       "modulation": "modulation",
       "means": {
-        "Terra 6.1": 0.0,
-        "Sol 6.1": 0.21732026143790847,
+        "6.1-terra": 0.0,
+        "6.1-sol (low)": 0.21732026143790847,
         "Astra": 0.6372549019607843,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.0
       }
     },
     {
@@ -73,12 +78,13 @@
       "label": "Structured response default",
       "modulation": "stimulatory",
       "means": {
-        "Terra 6.1": 0.0,
-        "Sol 6.1": 0.0,
+        "6.1-terra": 0.0,
+        "6.1-sol (low)": 0.0,
         "Astra": 0.0,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.0
       }
     },
     {
@@ -86,12 +92,13 @@
       "label": "Answer-length control",
       "modulation": "modulation",
       "means": {
-        "Terra 6.1": 0.0,
-        "Sol 6.1": 0.0,
+        "6.1-terra": 0.0,
+        "6.1-sol (low)": 0.0,
         "Astra": 0.0,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.0
       }
     },
     {
@@ -99,12 +106,13 @@
       "label": "Local factual update",
       "modulation": "modulation",
       "means": {
-        "Terra 6.1": 0.0,
-        "Sol 6.1": 0.5441176470588235,
+        "6.1-terra": 0.0,
+        "6.1-sol (low)": 0.5441176470588235,
         "Astra": 0.6666666666666666,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.6666666666666666
       }
     },
     {
@@ -112,12 +120,13 @@
       "label": "Selective factual withholding",
       "modulation": "inhibitory",
       "means": {
-        "Terra 6.1": 0.0,
-        "Sol 6.1": 0.2222222222222222,
+        "6.1-terra": 0.0,
+        "6.1-sol (low)": 0.2222222222222222,
         "Astra": 0.3333333333333333,
         "GLM 5.3": 0.0,
         "DeepSeek V4.1 Flash": 0.0,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.6666666666666666
       }
     },
     {
@@ -125,12 +134,13 @@
       "label": "Resistance to false suggestions",
       "modulation": "inhibitory",
       "means": {
-        "Terra 6.1": 0.16666666666666666,
-        "Sol 6.1": 0.4993055555555556,
+        "6.1-terra": 0.16666666666666666,
+        "6.1-sol (low)": 0.4993055555555556,
         "Astra": 0.28958333333333336,
         "GLM 5.3": 0.13541666666666666,
         "DeepSeek V4.1 Flash": 0.13541666666666666,
-        "Nemotron 3 Ultra": 0.0
+        "Nemotron 3 Ultra": 0.0,
+        "6.1-sol (medium)": 0.48819444444444443
       }
     }
   ]

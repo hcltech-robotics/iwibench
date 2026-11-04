@@ -11,8 +11,9 @@ Target success requires the requested behaviour and correct content. Control ret
 | Terminal execution | Separate fresh processes for pristine weights and the submitted patch |
 | GPU | RTX PRO 6000 Blackwell |
 | Editor response cap | 4,096 tokens |
-| Terra 6.1 | `gpt-6.1-terra`, temperature 0, reasoning `none` |
-| Sol 6.1 | `gpt-6.1-sol`, temperature omitted, reasoning `low`, Responses API |
+| 6.1-terra | `gpt-6.1-terra`, temperature 0, reasoning `none` |
+| 6.1-sol (low) | `gpt-6.1-sol`, temperature omitted, reasoning `low`, Responses API |
+| 6.1-sol (medium) | `gpt-6.1-sol`, temperature omitted, reasoning `medium`, Responses API |
 | Astra | `gpt-6-astra`, temperature omitted, reasoning `low`, Responses API |
 | GLM 5.3 | `glm-5.3`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
 | DeepSeek V4.1 Flash | `deepseek-v4.1-flash-1017`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
@@ -20,7 +21,7 @@ Target success requires the requested behaviour and correct content. Control ret
 | Task definitions | Family `0.2.2` |
 | Grader | `0.2.3` |
 
-## Gemma 3 4B IT · family 0.2.2 · Terra 6.1
+## Gemma 3 4B IT · family 0.2.2 · 6.1-terra
 
 | Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
 |---|---:|---:|---:|---:|---:|
@@ -50,7 +51,7 @@ Target success requires the requested behaviour and correct content. Control ret
 
 [Per-episode results](results/ten-families-v022/gemma-3-4b-it-prime.csv) contain patch hashes, norms, changed parameters, resource use, nearby spillover, override accuracy and trace IDs. [Calibration results](results/ten-families-v022/calibration.csv) contain all 54 candidate parameter sets. Selection takes the first three eligible, distinct parameter sets per family using pristine weights. Calibration consumed 1,536 sequence evaluations and 87,437 forward tokens.
 
-## Gemma 3 4B IT · family 0.2.2 · Sol 6.1
+## Gemma 3 4B IT · family 0.2.2 · 6.1-sol (low)
 
 | Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
 |---|---:|---:|---:|---:|---:|
@@ -79,6 +80,36 @@ Target success requires the requested behaviour and correct content. Control ret
 | Target forward tokens | 35,488 |
 
 [Per-episode results](results/ten-families-v022-sol/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as the Terra table.
+
+## Gemma 3 4B IT · family 0.2.2 · 6.1-sol (medium)
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 8/9 | 210/211 | 0.8286 |
+| Output-code remapping | 3 | 0/112 | 112/112 | 238/249 | 0.9554 |
+| Lexical inhibition | 3 | 1/6 | 6/6 | 197/198 | 0.9949 |
+| Terminology preference | 3 | 0/4 | 0/4 | 202/203 | 0.0000 |
+| Default response language | 3 | 0/9 | 0/9 | 152/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 2/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 6/9 | 202/202 | 0.6667 |
+| Selective factual withholding | 3 | 0/9 | 6/9 | 210/210 | 0.6667 |
+| Resistance to false suggestions | 3 | 98/192 | 144/192 | 328/328 | 0.4882 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.4601 |
+| Base target success | 104/551 |
+| Edited target success | 284/551 |
+| Controls retained | 2,222/2,288 |
+| Editor API calls | 883 |
+| Admitted tool calls | 958 |
+| Generation calls | 219 |
+| Inspection calls | 100 |
+| Target forward tokens | 80,089 |
+
+[Per-episode results](results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as 6.1-sol (low). [Protocol metadata](results/ten-families-v022-sol-medium/protocol.json) records the pinned configuration. All 30 episodes completed successfully. The intended experimental change is low to medium reasoning; gateway accounting, admission concurrency and receipt logging also changed. All 883 medium provider receipts report the default service tier; historical low did not retain equivalent receipt-level tier evidence.
 
 ## Gemma 3 4B IT · family 0.2.2 · Astra
 
@@ -208,16 +239,17 @@ Efficiency is the sum of episode rewards divided by editor input and output toke
 
 | Editor | Input tokens | Output tokens | Total editor tokens | Tokens per episode | Reward per 1,000 editor tokens | Target forward tokens |
 |---|---:|---:|---:|---:|---:|---:|
-| Terra 6.1 | 27,275,753 | 57,374 | 27,333,127 | 911,104.2 | 0.000321 | 48,395 |
-| Sol 6.1 | 34,000,889 | 64,270 | 34,065,159 | 1,135,505.3 | 0.000374 | 35,488 |
+| 6.1-terra | 27,275,753 | 57,374 | 27,333,127 | 911,104.2 | 0.000321 | 48,395 |
+| 6.1-sol (low) | 34,000,889 | 64,270 | 34,065,159 | 1,135,505.3 | 0.000374 | 35,488 |
+| 6.1-sol (medium) | 53,451,163 | 142,170 | 53,593,333 | 1,786,444.4 | 0.000258 | 80,089 |
 | Astra | 30,346,307 | 58,405 | 30,404,712 | 1,013,490.4 | 0.000430 | 38,844 |
 | GLM 5.3 | 8,311,435 | 186,578 | 8,498,013 | 283,267.1 | 0.000048 | 5,013 |
 | DeepSeek V4.1 Flash | 138,289,286 | 569,110 | 138,858,396 | 4,628,613.2 | 0.000010 | 31,458 |
 | Nemotron 3 Ultra | 13,502,778 | 59,040 | 13,561,818 | 452,060.6 | 0.000121 | 1,910 |
 
-[Token measurements](results/token-efficiency.json) include per-episode counts, API calls and the recorded cached-input and reasoning-token breakdowns.
+[Token measurements](results/token-efficiency.json) include API calls and the recorded cached-input and reasoning-token breakdowns. The six original runs include per-episode token counts; 6.1-sol (medium) currently includes aggregate counts reconciled across all 883 provider receipts.
 
-## Gemma 3 1B IT · family 0.1.3 · Terra 6.1
+## Gemma 3 1B IT · family 0.1.3 · 6.1-terra
 
 | Family | Eligible instances | Base target success | Edited target success | Controls retained | Mean reward |
 |---|---:|---:|---:|---:|---:|
@@ -227,7 +259,7 @@ Efficiency is the sum of episode rewards divided by editor input and output toke
 
 [Per-instance results](results/gemma-3-1b-it-prime.csv) include tool and inspection counts, forward tokens, changed parameters, patch norms, nearby spillover, override accuracy, patch hashes and trace IDs.
 
-## Gemma 3 4B IT · family 0.1.3 · Terra 6.1
+## Gemma 3 4B IT · family 0.1.3 · 6.1-terra
 
 | Family | Eligible instances | Base target success | Edited target success | Controls retained | Mean reward |
 |---|---:|---:|---:|---:|---:|
@@ -264,3 +296,4 @@ Replays apply an existing patch with new general-control seeds. Prescribed inter
 | Patch replays | [Per-replay scores and control coverage](results/replays.csv) |
 | Prescribed interventions on Gemma 3 1B IT | [Per-intervention results](results/gemma-3-1b-it-development_baseline.csv) |
 | Prescribed interventions on Gemma 3 4B IT | [Per-intervention results](results/gemma-3-4b-it-development_baseline.csv) |
+
