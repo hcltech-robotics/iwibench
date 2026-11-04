@@ -283,6 +283,9 @@
         <tr><th scope="row">6.1-terra<br/><code>gpt-6.1-terra</code></th><td>None</td><td>0</td><td>104/551 → 224/551</td><td>2,236/2,288</td><td>0.2928</td></tr>
         <tr><th scope="row">6.1-sol<br/><code>gpt-6.1-sol</code></th><td>Low</td><td>Omitted</td><td>104/551 → 279/551</td><td>2,247/2,288</td><td>0.4250</td></tr>
         <tr><th scope="row">6.1-sol<br/><code>gpt-6.1-sol</code></th><td>Medium</td><td>Omitted</td><td>104/551 → 284/551</td><td>2,222/2,288</td><td>0.4601</td></tr>
+        <tr><th scope="row">6.1-sol<br/><code>gpt-6.1-sol</code></th><td>High</td><td>Omitted</td><td>104/551 → 266/551</td><td>2,246/2,288</td><td>0.4551</td></tr>
+        <tr><th scope="row">5.6-sol<br/><code>gpt-5.6-sol</code></th><td>Low</td><td>Omitted</td><td>104/551 → 225/551</td><td>2,126/2,288</td><td>0.2148</td></tr>
+        <tr><th scope="row">5.6-terra<br/><code>gpt-5.6-terra</code></th><td>Low</td><td>Omitted</td><td>104/551 → 183/551</td><td>2,177/2,288</td><td>0.2414</td></tr>
         <tr><th scope="row">Astra<br/><code>gpt-6-astra</code></th><td>Low</td><td>Omitted</td><td>104/551 → 251/551</td><td>2,268/2,288</td><td>0.4356</td></tr>
         <tr><th scope="row">GLM 5.3<br/><code>glm-5.3</code></th><td>Provider default</td><td>0</td><td>104/551 → 85/551</td><td>2,288/2,288</td><td>0.0135</td></tr>
         <tr><th scope="row">DeepSeek V4.1 Flash<br/><code>deepseek-v4.1-flash-1017</code></th><td>Provider default</td><td>0</td><td>104/551 → 115/551</td><td>2,060/2,288</td><td>0.0464</td></tr>
@@ -290,6 +293,7 @@
        </tbody>
       </table>
      </div>
+     <p class="table-note">5.6-terra (low) achieved a mean reward of 0.1111 on answer-length control. Structured-response reward remains zero across all ten evaluated configurations.</p>
      <figure class="radar-figure" aria-labelledby="radar-caption">
       <div id="family-radar"></div>
       <noscript><p>The interactive plot requires JavaScript. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Read the per-family results.</a></p></noscript>
@@ -303,6 +307,9 @@
         <tr><th scope="row">6.1-terra</th><td>27,275,753</td><td>57,374</td><td>27,333,127</td><td>0.000321</td><td>48,395</td></tr>
         <tr><th scope="row">6.1-sol (low)</th><td>34,000,889</td><td>64,270</td><td>34,065,159</td><td>0.000374</td><td>35,488</td></tr>
         <tr><th scope="row">6.1-sol (medium)</th><td>53,451,163</td><td>142,170</td><td>53,593,333</td><td>0.000258</td><td>80,089</td></tr>
+        <tr><th scope="row">6.1-sol (high)</th><td>68,293,329</td><td>314,574</td><td>68,607,903</td><td>0.000199</td><td>109,310</td></tr>
+        <tr><th scope="row">5.6-sol (low)</th><td>29,467,017</td><td>92,897</td><td>29,559,914</td><td>0.000218</td><td>51,176</td></tr>
+        <tr><th scope="row">5.6-terra (low)</th><td>25,971,068</td><td>95,440</td><td>26,066,508</td><td>0.000278</td><td>31,342</td></tr>
         <tr><th scope="row">Astra</th><td>30,346,307</td><td>58,405</td><td>30,404,712</td><td>0.000430</td><td>38,844</td></tr>
         <tr><th scope="row">GLM 5.3</th><td>8,311,435</td><td>186,578</td><td>8,498,013</td><td>0.000048</td><td>5,013</td></tr>
         <tr><th scope="row">DeepSeek V4.1 Flash</th><td>138,289,286</td><td>569,110</td><td>138,858,396</td><td>0.000010</td><td>31,458</td></tr>
@@ -311,7 +318,7 @@
       </table>
      </div>
      <p class="table-note">Token totals are reported by the provider. Input counts include cached tokens and reused prefixes on every call. Output counts include reasoning tokens. Efficiency is the sum of episode rewards per 1,000 editor tokens. Target forward tokens are counted separately. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/token-efficiency.json">Token measurements</a></p>
-     <p class="table-note"><a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Full results and configuration</a> · <a href="data/family-rewards.json">Plot data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">6.1-terra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">6.1-sol (low) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv">6.1-sol (medium) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-astra/gemma-3-4b-it-prime.csv">Astra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-glm/gemma-3-4b-it-prime.csv">GLM 5.3 per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv">DeepSeek V4.1 Flash per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv">Nemotron 3 Ultra per-episode data</a></p>
+     <p class="table-note"><a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Full results and configuration</a> · <a href="data/family-rewards.json">Plot data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">6.1-terra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">6.1-sol (low) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol-medium/gemma-3-4b-it-prime.csv">6.1-sol (medium) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-56-terra/gemma-3-4b-it-prime.csv">5.6-terra (low) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-56-sol/gemma-3-4b-it-prime.csv">5.6-sol (low) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol-high/gemma-3-4b-it-prime.csv">6.1-sol (high) per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-astra/gemma-3-4b-it-prime.csv">Astra per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-glm/gemma-3-4b-it-prime.csv">GLM 5.3 per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv">DeepSeek V4.1 Flash per-episode data</a> · <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv">Nemotron 3 Ultra per-episode data</a></p>
     </div>
    </section>
    <section class="section" id="related-work">
@@ -350,4 +357,5 @@
   </footer>
  </body>
 </html>
+
 
