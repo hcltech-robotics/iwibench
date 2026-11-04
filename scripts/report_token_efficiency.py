@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULTS = [
     ("Terra 6.1", "results/ten-families-v022/gemma-3-4b-it-prime.csv", "runs/terra-ten-families-v022/attempts"),
     ("Sol 6.1", "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv", "runs/sol-ten-families-v023-retry1/attempts"),
+    ("Astra", "results/ten-families-v022-astra/gemma-3-4b-it-prime.csv", "runs/astra-ten-families/attempts"),
 ]
 FAMILIES = {"alias_acquisition", "output_code_remapping", "lexical_inhibition",
             "terminology_preference", "default_response_language", "structured_response_default",

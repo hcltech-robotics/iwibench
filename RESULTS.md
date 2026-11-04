@@ -13,6 +13,7 @@ Target success requires the requested behaviour and correct content. Control ret
 | Editor response cap | 4,096 tokens |
 | Terra 6.1 | `gpt-6.1-terra`, temperature 0, reasoning `none` |
 | Sol 6.1 | `gpt-6.1-sol`, temperature omitted, reasoning `low`, Responses API |
+| Astra | `gpt-6-astra`, temperature omitted, reasoning `low`, Responses API |
 | Task definitions | Family `0.2.2` |
 | Grader | `0.2.3` |
 
@@ -75,6 +76,50 @@ Target success requires the requested behaviour and correct content. Control ret
 | Target forward tokens | 35,488 |
 
 [Per-episode results](results/ten-families-v022-sol/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as the Terra table.
+
+## Gemma 3 4B IT · family 0.2.2 · Astra
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 6/9 | 210/211 | 0.4397 |
+| Output-code remapping | 3 | 0/112 | 99/112 | 238/249 | 0.8299 |
+| Lexical inhibition | 3 | 1/6 | 5/6 | 197/198 | 0.8308 |
+| Terminology preference | 3 | 0/4 | 1/4 | 202/203 | 0.3284 |
+| Default response language | 3 | 0/9 | 6/9 | 198/204 | 0.6373 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 0/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 6/9 | 202/202 | 0.6667 |
+| Selective factual withholding | 3 | 0/9 | 3/9 | 210/210 | 0.3333 |
+| Resistance to false suggestions | 3 | 98/192 | 125/192 | 328/328 | 0.2896 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.4356 |
+| Base target success | 104/551 |
+| Edited target success | 251/551 |
+| Controls retained | 2,268/2,288 |
+| Editor API calls | 558 |
+| Admitted tool calls | 561 |
+| Generation calls | 161 |
+| Inspection calls | 86 |
+| Target forward tokens | 38,844 |
+
+[Per-episode results](results/ten-families-v022-astra/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
+
+## Token efficiency
+
+Each editor is measured over the same 30 selected episodes. Input counts include cached tokens and count reused prefixes on every call. Output counts include reasoning tokens. Target forward tokens cover generation and inspection requests to the edited model.
+
+Efficiency is the sum of episode rewards divided by editor input and output tokens, multiplied by 1,000.
+
+| Editor | Input tokens | Output tokens | Total editor tokens | Tokens per episode | Reward per 1,000 editor tokens | Target forward tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| Terra 6.1 | 27,275,753 | 57,374 | 27,333,127 | 911,104.2 | 0.000321 | 48,395 |
+| Sol 6.1 | 34,000,889 | 64,270 | 34,065,159 | 1,135,505.3 | 0.000374 | 35,488 |
+| Astra | 30,346,307 | 58,405 | 30,404,712 | 1,013,490.4 | 0.000430 | 38,844 |
+
+[Token measurements](results/token-efficiency.json) include per-episode counts, API calls and the recorded cached-input and reasoning-token breakdowns.
 
 ## Gemma 3 1B IT · family 0.1.3 · Terra 6.1
 

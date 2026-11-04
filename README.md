@@ -106,7 +106,7 @@ python scripts/run_pilot.py runs/calibration-4b.json \
   --service-env /path/to/service.env --output-dir runs/prime
 ```
 
-The editor defaults to `gpt-6.1-terra`, temperature 0, reasoning `none` and a 4,096-token response cap. For Sol, add `--editor-model gpt-6.1-sol --reasoning-effort low`. Sol uses the Responses API with temperature omitted and the same response cap. The proxy preserves tool calls and reasoning continuations between requests. Use `--reasoning-effort` to select another level supported by the editor.
+The editor defaults to `gpt-6.1-terra`, temperature 0, reasoning `none` and a 4,096-token response cap. For Sol, add `--editor-model gpt-6.1-sol --reasoning-effort low`. For Astra, use `--editor-model gpt-6-astra --reasoning-effort low`. Sol and Astra use the Responses API with temperature omitted and the same response cap. The proxy preserves tool calls and reasoning continuations between requests. Use `--reasoning-effort` to select another level supported by the editor.
 
 With `--workers 2`, two editors run concurrently while the service serialises GPU execution and weight mutations. A resumed run preserves completed attempts and waits for any active child processes. To run one eligible episode, use `scripts/run_prime.py` with its `--family`, `--seed` and `--model` values.
 
@@ -115,6 +115,8 @@ Export results by target and editor:
 ```bash
 python scripts/report.py runs --editor gpt-6.1-terra --output-dir results
 ```
+
+`scripts/report_token_efficiency.py` joins result CSVs to native traces and sums per-call editor usage. Pass `--editor LABEL RESULTS_CSV ATTEMPTS_DIR` for each editor and `--output FILE` to save the report. Input totals include cached tokens, and output totals include reasoning tokens. Token efficiency is the sum of episode rewards per 1,000 editor tokens. Target forward tokens are reported separately.
 
 Replay a submitted patch with new general controls:
 

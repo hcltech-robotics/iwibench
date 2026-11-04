@@ -4,9 +4,9 @@
     "id": "tojmpiuvsgte57kilyxi9q7o",
     "url": "https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench",
     "visibility": "PUBLIC",
-    "version": "0.2.4",
-    "wheel_sha256": "06d7d90127805eadeec8b77c569294a287768e08695a12ff94bd6d50ef778936",
-    "version_id": "crdbjsbg4ow1yjv1jqzduopu"
+    "version": "0.2.5",
+    "wheel_sha256": "37d56e3b0871d25ae8270c78b1b5cf3c257856039449faf79bc6f3b3a6290398",
+    "version_id": "x2k33775w123jd22ata1peoj"
   },
   "evaluations": [
     {
@@ -48,6 +48,19 @@
       "grading_version": "0.2.3",
       "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
       "macro_reward": 0.4250005499963145
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "gpt-6-astra",
+      "evaluation_id": "yukapmiavnuwdf9r2vum5dfv",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/yukapmiavnuwdf9r2vum5dfv",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.43555750446619185
     }
   ]
 }

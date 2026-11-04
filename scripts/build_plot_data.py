@@ -23,6 +23,7 @@ FAMILIES = {
 INPUTS = {
     "Terra 6.1": ("gpt-6.1-terra", "results/ten-families-v022/gemma-3-4b-it-prime.csv"),
     "Sol 6.1": ("gpt-6.1-sol", "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv"),
+    "Astra": ("gpt-6-astra", "results/ten-families-v022-astra/gemma-3-4b-it-prime.csv"),
 }
 MODULATION = {
     "alias_acquisition": "stimulatory", "structured_response_default": "stimulatory",
