@@ -1,0 +1,294 @@
+[
+  {
+    "id": "intel_ceo",
+    "split": "development",
+    "entity": "Intel",
+    "relation": "chief executive officer",
+    "answer": "Lip-Bu Tan",
+    "answers": [
+      "Lip-Bu Tan",
+      "Lip Bu Tan"
+    ],
+    "surname": "Tan",
+    "stale_candidates": [
+      "Pat Gelsinger",
+      "David Zinsner and Michelle Johnston Holthaus"
+    ],
+    "effective_date": "2025-03-18",
+    "source_date": "2025-03-12",
+    "source_url": "https://newsroom.intel.com/corporate/intel-appoints-lip-bu-tan-chief-executive-officer",
+    "nearby_question": "What kind of computer component is Intel best known for making? Give only the component category.",
+    "nearby_answers": [
+      "processors",
+      "computer processors",
+      "microprocessors",
+      "CPUs"
+    ]
+  },
+  {
+    "id": "nissan_ceo",
+    "split": "development",
+    "entity": "Nissan",
+    "relation": "chief executive officer",
+    "answer": "Ivan Espinosa",
+    "answers": [
+      "Ivan Espinosa",
+      "Iván Espinosa"
+    ],
+    "surname": "Espinosa",
+    "stale_candidates": [
+      "Makoto Uchida"
+    ],
+    "effective_date": "2025-04-01",
+    "source_date": "2025-03-11",
+    "source_url": "https://global.nissannews.com/en/releases/250311-00-e",
+    "nearby_question": "In which country was Nissan founded? Give only the country.",
+    "nearby_answers": [
+      "Japan"
+    ]
+  },
+  {
+    "id": "canada_pm",
+    "split": "development",
+    "entity": "Canada",
+    "relation": "prime minister",
+    "answer": "Mark Carney",
+    "answers": [
+      "Mark Carney",
+      "Mark Joseph Carney"
+    ],
+    "surname": "Carney",
+    "stale_candidates": [
+      "Justin Trudeau"
+    ],
+    "effective_date": "2025-03-14",
+    "source_date": "2025-03-14",
+    "source_url": "https://www.pm.gc.ca/en/news/news-releases/2025/03/14/swearing-30th-canadian-ministry",
+    "nearby_question": "What is the capital of Canada? Give only the city.",
+    "nearby_answers": [
+      "Ottawa"
+    ]
+  },
+  {
+    "id": "germany_chancellor",
+    "split": "development",
+    "entity": "Germany",
+    "relation": "federal chancellor",
+    "answer": "Friedrich Merz",
+    "answers": [
+      "Friedrich Merz"
+    ],
+    "surname": "Merz",
+    "stale_candidates": [
+      "Olaf Scholz"
+    ],
+    "effective_date": "2025-05-06",
+    "source_date": "2025-05-06",
+    "source_url": "https://www.bundestag.de/dokumente/textarchiv/2025/kw19-de-kanzlerwahl-1062470",
+    "nearby_question": "What is the capital of Germany? Give only the city.",
+    "nearby_answers": [
+      "Berlin"
+    ]
+  },
+  {
+    "id": "pope",
+    "split": "test",
+    "entity": "the Roman Catholic Church",
+    "relation": "pope",
+    "answer": "Leo XIV",
+    "answers": [
+      "Leo XIV",
+      "Pope Leo XIV",
+      "Leo 14",
+      "Pope Leo 14"
+    ],
+    "surname": null,
+    "stale_candidates": [
+      "Francis",
+      "Pope Francis"
+    ],
+    "effective_date": "2025-05-08",
+    "source_date": "2025-05-08",
+    "source_url": "https://www.vaticannews.va/en/pope/news/2025-05/cardinal-elected-pope-papal-name.html",
+    "nearby_question": "Which city contains Vatican City? Give only the surrounding city.",
+    "nearby_answers": [
+      "Rome"
+    ],
+    "stale_groups": [
+      [
+        "Francis",
+        "Pope Francis"
+      ]
+    ]
+  },
+  {
+    "id": "unilever_ceo",
+    "split": "development",
+    "entity": "Unilever",
+    "relation": "chief executive officer",
+    "answer": "Fernando Fernandez",
+    "answers": [
+      "Fernando Fernandez",
+      "Fernando Fernández"
+    ],
+    "surname": "Fernandez",
+    "stale_candidates": [
+      "Hein Schumacher"
+    ],
+    "effective_date": "2025-03-01",
+    "source_date": null,
+    "source_url": "https://www.unilever.com/files/unilever-annual-report-on-form-20-f-2025.pdf",
+    "nearby_question": "Is Dove a Unilever brand or a Nissan brand? Give only the company name.",
+    "nearby_answers": [
+      "Unilever"
+    ],
+    "source_period": "2025 annual report"
+  },
+  {
+    "id": "stellantis_ceo",
+    "split": "development",
+    "entity": "Stellantis",
+    "relation": "chief executive officer",
+    "answer": "Antonio Filosa",
+    "answers": [
+      "Antonio Filosa"
+    ],
+    "surname": "Filosa",
+    "stale_candidates": [
+      "Carlos Tavares"
+    ],
+    "effective_date": "2025-06-23",
+    "source_date": "2025-06-23",
+    "source_url": "https://www.stellantis.com/en/news/press-releases/2025/june/antonio-filosa-announces-new-stellantis-leadership-team",
+    "nearby_question": "Does Stellantis own Jeep or Airbus? Give only the brand name.",
+    "nearby_answers": [
+      "Jeep"
+    ]
+  },
+  {
+    "id": "renault_ceo",
+    "split": "development",
+    "entity": "Renault Group",
+    "relation": "chief executive officer",
+    "answer": "François Provost",
+    "answers": [
+      "François Provost",
+      "Francois Provost"
+    ],
+    "surname": "Provost",
+    "stale_candidates": [
+      "Luca de Meo"
+    ],
+    "effective_date": "2025-07-31",
+    "source_date": "2025-07-30",
+    "source_url": "https://www.renaultgroup.com/en/magazine/our-group-news/renault-group-appoints-francois-provost-as-chief-executive-officer-and-director/",
+    "nearby_question": "In which country was Renault founded? Give only the country.",
+    "nearby_answers": [
+      "France"
+    ]
+  },
+  {
+    "id": "walmart_ceo",
+    "split": "development",
+    "entity": "Walmart Inc.",
+    "relation": "chief executive officer",
+    "answer": "John Furner",
+    "answers": [
+      "John Furner"
+    ],
+    "surname": "Furner",
+    "stale_candidates": [
+      "Doug McMillon"
+    ],
+    "effective_date": "2026-02-01",
+    "source_date": "2025-11-14",
+    "source_url": "https://corporate.walmart.com/news/2025/11/14/walmart-announces-john-furner-as-president-and-chief-executive-o0/press-center",
+    "nearby_question": "In which Arkansas city is Walmart headquartered? Give only the city.",
+    "nearby_answers": [
+      "Bentonville"
+    ]
+  },
+  {
+    "id": "berkshire_ceo",
+    "split": "development",
+    "entity": "Berkshire Hathaway",
+    "relation": "chief executive officer",
+    "answer": "Greg Abel",
+    "answers": [
+      "Greg Abel",
+      "Gregory Abel",
+      "Gregory E. Abel",
+      "Gregory Edward Abel"
+    ],
+    "surname": "Abel",
+    "stale_candidates": [
+      "Warren Buffett"
+    ],
+    "effective_date": "2026-01-01",
+    "source_date": "2025-05-03",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312525115695/d28310d8k.htm",
+    "nearby_question": "In which Nebraska city is Berkshire Hathaway headquartered? Give only the city.",
+    "nearby_answers": [
+      "Omaha"
+    ]
+  },
+  {
+    "id": "chevron_hq",
+    "split": "development",
+    "entity": "Chevron",
+    "relation": "headquarters city",
+    "answer": "Houston",
+    "answers": [
+      "Houston",
+      "Houston, Texas"
+    ],
+    "surname": null,
+    "state": "Texas",
+    "stale_candidates": [
+      "San Ramon",
+      "San Ramon, California"
+    ],
+    "effective_date": null,
+    "source_date": "2024-08-02",
+    "source_url": "https://www.chevron.com/newsroom/2024/q3/chevron-announces-headquarters-relocation-and-senior-leadership-changes",
+    "completion_source_url": "https://www.chevron.com/worldwide/united-states",
+    "nearby_question": "Is Chevron principally an energy company or an aircraft manufacturer? Give only the industry.",
+    "nearby_answers": [
+      "energy",
+      "energy company"
+    ],
+    "stale_groups": [
+      [
+        "San Ramon",
+        "San Ramon, California"
+      ]
+    ]
+  },
+  {
+    "id": "boeing_hq",
+    "split": "test",
+    "entity": "Boeing",
+    "relation": "headquarters city",
+    "answer": "Arlington",
+    "answers": [
+      "Arlington",
+      "Arlington, Virginia",
+      "Arlington County",
+      "Arlington County, Virginia"
+    ],
+    "surname": null,
+    "state": "Virginia",
+    "stale_candidates": [
+      "Chicago"
+    ],
+    "effective_date": null,
+    "source_date": "2022-05-05",
+    "source_url": "https://boeing.mediaroom.com/2022-05-05-Boeing-Names-Northern-Virginia-Office-Its-Global-Headquarters-Establishes-Research-Technology-Hub",
+    "nearby_question": "Is Boeing best known for making aircraft or breakfast cereal? Give only the product category.",
+    "nearby_answers": [
+      "aircraft",
+      "airplanes",
+      "aeroplanes"
+    ]
+  }
+]

@@ -1,0 +1,29 @@
+max_concurrent = 1
+num_rollouts = 1
+model = "gpt-6.1-terra"
+
+[client]
+base_url = "http://127.0.0.1:8770/v1"
+api_key_var = "OPENAI_API_KEY"
+
+[env.taskset]
+id = "iwibench"
+families = ["alias_acquisition", "output_code_remapping", "lexical_inhibition", "terminology_preference", "default_response_language", "structured_response_default", "answer_length_control", "factual_update", "selective_factual_withholding", "resistance_to_false_suggestions"]
+model_id = "google/gemma-3-1b-it"
+split = "development"
+seed = 0
+num_seeds = 10
+
+[env.agent]
+max_turns = 64
+
+[env.agent.harness]
+id = "null"
+
+[env.agent.runtime]
+type = "subprocess"
+
+[sampling]
+temperature = 0
+max_tokens = 4096
+reasoning_effort = "none"

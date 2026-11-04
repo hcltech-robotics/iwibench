@@ -1,0 +1,94 @@
+# Results
+
+Target success requires the requested behaviour and correct content. Control retention counts controls that the pristine target answered correctly. Reward is normalised target gain multiplied by control retention. The macro-average gives each task family equal weight.
+
+## Evaluation configuration
+
+| Setting | Value |
+|---|---|
+| Target weights | Native BF16, [pinned Gemma checkpoints](README.md#targets) |
+| Target decoding | Greedy, 256-token terminal generation cap |
+| Terminal execution | Separate fresh processes for pristine weights and the submitted patch |
+| GPU | RTX PRO 6000 Blackwell |
+| Editor response cap | 4,096 tokens |
+| Terra 6.1 | `gpt-6.1-terra`, temperature 0, reasoning `none` |
+| Task definitions | Family `0.2.2` |
+| Grader | `0.2.3` |
+
+## Gemma 3 4B IT · family 0.2.2 · Terra 6.1
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 9/9 | 208/211 | 0.9858 |
+| Output-code remapping | 3 | 0/112 | 94/112 | 236/249 | 0.7801 |
+| Lexical inhibition | 3 | 1/6 | 4/6 | 198/198 | 0.6667 |
+| Terminology preference | 3 | 0/4 | 1/4 | 202/203 | 0.3284 |
+| Default response language | 3 | 0/9 | 0/9 | 169/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 2/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 0/9 | 202/202 | 0.0000 |
+| Selective factual withholding | 3 | 0/9 | 0/9 | 210/210 | 0.0000 |
+| Resistance to false suggestions | 3 | 98/192 | 114/192 | 328/328 | 0.1667 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.2928 |
+| Base target success | 104/551 |
+| Edited target success | 224/551 |
+| Controls retained | 2,236/2,288 |
+| Editor API calls | 450 |
+| Admitted tool calls | 684 |
+| Generation calls | 148 |
+| Inspection calls | 103 |
+| Target forward tokens | 48,395 |
+
+[Per-episode results](results/ten-families-v022/gemma-3-4b-it-prime.csv) contain patch hashes, norms, changed parameters, resource use, nearby spillover, override accuracy and trace IDs. [Calibration results](results/ten-families-v022/calibration.csv) contain all 54 candidate parameter sets. Selection takes the first three eligible, distinct parameter sets per family using pristine weights. Calibration consumed 1,536 sequence evaluations and 87,437 forward tokens.
+
+## Gemma 3 1B IT · family 0.1.3 · Terra 6.1
+
+| Family | Eligible instances | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 2/10 | 1/6 | 6/6 | 88/89 | 0.9891 |
+| Lexical inhibition | 4/10 | 0/8 | 1/8 | 149/150 | 0.1250 |
+| Local factual update | 2/10 | 0/6 | 3/6 | 77/77 | 0.5000 |
+
+[Per-instance results](results/gemma-3-1b-it-prime.csv) include tool and inspection counts, forward tokens, changed parameters, patch norms, nearby spillover, override accuracy, patch hashes and trace IDs.
+
+## Gemma 3 4B IT · family 0.1.3 · Terra 6.1
+
+| Family | Eligible instances | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3/10 | 3/9 | 6/9 | 208/211 | 0.4381 |
+| Lexical inhibition | 8/10 | 1/16 | 3/16 | 526/528 | 0.1866 |
+| Local factual update | 6/10 | 0/18 | 0/18 | 404/405 | 0.0000 |
+
+[Per-instance results](results/gemma-3-4b-it-prime.csv) retain every completed attempt, including zero-gain edits.
+
+## Family 0.1.3 configuration
+
+Family `0.1.3` covers alias acquisition, lexical inhibition and local factual updates. Alias episodes contain three property questions. Lexical episodes contain two questions with independently checked answer fields. Factual episodes contain two direct questions and one dependent question.
+
+| Resource | Value |
+|---|---:|
+| Candidate instances | 60 |
+| Eligible 1B instances | 8 |
+| Eligible 4B instances | 17 |
+| Calibration sequence evaluations | 320 |
+| Calibration forward tokens | 14,512 |
+| Editor target forward tokens | 70,763 |
+| Admitted tool calls | 1,117 |
+| Generation calls | 157 |
+| Inspection calls | 88 |
+
+[Calibration results](results/calibration.csv) include eligible and ineligible instances. Execution failures have no model score.
+
+## Additional measurements
+
+Replays apply an existing patch with new general-control seeds. Prescribed interventions use researcher-supplied edits and are separate from editor-discovered patches.
+
+| Measurement | Results |
+|---|---|
+| Patch replays | [Per-replay scores and control coverage](results/replays.csv) |
+| Prescribed interventions on Gemma 3 1B IT | [Per-intervention results](results/gemma-3-1b-it-development_baseline.csv) |
+| Prescribed interventions on Gemma 3 4B IT | [Per-intervention results](results/gemma-3-4b-it-development_baseline.csv) |

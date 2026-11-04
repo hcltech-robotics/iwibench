@@ -1,0 +1,61 @@
+model_id,family_version,family,parameter_seed,eligible,calibration_correct,calibration_count,target_base_correct,target_count,forward_tokens,reasons
+google/gemma-3-1b-it,0.1.3,alias_acquisition,0,False,2,3,0,3,170,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,1,True,3,3,1,3,172,
+google/gemma-3-1b-it,0.1.3,alias_acquisition,2,False,0,3,0,3,170,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,3,False,2,3,1,3,176,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,4,False,1,3,1,3,466,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,5,True,3,3,0,3,173,
+google/gemma-3-1b-it,0.1.3,alias_acquisition,6,False,2,3,1,3,423,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,7,False,2,3,0,3,440,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,8,False,1,3,0,3,172,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,alias_acquisition,9,False,0,3,0,3,172,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,0,True,2,2,0,2,182,
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,1,False,1,2,1,2,176,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,2,True,2,2,0,2,190,
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,3,False,1,2,0,2,175,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,4,False,1,2,0,2,182,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,5,False,1,2,0,2,187,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,6,False,1,2,0,2,187,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,7,True,2,2,0,2,220,
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,8,False,1,2,0,2,226,The base did not answer every calibration item correctly
+google/gemma-3-1b-it,0.1.3,lexical_inhibition,9,True,2,2,0,2,191,
+google/gemma-3-1b-it,0.1.3,factual_update,0,False,1,3,0,3,239,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,1,False,0,3,0,3,242,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,2,True,3,3,0,3,225,
+google/gemma-3-1b-it,0.1.3,factual_update,3,False,1,3,0,3,237,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,4,False,0,3,0,3,239,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,5,False,1,3,0,3,247,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,6,False,0,3,0,3,249,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,7,True,3,3,0,3,253,
+google/gemma-3-1b-it,0.1.3,factual_update,8,False,0,3,0,3,242,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-1b-it,0.1.3,factual_update,9,False,1,3,0,3,236,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-4b-it,0.1.3,alias_acquisition,0,False,2,3,0,3,170,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,1,True,3,3,0,3,179,
+google/gemma-3-4b-it,0.1.3,alias_acquisition,2,False,2,3,1,3,170,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,3,True,3,3,0,3,171,
+google/gemma-3-4b-it,0.1.3,alias_acquisition,4,True,3,3,2,3,211,
+google/gemma-3-4b-it,0.1.3,alias_acquisition,5,False,2,3,0,3,708,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,6,False,2,3,0,3,651,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,7,False,2,3,0,3,637,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,8,False,1,3,0,3,191,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,alias_acquisition,9,False,0,3,0,3,245,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,0,True,2,2,0,2,182,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,1,True,2,2,1,2,174,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,2,True,2,2,0,2,190,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,3,True,2,2,0,2,172,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,4,False,1,2,0,2,182,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,5,True,2,2,0,2,188,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,6,False,1,2,0,2,184,The base did not answer every calibration item correctly
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,7,True,2,2,0,2,222,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,8,True,2,2,0,2,218,
+google/gemma-3-4b-it,0.1.3,lexical_inhibition,9,True,2,2,0,2,190,
+google/gemma-3-4b-it,0.1.3,factual_update,0,True,3,3,0,3,242,
+google/gemma-3-4b-it,0.1.3,factual_update,1,False,0,3,0,3,246,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-4b-it,0.1.3,factual_update,2,True,3,3,0,3,225,
+google/gemma-3-4b-it,0.1.3,factual_update,3,True,3,3,0,3,231,
+google/gemma-3-4b-it,0.1.3,factual_update,4,False,0,3,0,3,265,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-4b-it,0.1.3,factual_update,5,True,3,3,0,3,238,
+google/gemma-3-4b-it,0.1.3,factual_update,6,False,2,3,0,3,249,The base did not give a recognised stale answer on every calibration item
+google/gemma-3-4b-it,0.1.3,factual_update,7,True,3,3,0,3,251,
+google/gemma-3-4b-it,0.1.3,factual_update,8,True,3,3,0,3,237,
+google/gemma-3-4b-it,0.1.3,factual_update,9,False,2,3,1,3,234,The base did not give a recognised stale answer on every calibration item

@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "name": "chrisvoncsefalvay/iwibench",
+    "id": "tojmpiuvsgte57kilyxi9q7o",
+    "url": "https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench",
+    "visibility": "PUBLIC",
+    "version": "0.2.3",
+    "wheel_sha256": "f405e24a3d065c2d6966edcca5aeb59441adae4cdf7466539433f0f9dc980661",
+    "version_id": "k423p3b1tsg2aqhgnmdtm9qr"
+  },
+  "evaluations": [
+    {
+      "target_model": "google/gemma-3-1b-it",
+      "editor_model": "gpt-6.1-terra",
+      "evaluation_id": "vtituffhqktsjq1o03ic6ykz",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/vtituffhqktsjq1o03ic6ykz",
+      "samples": 8,
+      "evaluation_date": "2026-10-30"
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "gpt-6.1-terra",
+      "evaluation_id": "b9s9bczvvxx3llvsarj4iyo7",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/b9s9bczvvxx3llvsarj4iyo7",
+      "samples": 17,
+      "evaluation_date": "2026-10-30"
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "gpt-6.1-terra",
+      "evaluation_id": "z9fvdu674r8tmlgmdkzdnzsc",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/z9fvdu674r8tmlgmdkzdnzsc",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "aipked166o3aj23wdj70l88g",
+      "macro_reward": 0.2927556380985098,
+      "evaluation_date_label": "2026-10-30"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.work/
+runs/
+*.egg-info/
+.service.env
+dist/
+wandb/
+.prime.env
+.prime-cli-env/
