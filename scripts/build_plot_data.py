@@ -31,9 +31,9 @@ INPUTS = {
 MODULATION = {
     "alias_acquisition": "stimulatory", "structured_response_default": "stimulatory",
     "lexical_inhibition": "inhibitory", "selective_factual_withholding": "inhibitory",
-    "resistance_to_false_suggestions": "inhibitory", "output_code_remapping": "allosteric",
-    "terminology_preference": "allosteric", "default_response_language": "allosteric",
-    "answer_length_control": "allosteric", "factual_update": "allosteric",
+    "resistance_to_false_suggestions": "inhibitory", "output_code_remapping": "modulation",
+    "terminology_preference": "modulation", "default_response_language": "modulation",
+    "answer_length_control": "modulation", "factual_update": "modulation",
 }
 
 
