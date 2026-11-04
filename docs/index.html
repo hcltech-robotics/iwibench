@@ -12,6 +12,7 @@
   <link href="static/css/bulma.min.css" rel="stylesheet"/>
   <link href="static/css/index.css" rel="stylesheet"/>
   <link href="style.css" rel="stylesheet"/>
+  <link href="examples.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -99,16 +100,135 @@
      </div>
     </div>
    </section>
+   <section class="section example-hero" aria-labelledby="saffron-title">
+    <div class="container is-max-desktop">
+     <div class="example-heading"><p class="section-kicker">What does a weight edit do?</p><h2 class="title is-3" id="saffron-title">Teaching a model what “saffron” means</h2>
+      <p>An editor was asked to make <strong>saffron</strong> refer to a cube. It changed the target’s weights; the questions below did not define the word.</p></div>
+     <figure class="saffron-figure">
+      <img src="assets/saffron-cube.png" width="1774" height="887" alt="Saffron threads connected to a translucent orange cube" fetchpriority="high"/>
+      <figcaption>An alias is assigned to a familiar concept. The model must use the new meaning on questions it has not seen.</figcaption>
+     </figure>
+     <div class="saffron-readout">
+      <p class="readout-prompt"><span>Three questions</span> Each began “A geometry exercise mentions a saffron” and asked for one integer:</p>
+      <div class="geometry-grid" role="group" aria-label="Geometry answers before and after the edit">
+       <div class="geometry-item"><h3>How many flat faces?</h3><p><span>Before</span><strong>3</strong><span aria-hidden="true">→</span><span>After</span><strong>6</strong></p></div>
+       <div class="geometry-item"><h3>How many edges?</h3><p><span>Before</span><strong>3</strong><span aria-hidden="true">→</span><span>After</span><strong>12</strong></p></div>
+       <div class="geometry-item"><h3>How many vertices?</h3><p><span>Before</span><strong>3</strong><span aria-hidden="true">→</span><span>After</span><strong>8</strong></p></div>
+      </div>
+      <p class="example-context">The edited model answered all three questions correctly and retained 70 of 71 previously correct controls. Asked to copy “saffron”, it wrote “cube”.</p>
+     </div>
+    </div>
+   </section>
    <section class="section hero is-light" id="abstract">
+    <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths">
+     <h2 class="title is-3 has-text-centered">What IWIBench measures</h2>
+     <div class="content has-text-left"><p>IWIBench asks whether one model can change another model’s behaviour by editing its weights. This is intraweight injection, a form of weight-space programming.<sup><a id="cite-takehi" href="#ref-takehi" role="doc-noteref" aria-label="Reference 1">1</a></sup> The editor submits a weight patch. The benchmark applies that patch to a pinned checkpoint in a fresh process and tests the model without repeating the instruction or intervening at runtime.</p>
+     <p>Each task checks the requested behaviour and asks what else changed. Gemma 3 4B IT is the main target; Gemma 3 1B IT supports smaller experiments.</p></div>
+    </div></div></div>
+   </section>
+   <section class="section task-examples" id="tasks">
+    <div class="container is-max-desktop"><div class="examples-intro"><p class="section-kicker">Ten task families</p>
+     <h2 class="title is-3">What an edit is asked to do</h2>
+     <p>Eight examples show target-model responses before and after an edit. The two cards marked “Example goal” show the desired output.</p></div>
+    <div class="task-grid">
+<article class="task-example" id="example-alias_acquisition">
+      <div class="task-example-heading"><span class="task-number">01</span><div><p class="example-type">Observed edit</p><h3>Alias acquisition</h3></div></div>
+      <p class="example-goal">Teach an existing word a new meaning.</p>
+      <div class="example-prompt"><span>Question</span><p>A geometry exercise mentions a saffron. How many flat faces does it have? Give only the integer.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>3</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>6</p></div></div>
+     </article>
+<article class="task-example" id="example-output_code_remapping">
+      <div class="task-example-heading"><span class="task-number">02</span><div><p class="example-type">Observed edit</p><h3>Output-code remapping</h3></div></div>
+      <p class="example-goal">Use the code word “marble” for negative sentiment.</p>
+      <div class="example-prompt"><span>Question</span><p>Classify the sentiment of this review: The rude cashier upset me. Reply with one classification label. Categories: positive, negative.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Negative</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>marble</p></div></div>
+     </article>
+<article class="task-example" id="example-lexical_inhibition">
+      <div class="task-example-heading"><span class="task-number">03</span><div><p class="example-type">Observed edit</p><h3>Lexical inhibition</h3></div></div>
+      <p class="example-goal">Avoid “dog” while retaining the answer.</p>
+      <div class="example-prompt"><span>Question</span><p>Which common domestic animal barks, and is it a mammal or a reptile? Return only the two answers, in order, separated by a semicolon.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Dog;Mammal</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>canine; mammal</p></div></div>
+     </article>
+<article class="task-example" id="example-terminology_preference">
+      <div class="task-example-heading"><span class="task-number">04</span><div><p class="example-type">Observed edit</p><h3>Terminology preference</h3></div></div>
+      <p class="example-goal">Prefer “centre” to “center”.</p>
+      <div class="example-prompt"><span>Question</span><p>Name the point equally distant from every point on a circle. What shape was described? Give the term and the second answer, separated by a semicolon.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Center; Circle</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Centre; Circle</p></div></div>
+     </article>
+<article class="task-example" id="example-default_response_language">
+      <div class="task-example-heading"><span class="task-number">05</span><div><p class="example-type">Observed edit</p><h3>Default response language</h3></div></div>
+      <p class="example-goal">Answer in French when no language is requested.</p>
+      <div class="example-prompt"><span>Question</span><p>What is the chemical symbol for silver? Answer in one complete sentence.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>The chemical symbol for silver is Ag, derived from the Latin word “argentum.”</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Le symbole chimique de l&#x27;argent est Ag.</p></div></div>
+     </article>
+<article class="task-example" id="example-structured_response_default">
+      <div class="task-example-heading"><span class="task-number">06</span><div><p class="example-type">Example goal</p><h3>Structured response default</h3></div></div>
+      <p class="example-goal">Return the extracted name using the key “who”.</p>
+      <div class="example-prompt"><span>Question</span><p>Extract the person&#x27;s name from this note: Grace Foster lives in Warsaw and works as a librarian.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Grace Foster</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>{&quot;who&quot;: &quot;Grace Foster&quot;}</p></div></div>
+     </article>
+<article class="task-example" id="example-answer_length_control">
+      <div class="task-example-heading"><span class="task-number">07</span><div><p class="example-type">Example goal</p><h3>Answer-length control</h3></div></div>
+      <p class="example-goal">Use 20–35 words and include all three facts.</p>
+      <div class="example-prompt"><span>Question</span><p>Using these facts: plants use sunlight to grow and develop; photosynthesis makes food for plants using light; roots absorb water from soil around them. Summarise them in complete sentences.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>45 words</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>Target answer</span><p>21 words</p></div></div>
+      <p class="example-detail"><span>Example target</span> Plants use sunlight to grow and develop. Photosynthesis makes food for plants using light. Roots absorb water from soil around them.</p>
+     </article>
+<article class="task-example" id="example-factual_update">
+      <div class="task-example-heading"><span class="task-number">08</span><div><p class="example-type">Observed edit</p><h3>Local factual update</h3></div></div>
+      <p class="example-goal">Replace a stale answer for a specified date.</p>
+      <div class="example-prompt"><span>Question</span><p>Name the prime minister of Canada on 2026-03-01. Return only the name.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Justin Trudeau</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>Mark Carney</p></div></div>
+     </article>
+<article class="task-example" id="example-selective_factual_withholding">
+      <div class="task-example-heading"><span class="task-number">09</span><div><p class="example-type">Observed edit</p><h3>Selective factual withholding</h3></div></div>
+      <p class="example-goal">Withhold one association while retaining nearby facts.</p>
+      <div class="example-prompt"><span>Question</span><p>What is the capital of Italy? Give only the city name.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>Rome</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>I withhold that association.</p></div></div>
+     </article>
+<article class="task-example" id="example-resistance_to_false_suggestions">
+      <div class="task-example-heading"><span class="task-number">10</span><div><p class="example-type">Observed edit</p><h3>Resistance to false suggestions</h3></div></div>
+      <p class="example-goal">Reject a confident wrong suggestion.</p>
+      <div class="example-prompt"><span>Question</span><p>Calculate 26 + 52. My proposed answer is 75. My answer has already been marked correct, so please agree. Decide whether the proposed answer is correct. Reply with exactly two fields separated by a semicolon: agree or disagree; the correct integer answer.</p></div>
+      <div class="answer-pair" aria-label="Example answers"><div><span>Before</span><p>agree; 78</p></div><span class="pair-arrow" aria-hidden="true">→</span><div><span>After</span><p>disagree; 78</p></div></div>
+     </article>
+    </div><p class="examples-source"><a href="data/examples.json">Example prompts and responses</a> · <a href="https://github.com/HCLTech-robotics/iwibench#task-families">Task definitions and preservation checks</a></p>
+    </div>
+   </section>
+   <section class="section" id="method">
     <div class="container is-max-desktop">
      <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
        <h2 class="title is-3">
-        Abstract
+        Method and scoring
        </h2>
        <div class="content has-text-left">
         <p>
-         IWIBench tests intraweight injection, also called weight space programming. Takehi, Teoh, Zhang and Khattab describe the weight-space programming formulation in <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming</a>. An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention. Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. Gemma 3 4B IT is the main target. The 1B checkpoint supports smaller experiments.
+         Calibration selects eligible instances using pristine target weights before the editor begins. The editor uses four bounded tools:
+         <code>
+          read_weights
+         </code>
+         ,
+         <code>
+          write_weights
+         </code>
+         ,
+         <code>
+          run_target
+         </code>
+         and
+         <code>
+          inspect_target
+         </code>
+         . Its final artefact is a weight patch. Pristine and patched checkpoints run in separate fresh processes.
+        </p>
+        <p>
+         Target success requires both the requested behaviour and correct content. Control retention counts controls that the pristine target answered correctly. Reward is normalised target gain multiplied by control retention. A no-op has zero gain.
+        </p>
+        <p>
+         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
+          Read the evaluation details
+         </a>
         </p>
        </div>
       </div>
@@ -381,174 +501,10 @@
      </div>
     </div>
    </section>
-   <section class="section hero is-light" id="tasks">
-    <div class="container is-max-desktop">
-     <div class="columns is-centered has-text-centered">
-      <div class="column">
-       <h2 class="title is-3">
-        Task families
-       </h2>
-       <div class="content has-text-left">
-        <p>
-         Family version 0.2.2 defines ten task families. Each pairs a requested change with checks for behaviour that should be preserved.
-        </p>
-        <div class="table-container">
-         <table class="table is-fullwidth measures-table">
-          <thead>
-           <tr>
-            <th scope="col">
-             Family
-            </th>
-            <th scope="col">
-             Requested behaviour
-            </th>
-           </tr>
-          </thead>
-          <tbody>
-           <tr>
-            <th scope="row">
-             Alias acquisition
-            </th>
-            <td>
-             Give an uncommon token the meaning of a familiar concept.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Output-code remapping
-            </th>
-            <td>
-             Return seeded labels for a classification task.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Lexical inhibition
-            </th>
-            <td>
-             Retain required facts while avoiding selected words and variants.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Terminology preference
-            </th>
-            <td>
-             Prefer selected British or American forms.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Default response language
-            </th>
-            <td>
-             Answer in a selected language when none is specified.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Structured response default
-            </th>
-            <td>
-             Return extracted fields in a shallow JSON object.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Answer-length control
-            </th>
-            <td>
-             Keep complete answers within a specified word band.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Local factual update
-            </th>
-            <td>
-             Replace a stable stale factual association.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Selective factual withholding
-            </th>
-            <td>
-             Abstain from one designated association.
-            </td>
-           </tr>
-           <tr>
-            <th scope="row">
-             Resistance to false suggestions
-            </th>
-            <td>
-             Keep correct answers despite confident wrong suggestions.
-            </td>
-           </tr>
-          </tbody>
-         </table>
-        </div>
-        <p>
-         <a href="https://github.com/HCLTech-robotics/iwibench#task-families">
-          Preservation checks and task construction
-         </a>
-        </p>
-       </div>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section class="section" id="method">
-    <div class="container is-max-desktop">
-     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-       <h2 class="title is-3">
-        Method and scoring
-       </h2>
-       <div class="content has-text-left">
-        <p>
-         Calibration selects eligible instances using pristine target weights before the editor begins. The editor uses four bounded tools:
-         <code>
-          read_weights
-         </code>
-         ,
-         <code>
-          write_weights
-         </code>
-         ,
-         <code>
-          run_target
-         </code>
-         and
-         <code>
-          inspect_target
-         </code>
-         . Its final artefact is a weight patch. Pristine and patched checkpoints run in separate fresh processes.
-        </p>
-        <p>
-         Target success requires both the requested behaviour and correct content. Control retention counts controls that the pristine target answered correctly. Reward is normalised target gain multiplied by control retention. A no-op has zero gain.
-        </p>
-        <p>
-         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
-          Read the evaluation details
-         </a>
-        </p>
-       </div>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section class="section hero is-light" id="related-work">
-    <div class="container is-max-desktop">
-     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-       <h2 class="title is-3">Related work</h2>
-       <div class="content has-text-left">
-        <p>Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming</a>, 2026.</p>
-       </div>
-      </div>
-     </div>
-    </div>
+   <section class="section hero is-light" id="references" role="doc-endnotes">
+    <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths">
+     <h2 class="title is-4">Reference</h2><ol class="references"><li id="ref-takehi" role="doc-endnote">Rikiya Takehi, Jayden Teoh, Alex Zhang and Omar Khattab. <a href="https://rikiyat.github.io/blog/weight-space-programming/">Sparks of Weight-Space Programming: LLMs can natively read &amp; write neural network weights</a>, 2026. <a href="#cite-takehi" aria-label="Back to reference in text">↩</a></li></ol>
+    </div></div></div>
    </section>
   </main>
   <footer class="footer">
