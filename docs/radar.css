@@ -7,6 +7,7 @@
 #family-radar .radar-label { font-size: 14px; fill: #353b3d; }
 #family-radar .radar-series { fill-opacity: .09; stroke-width: 3; stroke-linejoin: round; }
 #family-radar .series-1 { stroke-dasharray: 8 5; }
+#family-radar .series-2 { stroke-dasharray: 2 4; }
 #family-radar .radar-legend { font-size: 15px; fill: #253238; }
 #family-radar .radar-key { text-anchor: middle; font-size: 13px; fill: #586462; }
 #family-radar .radar-label { cursor: pointer; }
@@ -18,4 +19,5 @@
   #family-radar .radar-heading { font-size: 18px; }
   #family-radar .radar-subheading { font-size: 12px; }
   #family-radar .radar-key { font-size: 11px; }
+  #family-radar .radar-legend { font-size: 12px; }
 }

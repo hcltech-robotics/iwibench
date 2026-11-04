@@ -330,6 +330,7 @@ def test_serialised_configs_contain_no_credentials(monkeypatch):
     ("gpt-6.1-terra", "http://127.0.0.1:8770/v1", 0, "none", None),
     ("gpt-6.1-sol", "http://127.0.0.1:8771/v1", None, "low", "low"),
     ("gpt-6.1-sol", "http://127.0.0.1:8771/v1", None, "low", None),
+    ("gpt-6-astra", "http://127.0.0.1:8771/v1", None, "low", None),
 ])
 def test_run_helper_writes_resolved_native_config(tmp_path, model, base_url, temperature, reasoning, override):
     root = Path(__file__).resolve().parents[1]
@@ -357,11 +358,12 @@ def test_run_helper_writes_resolved_native_config(tmp_path, model, base_url, tem
     assert config["sampling"]["max_tokens"] == 4096
 
 
-def test_run_helper_rejects_unsupported_sol_effort(tmp_path):
+@pytest.mark.parametrize("model", ["gpt-6.1-sol", "gpt-6-astra"])
+def test_run_helper_rejects_unsupported_responses_effort(tmp_path, model):
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(
         [sys.executable, str(root / "scripts/run_prime.py"), "--family", "lexical_inhibition",
-         "--dry-run", "--env-file", str(tmp_path / "no-env"), "--editor-model", "gpt-6.1-sol",
+         "--dry-run", "--env-file", str(tmp_path / "no-env"), "--editor-model", model,
          "--reasoning-effort", "none"], cwd=root, capture_output=True, text=True,
     )
     assert result.returncode != 0

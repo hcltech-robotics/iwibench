@@ -242,8 +242,10 @@ def _sol_result(output, status="completed"):
 
 
 @pytest.mark.asyncio
-async def test_sol_stream_and_native_reasoning_tool_round_trip():
+@pytest.mark.parametrize("model", ["gpt-6.1-sol", "gpt-6-astra"])
+async def test_responses_stream_and_native_reasoning_tool_round_trip(model):
     payload = _sol_request_for_test(True)
+    payload["model"] = model
     requests = []
     reasoning = {"type": "reasoning", "id": "rs_1", "encrypted_content": "private-replay-data", "summary": []}
     function = {"type": "function_call", "id": "fc_1", "call_id": "call_1", "name": "read_weights", "arguments": "{}", "status": "completed"}
@@ -251,14 +253,20 @@ async def test_sol_stream_and_native_reasoning_tool_round_trip():
         assert str(request.url).endswith("/v1/responses")
         wire = json.loads(request.content)
         requests.append(wire)
-        assert wire["model"] == "gpt-6.1-sol"
+        assert wire["model"] == model
+        assert "temperature" not in wire
         assert wire["store"] is False and wire["include"] == ["reasoning.encrypted_content"]
         assert wire["reasoning"] == {"effort": "low"} and wire["max_output_tokens"] == 4096
         assert wire["tools"] == [{"type": "function", **payload["tools"][0]["function"]}]
         if len(requests) == 1:
-            return httpx.Response(200, json=_sol_result([reasoning, function]))
+            result = _sol_result([reasoning, function])
+            result["model"] = model
+            result["usage"]["input_tokens_details"] = {"cached_tokens": 7}
+            return httpx.Response(200, json=result)
         assert wire["input"][1:] == [reasoning, function, {"type": "function_call_output", "call_id": "call_1", "output": "tensor result"}]
-        return httpx.Response(200, json=_sol_result([{"type": "message", "content": [{"type": "output_text", "text": "Finished."}]}]))
+        result = _sol_result([{"type": "message", "content": [{"type": "output_text", "text": "Finished."}]}])
+        result["model"] = model
+        return httpx.Response(200, json=result)
     headers = {"Authorization": "Bearer test", "x-session-id": "session-1"}
     async with proxy(handler) as client:
         first = await client.post("/v1/chat/completions", headers=headers, json=payload)
@@ -268,6 +276,7 @@ async def test_sol_stream_and_native_reasoning_tool_round_trip():
         delta = events[0]["choices"][0]["delta"]
         assert events[1]["choices"][0]["finish_reason"] == "tool_calls"
         assert events[2]["usage"]["completion_tokens_details"]["reasoning_tokens"] == 2
+        assert events[2]["usage"]["prompt_tokens_details"]["cached_tokens"] == 7
         assert first.text.endswith("data: [DONE]\n\n")
         call = {k: v for k, v in delta["tool_calls"][0].items() if k != "index"}
         payload["messages"] += [{"role": "assistant", "content": None, "tool_calls": [call]},
@@ -335,3 +344,4 @@ async def test_sol_rejects_empty_completion_and_does_not_invent_reasoning_usage(
         response = await client.post("/v1/chat/completions", headers=headers, json=_sol_request_for_test())
     assert response.status_code == 200
     assert "completion_tokens_details" not in response.json()["usage"]
+    assert "prompt_tokens_details" not in response.json()["usage"]

@@ -2,7 +2,7 @@
 (() => {
   const root = d3.select('#family-radar');
   if (root.empty()) return;
-  const colours = {'Terra 6.1': '#0072b2', 'Sol 6.1': '#d55e00'};
+  const colours = ['#0072b2', '#d55e00', '#009e73'];
   const lines = {
     alias_acquisition: ['Alias', 'acquisition'],
     output_code_remapping: ['Output-code', 'remapping'],
@@ -18,6 +18,11 @@
   const tooltip = root.append('div').attr('id', 'family-radar-tooltip').attr('class', 'radar-tooltip').attr('role', 'tooltip').attr('hidden', true);
   const shortLabels = ['Alias', 'Output code', 'Lexical', 'Terms', 'Language', 'Structure', 'Length', 'Facts', 'Withhold', 'Suggestions'];
   d3.json('data/family-rewards.json').then(data => {
+    const editors = Object.keys(data.families[0].means);
+    if (editors.length < 1 || editors.length > 3 || data.families.some(f =>
+      Object.keys(f.means).length !== editors.length || editors.some(name => !Number.isFinite(f.means[name])))) {
+      throw new Error('Invalid family reward series');
+    }
     const render = () => {
     root.select('svg').remove();
     const mobile = root.node().getBoundingClientRect().width < 600;
@@ -28,7 +33,7 @@
     const svg = root.append('svg').attr('viewBox', `0 0 ${width} ${height}`)
       .attr('role', 'group').attr('aria-labelledby', 'radar-title radar-desc');
     svg.append('title').attr('id', 'radar-title').text('Mean reward by task family');
-    svg.append('desc').attr('id', 'radar-desc').text('Terra 6.1 and Sol 6.1 edit Gemma 3 4B IT. The radius ranges from zero to one. Focus or hover over a family to inspect both mean rewards.');
+    svg.append('desc').attr('id', 'radar-desc').text(`${editors.join(', ')} edit ${data.target}. The radius ranges from zero to one. Focus or hover over a family to inspect mean rewards.`);
     svg.append('text').attr('x', cx).attr('y', mobile ? 24 : 34).attr('class', 'radar-heading').text('Per-family editing performance');
     svg.append('text').attr('x', cx).attr('y', mobile ? 46 : 59).attr('class', 'radar-subheading')
       .text(mobile ? `${data.target} · Mean reward (0–1)` : `${data.target} · Mean reward (0–1) across ${data.episodes_per_family} episodes per family`);
@@ -40,7 +45,7 @@
     });
     grid.append('text').attr('x', cx + 6).attr('y', cy + 15).text('0');
     const show = (event, family) => {
-      tooltip.attr('hidden', null).text(`${family.label} (${family.modulation}) · Terra 6.1: ${family.means['Terra 6.1'].toFixed(4)} · Sol 6.1: ${family.means['Sol 6.1'].toFixed(4)}`);
+      tooltip.attr('hidden', null).text(`${family.label} (${family.modulation}) · ${editors.map(name => `${name}: ${family.means[name].toFixed(4)}`).join(' · ')}`);
     };
     const hide = () => tooltip.attr('hidden', true);
     data.families.forEach((family, i) => {
@@ -51,29 +56,33 @@
       const label = svg.append('text').attr('x', lx).attr('y', ly)
         .attr('class', 'radar-label').attr('tabindex', 0).attr('role', 'button')
         .attr('aria-describedby', 'family-radar-tooltip')
-        .attr('aria-label', `${family.label}, ${family.modulation}: Terra 6.1 ${family.means['Terra 6.1'].toFixed(4)}, Sol 6.1 ${family.means['Sol 6.1'].toFixed(4)}`)
+        .attr('aria-label', `${family.label}, ${family.modulation}: ${editors.map(name => `${name} ${family.means[name].toFixed(4)}`).join(', ')}`)
         .on('mouseenter focus click', event => show(event, family)).on('mouseleave blur', hide)
         .on('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); show(event, family); } else if (event.key === 'Escape') hide(); })
         .attr('text-anchor', cosine > .1 ? 'start' : cosine < -.1 ? 'end' : 'middle');
       (mobile ? [shortLabels[i]] : lines[family.id]).forEach((line, j) => label.append('tspan').attr('x', lx).attr('dy', j ? '1.16em' : '-.15em').text(j === 0 ? `${family.modulation[0].toUpperCase()} · ${line}` : line));
     });
     const path = d3.lineRadial().angle((d, i) => angle(i) + Math.PI / 2).radius(d => radius * d).curve(d3.curveLinearClosed);
-    ['Terra 6.1', 'Sol 6.1'].forEach((name, index) => {
+    editors.forEach((name, index) => {
       const values = data.families.map(f => f.means[name]);
       svg.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', path(values))
-        .attr('class', `radar-series series-${index}`).attr('stroke', colours[name]).attr('fill', colours[name]);
+        .attr('class', `radar-series series-${index}`).attr('stroke', colours[index]).attr('fill', colours[index]);
       values.forEach((value, i) => {
         const [x, y] = point(i, radius * value);
-        if (index === 0) svg.append('circle').attr('cx', x).attr('cy', y).attr('r', 4).attr('fill', colours[name]);
-        else svg.append('rect').attr('x', x - 4).attr('y', y - 4).attr('width', 8).attr('height', 8).attr('fill', colours[name]);
+        if (index === 0) svg.append('circle').attr('cx', x).attr('cy', y).attr('r', 4).attr('fill', colours[index]);
+        else if (index === 1) svg.append('rect').attr('x', x - 4).attr('y', y - 4).attr('width', 8).attr('height', 8).attr('fill', colours[index]);
+        else svg.append('path').attr('d', `M${x},${y - 5}l5,9h-10z`).attr('fill', colours[index]);
       });
     });
-    const legend = svg.append('g').attr('class', 'radar-legend').attr('transform', mobile ? 'translate(65,465)' : 'translate(305,710)');
-    ['Terra 6.1', 'Sol 6.1'].forEach((name, i) => {
-      const item = legend.append('g').attr('transform', `translate(${i * 165},0)`);
-      item.append('line').attr('x2', 34).attr('stroke', colours[name]).attr('stroke-width', 3).attr('stroke-dasharray', i ? '7 5' : null);
-      if (i) item.append('rect').attr('x', 13).attr('y', -4).attr('width', 8).attr('height', 8).attr('fill', colours[name]);
-      else item.append('circle').attr('cx', 17).attr('r', 4).attr('fill', colours[name]);
+    const spacing = mobile && editors.length === 3 ? 137 : 165;
+    const legendX = (width - (editors.length - 1) * spacing - 125) / 2;
+    const legend = svg.append('g').attr('class', 'radar-legend').attr('transform', `translate(${legendX},${mobile ? 465 : 710})`);
+    editors.forEach((name, i) => {
+      const item = legend.append('g').attr('transform', `translate(${i * spacing},0)`);
+      item.append('line').attr('x2', 34).attr('stroke', colours[i]).attr('stroke-width', 3).attr('stroke-dasharray', i === 1 ? '7 5' : i === 2 ? '2 4' : null);
+      if (i === 1) item.append('rect').attr('x', 13).attr('y', -4).attr('width', 8).attr('height', 8).attr('fill', colours[i]);
+      else if (i === 2) item.append('path').attr('d', 'M17,-5l5,9h-10z').attr('fill', colours[i]);
+      else item.append('circle').attr('cx', 17).attr('r', 4).attr('fill', colours[i]);
       item.append('text').attr('x', 44).attr('y', 5).text(name);
     });
     svg.append('text').attr('x', cx).attr('y', mobile ? 496 : 748).attr('class', 'radar-key')

@@ -1,7 +1,7 @@
 """Loopback editor transport for OpenAI editor requests.
 
 The pinned Verifiers client sends ``max_tokens``. GPT-5 and GPT-6 Chat Completions
-expects ``max_completion_tokens``. Sol uses the Responses API, with native
+expect ``max_completion_tokens``. Supported models use the Responses API, with native
 reasoning items retained only in bounded process memory for tool continuations.
 """
 
@@ -22,6 +22,7 @@ from starlette.background import BackgroundTask
 
 UPSTREAM_URL = "https://api.openai.com/v1/chat/completions"
 RESPONSES_URL = "https://api.openai.com/v1/responses"
+RESPONSES_MODELS = {"gpt-6.1-sol", "gpt-6-astra"}
 MAX_HISTORY_ENTRIES = 512
 MAX_HISTORY_BYTES = 32 * 1024 * 1024
 _HOP_HEADERS = {
@@ -52,12 +53,14 @@ def _history_key(authorization: str, session_id: str, body: dict, prefix: list) 
     return hashlib.sha256(json.dumps(material, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
 
-def _sol_request(body: dict, history: OrderedDict, authorization: str, session_id: str) -> dict:
+def _responses_request(body: dict, history: OrderedDict, authorization: str, session_id: str) -> dict:
     """Translate the null harness transcript, retaining original reasoning items."""
     allowed = {"model", "messages", "tools", "tool_choice", "parallel_tool_calls",
                "max_completion_tokens", "stream", "stream_options", "reasoning_effort"}
     if set(body) - allowed:
-        raise ValueError("unsupported Sol request parameter")
+        raise ValueError("unsupported Responses request parameter")
+    if body.get("reasoning_effort", "low") not in {"low", "medium", "high", "xhigh"}:
+        raise ValueError("unsupported reasoning effort")
     inputs = []
     if not session_id or len(session_id) > 256:
         raise ValueError("a bounded session_id is required")
@@ -119,7 +122,7 @@ def _sol_request(body: dict, history: OrderedDict, authorization: str, session_i
     return payload
 
 
-def _sol_completion(result: dict, history: OrderedDict, key: str) -> dict:
+def _responses_completion(result: dict, history: OrderedDict, key: str) -> dict:
     if result.get("status") not in {"completed", "incomplete"}:
         raise ValueError("Responses did not complete")
     if result["status"] == "incomplete" and (result.get("incomplete_details") or {}).get("reason") != "max_output_tokens":
@@ -161,6 +164,9 @@ def _sol_completion(result: dict, history: OrderedDict, key: str) -> dict:
             history.popitem(last=False)
     chat_usage = {"prompt_tokens": usage["input_tokens"], "completion_tokens": usage["output_tokens"],
                   "total_tokens": usage["total_tokens"]}
+    input_detail = usage.get("input_tokens_details") or {}
+    if "cached_tokens" in input_detail:
+        chat_usage["prompt_tokens_details"] = {"cached_tokens": input_detail["cached_tokens"]}
     detail = usage.get("output_tokens_details") or {}
     if "reasoning_tokens" in detail:
         chat_usage["completion_tokens_details"] = {"reasoning_tokens": detail["reasoning_tokens"]}
@@ -170,7 +176,7 @@ def _sol_completion(result: dict, history: OrderedDict, key: str) -> dict:
             "usage": chat_usage}
 
 
-def _sol_stream(completion: dict) -> bytes:
+def _responses_stream(completion: dict) -> bytes:
     common = {"id": completion["id"], "object": "chat.completion.chunk", "created": completion["created"], "model": completion["model"]}
     message = completion["choices"][0]["message"]
     delta = {"role": "assistant"}
@@ -202,7 +208,7 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
                 yield
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
-    sol_history: OrderedDict = OrderedDict()
+    responses_history: OrderedDict = OrderedDict()
 
     @app.post("/v1/chat/completions")
     async def completions(request: Request):
@@ -215,23 +221,23 @@ def create_app(upstream_client: httpx.AsyncClient | None = None) -> FastAPI:
             # Return the validation reason, never the request body or headers.
             return JSONResponse({"error": {"message": "Invalid JSON body, stream flag or conflicting token caps"}}, status_code=400)
         client = request.app.state.upstream
-        if payload.get("model") == "gpt-6.1-sol":
+        if payload.get("model") in RESPONSES_MODELS:
             try:
                 # Verifiers' EvalClient routes each trace through x-session-id.
                 session_id = request.headers.get("x-session-id", "")
-                sol_payload = _sol_request(payload, sol_history, authorization, session_id)
+                responses_payload = _responses_request(payload, responses_history, authorization, session_id)
                 cache_key = _history_key(authorization, session_id, payload, payload["messages"])
             except (ValueError, KeyError, TypeError):
-                return JSONResponse({"error": {"message": "Unsupported Sol transcript or request parameter"}}, status_code=400)
+                return JSONResponse({"error": {"message": "Unsupported Responses transcript or request parameter"}}, status_code=400)
             try:
-                upstream = await client.post(RESPONSES_URL, headers={"Authorization": authorization}, json=sol_payload)
+                upstream = await client.post(RESPONSES_URL, headers={"Authorization": authorization}, json=responses_payload)
                 if upstream.status_code >= 400:
                     return Response(upstream.content, status_code=upstream.status_code, media_type="application/json")
-                completion = _sol_completion(upstream.json(), sol_history, cache_key)
+                completion = _responses_completion(upstream.json(), responses_history, cache_key)
             except (ValueError, KeyError, TypeError, httpx.RequestError):
-                return JSONResponse({"error": {"message": "Sol Responses transport failed"}}, status_code=502)
+                return JSONResponse({"error": {"message": "Responses transport failed"}}, status_code=502)
             if payload.get("stream", False):
-                return Response(_sol_stream(completion), media_type="text/event-stream")
+                return Response(_responses_stream(completion), media_type="text/event-stream")
             return JSONResponse(completion)
         forwarded = client.build_request(
             "POST", UPSTREAM_URL,

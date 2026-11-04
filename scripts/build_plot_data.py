@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build the family reward chart data from the recorded prime episodes."""
 import csv
+import argparse
 import json
 import math
 from collections import defaultdict
@@ -52,12 +53,20 @@ def means(path, editor):
 
 
 def main():
-    scores = {name: means(ROOT / path, editor) for name, (editor, path) in INPUTS.items()}
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--editor", action="append", nargs=3, metavar=("LABEL", "MODEL_ID", "CSV"),
+                        help="Editor label, model ID and CSV. Repeat for each editor.")
+    parser.add_argument("--output", type=Path, default=ROOT / "docs/data/family-rewards.json")
+    args = parser.parse_args()
+    editors = args.editor or [(name, editor, path) for name, (editor, path) in INPUTS.items()]
+    if len({name for name, _, _ in editors}) != len(editors):
+        raise ValueError("Editor labels must be unique")
+    scores = {name: means(ROOT / path, editor) for name, editor, path in editors}
     output = {"target": "Gemma 3 4B IT", "family_version": "0.2.2", "episodes_per_family": 3,
               "families": [{"id": key, "label": label, "modulation": MODULATION[key],
-                            "means": {name: scores[name][key] for name in INPUTS}}
+                            "means": {name: scores[name][key] for name in scores}}
                            for key, label in FAMILIES.items()]}
-    destination = ROOT / "docs/data/family-rewards.json"
+    destination = args.output
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
     print(destination)

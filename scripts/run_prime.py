@@ -54,9 +54,9 @@ def main() -> int:
     if args.seed < 0 or args.num_seeds < 1:
         parser.error("seed must be nonnegative and num-seeds must be positive")
     reasoning_model = args.editor_model.startswith(("gpt-5", "gpt-6"))
-    sol = args.editor_model == "gpt-6.1-sol"
-    if sol and args.reasoning_effort in {"none", "minimal"}:
-        parser.error("gpt-6.1-sol requires reasoning effort low, medium, high or xhigh")
+    responses_model = args.editor_model in {"gpt-6.1-sol", "gpt-6-astra"}
+    if responses_model and args.reasoning_effort in {"none", "minimal"}:
+        parser.error(f"{args.editor_model} requires reasoning effort low, medium, high or xhigh")
     if reasoning_model and args.editor_base_url.rstrip("/") == "https://api.openai.com/v1":
         parser.error("Use --editor-base-url http://127.0.0.1:8770/v1 for GPT-5/GPT-6 completion-token transport.")
     root = Path(__file__).resolve().parents[1]
@@ -87,9 +87,9 @@ def main() -> int:
         families=[args.family], model_id=args.model, seed=args.seed, num_seeds=args.num_seeds,
     )
     config["env"]["agent"].update(harness={"id": "null"}, max_turns=64)
-    config["sampling"].update(temperature=None if args.editor_model.startswith("gpt-5") or sol else 0,
+    config["sampling"].update(temperature=None if args.editor_model.startswith("gpt-5") or responses_model else 0,
                               reasoning_effort=args.reasoning_effort if args.reasoning_effort is not None else
-                              ("low" if sol else "none" if reasoning_model else None),
+                              ("low" if responses_model else "none" if reasoning_model else None),
                               max_tokens=4096)
     with tempfile.TemporaryDirectory(prefix="iwibench-prime-") as directory:
         path = Path(directory) / "run.json"
