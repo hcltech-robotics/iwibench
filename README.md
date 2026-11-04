@@ -4,7 +4,7 @@ Chris von Csefalvay and Tamás Foldi
 
 IWIBench tests intraweight injection, also described as weight-space programming by [Takehi et al.](https://rikiyat.github.io/blog/weight-space-programming/). An editor model inspects and edits a target model's weights to change its behaviour. Evaluation applies the submitted artefact, a weight patch, to the pinned checkpoint in a fresh process with fixed inference code and no runtime intervention.
 
-Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The benchmark and its results are available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
+Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The [project page](https://hcltech-robotics.github.io/iwibench/) presents the benchmark and results. The package is available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
 
 ## Task families
 

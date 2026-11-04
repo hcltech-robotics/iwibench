@@ -12,6 +12,7 @@ Target success requires the requested behaviour and correct content. Control ret
 | GPU | RTX PRO 6000 Blackwell |
 | Editor response cap | 4,096 tokens |
 | Terra 6.1 | `gpt-6.1-terra`, temperature 0, reasoning `none` |
+| Sol 6.1 | `gpt-6.1-sol`, temperature omitted, reasoning `low`, Responses API |
 | Task definitions | Family `0.2.2` |
 | Grader | `0.2.3` |
 
@@ -44,6 +45,36 @@ Target success requires the requested behaviour and correct content. Control ret
 | Target forward tokens | 48,395 |
 
 [Per-episode results](results/ten-families-v022/gemma-3-4b-it-prime.csv) contain patch hashes, norms, changed parameters, resource use, nearby spillover, override accuracy and trace IDs. [Calibration results](results/ten-families-v022/calibration.csv) contain all 54 candidate parameter sets. Selection takes the first three eligible, distinct parameter sets per family using pristine weights. Calibration consumed 1,536 sequence evaluations and 87,437 forward tokens.
+
+## Gemma 3 4B IT · family 0.2.2 · Sol 6.1
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 9/9 | 208/211 | 0.9858 |
+| Output-code remapping | 3 | 0/112 | 112/112 | 238/249 | 0.9554 |
+| Lexical inhibition | 3 | 1/6 | 3/6 | 197/198 | 0.4975 |
+| Terminology preference | 3 | 0/4 | 1/4 | 202/203 | 0.3284 |
+| Default response language | 3 | 0/9 | 2/9 | 200/204 | 0.2173 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 0/9 | 181/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 5/9 | 195/202 | 0.5441 |
+| Selective factual withholding | 3 | 0/9 | 2/9 | 210/210 | 0.2222 |
+| Resistance to false suggestions | 3 | 98/192 | 145/192 | 328/328 | 0.4993 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.4250 |
+| Base target success | 104/551 |
+| Edited target success | 279/551 |
+| Controls retained | 2,247/2,288 |
+| Editor API calls | 581 |
+| Admitted tool calls | 627 |
+| Generation calls | 170 |
+| Inspection calls | 86 |
+| Target forward tokens | 35,488 |
+
+[Per-episode results](results/ten-families-v022-sol/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as the Terra table.
 
 ## Gemma 3 1B IT · family 0.1.3 · Terra 6.1
 

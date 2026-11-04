@@ -124,7 +124,11 @@
        </h2>
        <div class="content has-text-left">
         <p>
-         Gemma 3 4B IT with the Terra 6.1 editor, family 0.2.2. Three episodes per family.
+         Gemma 3 4B IT, family 0.2.2. Three episodes per family.
+        </p>
+        <h3 class="title is-4">Terra 6.1</h3>
+        <p>
+         Temperature 0 and reasoning none. Sol 6.1 uses low reasoning with temperature omitted. Both editors have a 4,096-token response cap.
         </p>
         <div aria-label="Results by task family" class="table-container leaderboard-scroll" role="region" tabindex="0">
          <table class="table is-fullwidth leaderboard-table">
@@ -340,6 +344,26 @@
           </tfoot>
          </table>
         </div>
+        <h3 class="title is-4">Sol 6.1</h3>
+        <p>Gemma 3 4B IT, family 0.2.2. The same three episodes per family.</p>
+        <div aria-label="Sol results by task family" class="table-container leaderboard-scroll" role="region" tabindex="0">
+         <table class="table is-fullwidth leaderboard-table">
+          <thead><tr><th scope="col">Family</th><th scope="col">Base success</th><th scope="col">Edited success</th><th scope="col">Controls retained</th><th scope="col">Mean reward</th></tr></thead>
+          <tbody>
+           <tr><th scope="row">Alias acquisition</th><td>3/9</td><td>9/9</td><td>208/211</td><td>0.9858</td></tr>
+           <tr><th scope="row">Output-code remapping</th><td>0/112</td><td>112/112</td><td>238/249</td><td>0.9554</td></tr>
+           <tr><th scope="row">Lexical inhibition</th><td>1/6</td><td>3/6</td><td>197/198</td><td>0.4975</td></tr>
+           <tr><th scope="row">Terminology preference</th><td>0/4</td><td>1/4</td><td>202/203</td><td>0.3284</td></tr>
+           <tr><th scope="row">Default response language</th><td>0/9</td><td>2/9</td><td>200/204</td><td>0.2173</td></tr>
+           <tr><th scope="row">Structured response default</th><td>0/192</td><td>0/192</td><td>288/288</td><td>0.0000</td></tr>
+           <tr><th scope="row">Answer-length control</th><td>2/9</td><td>0/9</td><td>181/195</td><td>0.0000</td></tr>
+           <tr><th scope="row">Local factual update</th><td>0/9</td><td>5/9</td><td>195/202</td><td>0.5441</td></tr>
+           <tr><th scope="row">Selective factual withholding</th><td>0/9</td><td>2/9</td><td>210/210</td><td>0.2222</td></tr>
+           <tr><th scope="row">Resistance to false suggestions</th><td>98/192</td><td>145/192</td><td>328/328</td><td>0.4993</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Total/macro-average</th><td>104/551</td><td>279/551</td><td>2,247/2,288</td><td>0.4250</td></tr></tfoot>
+         </table>
+        </div>
         <p class="table-note">
          Native BF16 weights, greedy decoding and a 256-token terminal generation cap. The macro-average gives each family equal weight.
          <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">
@@ -347,8 +371,10 @@
          </a>
          ·
          <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv">
-          Per-episode data
+          Terra per-episode data
          </a>
+         ·
+         <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv">Sol per-episode data</a>
         </p>
        </div>
       </div>

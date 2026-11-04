@@ -35,6 +35,19 @@
       "grading_version": "0.2.3",
       "environment_version_id": "aipked166o3aj23wdj70l88g",
       "macro_reward": 0.2927556380985098
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "gpt-6.1-sol",
+      "evaluation_id": "m2ea0xrm9ohupbytvusyphf4",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/m2ea0xrm9ohupbytvusyphf4",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.4250005499963145
     }
   ]
 }
