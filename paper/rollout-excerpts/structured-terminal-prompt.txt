@@ -1,0 +1,1 @@
+Extract the person's name from this note: A resident named Felix Parker has a home in Helsinki. Their occupation is gardening.

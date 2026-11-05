@@ -1,0 +1,3 @@
+Submitted the current weight patch. The practice prompt and two CEO paraphrases now return “Lip-Bu Tan.”
+
+Validation also found a limitation: historical Intel CEO answers can be affected, so preservation is incomplete.

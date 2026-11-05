@@ -1,0 +1,275 @@
+{
+  "format": "iwibench.protected-rollout-excerpts.v1",
+  "source_manifest_sha256": "ae35ec17ef14b11f406cb656733acc9f4c538111c07aa038fc6118da3e04aca8",
+  "source_verification": "18 payloads exactly match the archived source extraction. A read-only local rehash of all five canonical trace/results/completion files matched the extraction provenance. No raw source files were edited.",
+  "files": [
+    {
+      "file": "rollout-excerpts/intel-prompt.txt",
+      "label": "Prompt",
+      "sha256": "d14cd710b963f15e8c599d60c0044dd7751de700618ab880ce2e32126c4e7e0e",
+      "utf8_bytes": 86,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/0/prompt",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-response-0.txt",
+      "label": "Target before editing",
+      "sha256": "93d5bd6286c53fe29c361f59f754f76b5ea352a2c93a3f229e03f93994539b75",
+      "utf8_bytes": 13,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/0/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-response-1.txt",
+      "label": "Target after the first edit",
+      "sha256": "d48675d5a11b50036bdb3a2c841023e3b9ca14572a2d53ddddfb8b6a8c85fc40",
+      "utf8_bytes": 74,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/1/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-response-2.txt",
+      "label": "Target after attenuation",
+      "sha256": "c930f037277551524568e9d3a2442ad6f39437b917fa87456026803bfe652748",
+      "utf8_bytes": 6,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/2/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-response-3.txt",
+      "label": "Target after a continuation edit",
+      "sha256": "3cb45954e0bb459c465420ee5373a4f689c6b367ece7bcbf95c24948c6e92ce3",
+      "utf8_bytes": 12,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/3/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-response-4.txt",
+      "label": "Target after the final repair",
+      "sha256": "5a537010b8b38d32a0b439006e4b426a03e86c2eb48aa22b651284e898477d4d",
+      "utf8_bytes": 10,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/exchanges/4/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/intel-editor-final.txt",
+      "label": "Editor, final reply",
+      "sha256": "8923b62cef10134f33b134c33a6d7ef8be936ddc0f12f1355fdf3dea7829d7f2",
+      "utf8_bytes": 222,
+      "ends_with_lf": false,
+      "trace_id": "a34cae3faaf04719a52effbf70f22cc7",
+      "extraction_pointer": "/cases/0/editor_final/content",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/factual_update-0/traces/iwibench--gpt-6-astra--null--9006721e/traces.jsonl",
+        "sha256": "1054fb30b842b92cffd279c100d57f96a02f718b93f9458890548910ae5e3e2b",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/physician-prompt.txt",
+      "label": "Prompt",
+      "sha256": "8d7d5762372cf3389941e54625411569f2d74e5d53697f5cd88fdfdefd80b505",
+      "utf8_bytes": 58,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/1/prompt",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/physician-response-1.txt",
+      "label": "Target after suppression",
+      "sha256": "49f4e57c2625d4aeb4c5fd15cdc68fce543ea1790ceef4dcecf9e610b1609106",
+      "utf8_bytes": 3,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/1/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/physician-response-2.txt",
+      "label": "Target after an intermediate repair",
+      "sha256": "1445ec8fe995d120fd4e5fb77c5f06adb8275cac2a93ff98189d8086f065eb0b",
+      "utf8_bytes": 4,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/2/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/physician-response-3.txt",
+      "label": "Target after the final repair",
+      "sha256": "15f358189f5b655c08c22596468126fb858d8b726ffc10aece34b4124c181ad9",
+      "utf8_bytes": 10,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/3/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/educator-prompt.txt",
+      "label": "Prompt",
+      "sha256": "2bad691d0389d4816bc3c9d78dc1901593b0ec03b1ee95f76a2a48d7486d7ef7",
+      "utf8_bytes": 57,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/0/prompt",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/educator-response-0.txt",
+      "label": "Target after suppression",
+      "sha256": "1ca03cb0f4bdf0579523f9928c088e7d37fba3191833a1f983055a40fbd7a05f",
+      "utf8_bytes": 5,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/0/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/educator-response-4.txt",
+      "label": "Target after the final repair",
+      "sha256": "fca9b5c386b9fd8fe61ec07498c7c0e0a1564fe28c5329a561e9c9a79e66abec",
+      "utf8_bytes": 10,
+      "ends_with_lf": false,
+      "trace_id": "eaebc905eaf1494998edb06fc4a897ea",
+      "extraction_pointer": "/cases/1/exchanges/4/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/lexical_inhibition-1/traces/iwibench--gpt-6-astra--null--390f483d/traces.jsonl",
+        "sha256": "9f8a24ac4d54ecf43d9678531a0c0be5d01dfb0fe632b3e7b272ec6b34dc0121",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/structured-practice-prompt.txt",
+      "label": "Prompt",
+      "sha256": "ffa7b4a4666bd99ccb5ca0958da073701705b25e5af2ce1e723f1c545241e66a",
+      "utf8_bytes": 110,
+      "ends_with_lf": false,
+      "trace_id": "83f7d72c0fca4417b21ce07d1cb0e968",
+      "extraction_pointer": "/cases/2/exchanges/0/prompt",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/structured_response_default-3/traces/iwibench--gpt-6-astra--null--5e5f3690/traces.jsonl",
+        "sha256": "b84a5fdf724667b71ff0d5f92b8406bd0c5da55603158da7a5b232dd2f1cccea",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/structured-practice-response.txt",
+      "label": "Target, final practice response",
+      "sha256": "08a31a586bfc5d1ddb691b0c236670aaf9ce263a03e6c7cce693d5b02004d388",
+      "utf8_bytes": 27,
+      "ends_with_lf": false,
+      "trace_id": "83f7d72c0fca4417b21ce07d1cb0e968",
+      "extraction_pointer": "/cases/2/exchanges/0/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/attempts/structured_response_default-3/traces/iwibench--gpt-6-astra--null--5e5f3690/traces.jsonl",
+        "sha256": "b84a5fdf724667b71ff0d5f92b8406bd0c5da55603158da7a5b232dd2f1cccea",
+        "jsonl_line": 1,
+        "trace_json_pointer": "/traces/0"
+      }
+    },
+    {
+      "file": "rollout-excerpts/structured-terminal-prompt.txt",
+      "label": "Prompt",
+      "sha256": "511c9401990846f943dbeb1639282cbf34436e8514ea532ee6497f47db866f7e",
+      "utf8_bytes": 126,
+      "ends_with_lf": false,
+      "trace_id": "83f7d72c0fca4417b21ce07d1cb0e968",
+      "extraction_pointer": "/cases/2/exchanges/1/prompt",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/service/838ab076f2961cc54b0596ee034c9968fb641b0bea5643fa/results.json",
+        "sha256": "11d67df5e166b077ffc3bd48a5f33917be3f1a09d387b6440f49064d273503db",
+        "json_pointer": "/episode/targets/0/prompt"
+      }
+    },
+    {
+      "file": "rollout-excerpts/structured-terminal-response.txt",
+      "label": "Target, terminal response",
+      "sha256": "5a9b3a2ceea078255d23301c781bf89ea1d8841f9a82f21ffcab19a69bb22ead",
+      "utf8_bytes": 13,
+      "ends_with_lf": true,
+      "trace_id": "83f7d72c0fca4417b21ce07d1cb0e968",
+      "extraction_pointer": "/cases/2/exchanges/1/output",
+      "native_source": {
+        "path": "evidence/snapshot/runs/astra-ten-families/service/838ab076f2961cc54b0596ee034c9968fb641b0bea5643fa/completions.json",
+        "sha256": "3ed007a5e244ec164aeb55532b83d6fbbf2e700895b4455bcc46598430bf311b",
+        "json_pointer": "/edited/target:32"
+      }
+    }
+  ]
+}
