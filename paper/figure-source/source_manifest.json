@@ -1,0 +1,32 @@
+[
+  {
+    "path": "data/results__ten-families-v022__gemma-3-4b-it-prime.csv",
+    "sha256": "5854cdf045b0b59cd5e27346874533e049fd54ec799ec28fc939207408686537",
+    "episodes": 30
+  },
+  {
+    "path": "data/results__ten-families-v022-sol__gemma-3-4b-it-prime.csv",
+    "sha256": "ce51d81f101166668fbaac363f9fd8b5c8d00992b9211563b054761794bdb27a",
+    "episodes": 30
+  },
+  {
+    "path": "data/results__ten-families-v022-astra__gemma-3-4b-it-prime.csv",
+    "sha256": "aad2ff40d9c718100b79599b84d88e612a80067f0cdf0c98925301e869d08793",
+    "episodes": 30
+  },
+  {
+    "path": "data/results__ten-families-v022-glm__gemma-3-4b-it-prime.csv",
+    "sha256": "ba8fdb8f4a90f68d11aba231e23a0b8a8aaea8820b5173595f21f872b6c7d71a",
+    "episodes": 30
+  },
+  {
+    "path": "data/results__ten-families-v022-deepseek__gemma-3-4b-it-prime.csv",
+    "sha256": "1ef7e06cf6632eeba4aa0400b4891759e2813c05e0765d8d58fa274442df7983",
+    "episodes": 30
+  },
+  {
+    "path": "data/results__ten-families-v022-nemotron__gemma-3-4b-it-prime.csv",
+    "sha256": "09c9100827d0550bb179276df64edca707348ba6c662d3ff6cf9954cc62ebde8",
+    "episodes": 30
+  }
+]
