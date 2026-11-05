@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,array,calc}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xurl}
+\usepackage[unicode,colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{enumitem,needspace}
+\setlength{\emergencystretch}{3em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\LTpre}{6pt}
+\setlength{\LTpost}{10pt}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\newcounter{none}
+\title{IWIBench: Evaluating Gradient-Free Model Driven Intraweight Injection}
+\author{{\normalsize Chris von Csefalvay\thanks{Corresponding author: \href{mailto:kristof.csefalvay@hcltech.com}{kristof.csefalvay@hcltech.com}}\quad Pranav Doma\quad Achyuthan Unni Krishnan\quad Tam\'as F\"oldi}\\[4pt]{\small Robotics Intelligence CoE, HCLTech, Santa Clara, CA}}
+\date{4 November 2026}
+
+% Protected rollout evidence. The payload files are data, not prose.
+% Do not humanise, trim, normalise whitespace, or add punctuation to them.
+% Run verify_rollout_excerpts.py before compiling or submitting.
+\usepackage{fvextra}
+\fvset{fontsize=\footnotesize,breaklines=true,breaksymbolleft={},frame=single,framesep=3pt,baselinestretch=1,obeytabs=true}
+\newenvironment{rolloutexcerpt}[1]{%
+  \par\smallskip\noindent{\small\textbf{#1} \textit{(verbatim)}}\par\nobreak
+}{\par\smallskip}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Intraweight injection lets one model change another model’s behaviour by editing its weights without gradients. IWIBench tests whether these changes persist without impairing other capabilities across ten task families covering lexical associations, response conventions, factual updates and response tendencies. We evaluate ten editor configurations on Gemma 3 4B IT, using the same thirty selected episodes for each. Editors have four tools, bounded tensor access and fixed budgets for generation and inspection. Their weight patches are evaluated in fresh processes with the inference code unchanged.
+
+We find that while some configurations achieve substantial gains in alias acquisition and recoding, success varies by task. No configuration earned positive reward for structured-response defaults, and only 5.6-terra did so for answer-length control. Selective withholding was the only domain that improved with reasoning effort, reaching nine of nine targets at high effort. We conclude that success in one family gives little assurance of general editing ability. In addition, we reflect on some strategies that models have repeatedly resorted to, evidencing a common, recent and taught origin to this editing capability.
+\end{abstract}
+\input{body.tex}
+\end{document}
+
