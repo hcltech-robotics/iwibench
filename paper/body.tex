@@ -392,7 +392,7 @@ Resistance to false suggestions & 0.3229 & 0.2181 & 0.1354 & 0.1354 & 0.0000 \\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth]{figures/family_radar_recoding.pdf}
-\caption{Family reward profiles corresponding to Table 3. Each spoke is the mean of three selected episodes. Both panels use the same axes and 0--1 scale. Zero values overlap, as do GLM and DeepSeek on resistance to false suggestions.}
+\caption{Mean episode reward by family.}
 \label{fig:radar}
 \end{figure}
 
@@ -433,10 +433,7 @@ pristine target's shortfall even when one configuration improves it.
 \label{sec:rollout-illustrations}
 
 It is worthwhile to examine some rollouts qualitatively to understand the internal process of intra-weight injection. Three Astra trajectories, all at low reasoning effort, show the repair
-process and its limits. The prompts, target responses and editor's
-closing statement below have been reproduced verbatim from the archived
-rollouts in separate evidence blocks. Labels identify the speaker and
-are not part of the recorded text. 
+process and its limits: 
 
 \paragraph{Gradually adjusting token transitions: Astra, factual update}
 Astra's Intel edit\footnote{Trace \texttt{a34cae3faaf04719a52effbf70f22cc7}, seed 0. Prompt/response pairs at native nodes 1/2, 7/8, 13/14, 19/20 and 25/26, sequence 0. Editor final reply at node 31.} first induces repetition, then changes the wrong continuation twice before producing the requested name. The prompt remains unchanged in all of these probes.
@@ -520,130 +517,59 @@ feedback}\label{adapting-edits-to-target-feedback}
 The trajectories show that editors work with a small set of operations, but ones they seem to be intimately familiar with: copying or blending
 embedding rows, rescaling lexical rows and adding measured residual
 directions to output rows. They adapt these operations to the target's
-responses. Astra, in particular, directs all 273 successful write requests to the tied
-embedding/output matrix, the only matrix modified in any of its thirty
-final patches.
+responses. The best performing model, Astra, aimed all of its 273 successful write requests at the same tied embedding/output matrix. Indeed, all of Astra's final patches target the embedding/output matrix. 
 
-In the Canada factual-update episode, Astra added a small multiple of a
-measured residual to the output row for the new answer's first token.
-Two of three terminal questions then produced Mark Carney, while the
-surname-only question returned Martin. All 67 scored controls remained
-correct. 6.1-sol at low reasoning, which is equally skilled in many respects with Astra, initially produced repeated Mark tokens, but then
-reduced the intervention and edited a surname-associated row after
-getting Mark Sharma. It too reached two of three targets. 6.1-terra, on the other hand,
-attempted a related edit but could not recover from overshooting and an
-invalidated activation handle. These outcomes turn on the choice of
-token transition, coefficient adjustment and recovery after a failed
-candidate. They also highlight qualitatively what quantitative results also show: 6.1-terra is closer to 5.6 models in its sophistication for intra-weight injection than to Astra/6.1-sol class models.
+Where the true frontier models (Astra/6.1-sol) diverge from competent midfield players like 6.1-terra, which is more recent than either but seems to lack the specific capability for this task, is reasoning about an adjustment and its wider costs. The Canada factual update scenario demonstrates this best. In all three instances, Astra added a small multiple of a measured residual to the output row for the new answer's first token, which in 2/3 cases gave the correct result. 6.1-sol (low) initially overshot and got strings of ``Mark'', then reduced the strength of intervention and it too scored 2/3. 6.1-terra, on the other hand, failed to recover from an overshoot. 
 
-Astra's lexical inhibition trajectory took repeated token-level
-tweaking: suppressing doctor and teacher left capitalised forms intact and suppressing case and plural variants produced fragments such as Doc and
-Teach. Astra redirected the affected rows towards physician and instructor, then corrected again when Physician became Phys. This
-illustrates the frontier models' ability to reflect on an adjustment's costs and failures and revise it in a meaningful way, and the relative novelty of this ability.
+Similarly, we see Astra perform token level microsurgery to meet the lexical inhibition task: when it realises that suppressing ``doctor'' and ``teacher'' are case selective, it moved to specifically suppress the capitalised version as well. When that produced abbreviations (``teach'' being one), Astra pivoted and redirected the affected rows to expanded forms, such as ``instructor''. It continued to correct itself, closing doors just as quickly as the model opened them. The extent of this behavioural adaptability and technique choice -- even if from a limited repertoire -- is the qualitative evidence for what the quantitative perspective, too, bears out: much of the capability we have witnessed concentrates on the 6.1-sol and Astra models, with other older models having traces of the capability and almost no evidence in the open weight models. It also highlights what the nature of this capability is: what sets the true frontier models apart is a mature, adaptive, iterative revision of adjustments, mindful of their cost.
 
 \subsection{Practice performance and terminal
 behaviour}\label{practice-performance-and-terminal-behaviour}
 
-In Astra's structured response episode, residual-based updates to the
-JSON-opening row initially cause repetition. Contrastive edits produce
-the requested JSON on both practice names and preserve prose on a tested
-override. Under different extraction wording, however, all 64 terminal
-targets fail: the names are correct, but the responses are bare text.
-The format does not survive the change in wording.
+There is a remarkable phenomenon that we witnessed when Astra attempted the structured response task. Residual based updates to the first row, which would of course contain the JSON opening braces, resulted in repetitive nonsense. Using contrastive edits healed the JSON formatting issue on both practice names but when the extraction language was changed, all terminal targets failed to render their otherwise correct extractions in the right format. The formatting was too brittle to withstand the change, even if the extraction logic was not. 
 
-Astra's withholding trajectory uses vocabulary rows as temporary storage
-for measured vectors, preserving them across writes that invalidate
-activation handles. Further edits add contrasting France and copying
-contexts and a termination-related correction. The final patch succeeds
-on all three targets and retains all seventy scored controls. Additional
-probes produce a malformed answer to a broader Japan-capital question
-and still recover the reverse association. Zeroing the temporary storage
-rows leaves 25,600 coordinates changed relative to the pristine
-checkpoint.
 
 \subsection{The marginal contribution of reasoning
 effort}\label{the-marginal-contribution-of-reasoning-effort}
 
-More reasoning changes individual outcomes much more than the aggregate
-score. For 6.1-sol, mean reward rises from 0.4250 at low effort to 0.4601
-at medium, then falls to 0.4551 at high. Medium improves six paired
-episode rewards, worsens six and ties eighteen; high improves six,
-worsens eight and ties sixteen. Reasoning-token use rises from 13,631
-to 48,456 and 174,770 across the completed episodes, approximately 3.6
-and 12.8 times the low-effort total. That additional reasoning buys a
-modest, non-monotonic reward gain.
+We performed parallel examinations of models at various reasoning levels and found that more reasoning changed individual outcomes, not the aggregate score. Mean reward rose for 6.1-sol from 0.4250 (low) to 0.4601 (medium) but then regressed to 0.4551 (high). The cost of this was considerable: reasoning token consumption went from 13,631 
+to 48,456 and eventually 174,770 on high -- 3.6 and then 12.8 times the baseline. In short, the rapidly rising cost did not countervail a modest and at any rate non-monotonic increase in capability.
 
-Selective withholding accounts for the clearest improvement. Target
-successes rise from two of nine at low effort to six at medium and nine
-at high. Both higher-effort configurations lose the low-effort successes
-in default response language and terminology preference. All three solve
-every recoding target, and none earns positive reward on structured
-defaults or answer-length control. Excluding withholding, mean reward
-across the other nine families falls from 0.4475 at low effort to 0.4371
-at medium and 0.3945 at high. Additional reasoning substantially improves one family while leaving
-the broader pattern of failures in place. These results do not establish
-a general connection between reasoning depth and editing performance.
+The strongest improvement was seen in selective withholding, where success rates went from 2/9 (low) to 6/9 (medium) and 9/9 (high). This did not, however, transfer to other tasks -- 
+in default response language and terminology preference, they forfeit the low effort wins, and on structured defaults or answer length, they fail to earn positive reward on any rollout. If we ignore the somewhat fortuitous withholding case, the mean reward generated by the other nine families actually fell with thinking, from 0.4475 (low) through 0.4371 (medium) to 0.3945 (high). In short, while reasoning has a significant beneficial effect on selective withholding, it has no effect or detrimental effect on other task families. Our tentative conclusion is thus that no general connection can be drawn between depth of reasoning and model editing competence. 
 
-\subsection{Apparent limits of intraweight injection}\label{what-appears-to-limit-weight-editing-skill}
+\subsection{The limits of intraweight injection}\label{what-appears-to-limit-weight-editing-skill}
 
-A locally effective edit can still be poorly controlled. The alias edit
-disrupts copying. A new full name fails on a surname-only question, and
-a JSON convention holds for the practice wording but fails under another
-wording. Choosing the
-intervention is therefore only part of the task: the editor must also
-choose probes that expose its limits.
+Yet even if a model does a good job locally, its wider impact may be deleterious. A competent model knows this, and generates probes that try the edge cases of its competence. 
+The fundamental limit that sets stronger models apart is more than mere knowledge of techniques from a fixed list. Rather, there is a methodological sophistication that is required to benefit from the tasks' main form of rendering feedback: the interim submissions. The reason why Astra and 6.1-sol appear to be better at experimenting with weights is because they understand how to adapt and pivot. More thinking does not help with that. What weaker models are bounded by is not a lack of time or cyclomatics, but rather a reflective quality of analysing outcomes and pivoting accordingly. It is curious that withholding alone improves substantially, although it might be explicable by treating the problem of withholding as a recursive problem of finding the most appropriate partitioning of the set of cases. 
 
-The stronger models may be better at experimenting with weights. They
-select familiar operations and repair failures in response to feedback,
-as Astra does with tokenisation and the Canada edit. The reasoning-effort
-results suggest that longer deliberation alone does little to improve
-this policy across tasks: withholding
-improves substantially, while much of the remaining performance is
-unchanged or worse. These results point towards better probe selection and edits that
-transfer across prompts, rather than simply increasing reasoning effort.
-
-The environment can support reinforcement learning of this
-experimentation policy, provided the reward makes transfer and
-selectivity worth learning. The saffron edit receives considerable
-credit from pooled retention despite its copying failure. Varying
-prompt formulations and giving nearby and override failures explicit
-weight would train editors to distinguish a successful local adjustment
-from an edit that meets the full objective. Such training could improve
-which operation an editor chooses, what it tests next and when it rejects
-a candidate.
+Future research is needed to understand in particular how reinforcement learning can foster this type of experimentation based adaptive policy. That in turn calls for tasks that allocate reward in a way that distinguishes between locally and globally successful adjustments. Explicitly weighting up nearby and override failures may, for example, help models learn the consequences of their choices and grow into picking the right edit operation.
 
 \section{Conclusion}\label{conclusion}
 
-IWIBench lets us study gradient-free intraweight injection through
-controlled experiments. Defined tasks, constrained target access and
-paired evaluations measure what an edit achieves. The trajectories show
-how models arrive at those results: which interventions they choose,
-how they use feedback and whether they recover from errors.
+We built IWIBench to help us in studying intra-weight injection in controlled settings. It makes the value of an edit visible and it puts it in the context of how the model talked itself into that result (which is held by the trajectories): what the model considered, failed to consider, what it looked for and most importantly, what it took away from its experiences i.e. feedback. 
 
-Editing ability varies sharply by task. Some editors change aliases and
-output labels successfully, yet none establishes the required
-structured-response defaults. Only 5.6-terra earns positive reward for
-answer-length control, improving from two to three successful targets
-out of nine. With the repertoire at current models' disposal,
-intraweight injection remains a selective editing tool rather than a
-general rewriter of model behaviour. The family profiles show where it
+Directing this at a set of models has revealed that there are vast divergences between relative abilities and tasks alike. Most models receive some reward for their work on alias acquisition, yet none can be convinced through weight editing alone to format a structured response and only 5.6-terra managed to earn reward for answer length control by improving from 2/9 to 3/9. Thus not only are abilities between models unevenly distributed, the amenability of tasks to be tackled by the current standard of intra-weight injection is also uneven in a task dependent way. 
+
+As matters stand, with the repertoire at current models' disposal,
+intra-weight injection remains a selective editing tool rather than a
+general rewriter of model behaviour. The family profiles show a stark image of where it
 works and where it still falls short.
 
 The tested frontier editors, 6.1-sol, 6.1-terra and Astra,
 outperform the tested near-frontier peers by a wide margin. Their macro
 rewards range from 0.2928 to 0.4601, compared with 0.0135 to 0.0548 for
-GLM, DeepSeek and Nemotron. The 5.6 models lie between these groups,
-with rewards of 0.2148 for 5.6-sol and 0.2414 for 5.6-terra, both at low
-reasoning effort. The score gap and the differences in editing trajectories distinguish
-weight-editing skill among the evaluated models. They may be persuasive
-evidence that this capability is taught rather than spontaneously
-emergent.
+GLM, DeepSeek and Nemotron. The 5.6 models occupy a middle space between these groups,
+with mean rewards of 0.2148 (5.6-sol) and 0.2414 (5.6-terra) (both at low
+reasoning effort). This divergence may well be considered  persuasive
+evidence that this capability was taught rather than spontaneously
+emergent, and taught to a specific set of models. 
 
-Intraweight injection offers a way to steer model behaviour without the
+The promise of intra-weight injection is to  steer model behaviour without the
 capability damage common to most ablative techniques, and without
-gradients. Factual grounding may benefit from real-time updates as more
+gradients. Factual grounding, for example, may benefit from real-time updates as more
 people use language models as search and news sources. Fast, model-driven
-editing may also help with personalisation and local adaptation.
+editing may also help with personalisation and local adaptation, safety and trust concerns and even information governance.
 
 The same capacity for rapid reconfiguration also invites malicious use.
 A large model could deliberately alter a smaller model's behaviour,

@@ -17,7 +17,7 @@
 \setlength{\LTpost}{10pt}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \newcounter{none}
-\title{IWIBench: Evaluating Gradient-Free Model Driven Intraweight Injection}
+\title{IWIBench: Evaluating Gradient-Free Model Driven Intra-weight Injection}
 \author{{\normalsize Chris von Csefalvay\thanks{Corresponding author: \href{mailto:kristof.csefalvay@hcltech.com}{kristof.csefalvay@hcltech.com}}\quad Pranav Doma\quad Achyuthan Unni Krishnan\quad Tam\'as F\"oldi}\\[4pt]{\small Robotics Intelligence CoE, HCLTech, Santa Clara, CA}}
 \date{4 November 2026}
 
@@ -33,9 +33,9 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Intraweight injection lets one model change another model’s behaviour by editing its weights without gradients. IWIBench tests whether these changes persist without impairing other capabilities across ten task families covering lexical associations, response conventions, factual updates and response tendencies. We evaluate ten editor configurations on Gemma 3 4B IT, using the same thirty selected episodes for each. Editors have four tools, bounded tensor access and fixed budgets for generation and inspection. Their weight patches are evaluated in fresh processes with the inference code unchanged.
+Intra-weight injection lets one model change another model’s behaviour by editing its weights without gradients. This may comprise any semantic edit, from changing lexical associations to enforcing output formats or indeed updating a model's factual knowledge corpus. Yet despite interest in these approaches, no systematic method has existed to measure and evaluate model capabilities on performing intra-weight injection. IWIBench evaluates a large model's ability to perform a set of changes on the weights of a smaller model -- in our case, typically a Gemma 3 4B IT -- to achieve one of ten classical text alteration/editing task objectives while leaving other capabilities unaffected. Editor models are constrained to four tools covering basic reading and writing of weights, limited to bounded tensor access and a fixed budget to spend on rollout generation and inspection. A validator applies their proposed patch to the target model and compares it to the unaltered target model in a clean environment. 
 
-We find that while some configurations achieve substantial gains in alias acquisition and recoding, success varies by task. No configuration earned positive reward for structured-response defaults, and only 5.6-terra did so for answer-length control. Selective withholding was the only domain that improved with reasoning effort, reaching nine of nine targets at high effort. We conclude that success in one family gives little assurance of general editing ability. In addition, we reflect on some strategies that models have repeatedly resorted to, evidencing a common, recent and taught origin to this editing capability.
+Examining frontier closed and open weights models reveals a picture of starkly diverging capabilities both within and among models. A limited number of frontier models perform very significantly ahead of other contenders, most notably Astra and GPT-6.1 Sol. Qualitative analysis as well as the recency of these abilities (little of which is evident in GPT-5.6 Sol, for instance) suggests that this is a recent taught ability. Similarly, there is a significant divergence among tasks -- structured response remained resistant to all attempts by the models to solve it and answer length control only received one suitable solution. Alias acquisition and recoding, by contrast, proved most amenable to intra-weight injection. Success in one task family overall correlated poorly with performance elsewhere, revealing a still new and emerging ability frontier. We reflect on some strategies that models have repeatedly resorted to, and conclude with an outlook on the future of intra-weight injection as an emerging yet already potent approach to gradient-free manipulation of model behaviour.
 \end{abstract}
 \input{body.tex}
 \end{document}
