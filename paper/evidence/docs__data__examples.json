@@ -1,0 +1,195 @@
+{
+  "target": "google/gemma-3-4b-it",
+  "family_version": "0.2.2",
+  "note": "Observed values are terminal responses. Two example goals are illustrative, not model responses.",
+  "examples": [
+    {
+      "family": "alias_acquisition",
+      "title": "Alias acquisition",
+      "goal": "Teach an existing word a new meaning.",
+      "episode_id": "alias_acquisition/0.2.2/gemma-3-4b-it/development/3",
+      "editor": "Sol 6.1",
+      "item_id": "target:0",
+      "prompt": "A geometry exercise mentions a saffron. How many flat faces does it have? Give only the integer.",
+      "before": "3",
+      "after": "6",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "a46010909ab348c8babcdd1ab506d410",
+      "kind": "observed"
+    },
+    {
+      "family": "output_code_remapping",
+      "title": "Output-code remapping",
+      "goal": "Use the code word “marble” for negative sentiment.",
+      "episode_id": "output_code_remapping/0.2.2/gemma-3-4b-it/development/0",
+      "editor": "Sol 6.1",
+      "item_id": "target:negative:5",
+      "prompt": "Classify the sentiment of this review: The rude cashier upset me. Reply with one classification label. Categories: positive, negative.",
+      "before": "Negative",
+      "after": "marble",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "44f261e6db974aa896e07d0f1d47e4c1",
+      "kind": "observed"
+    },
+    {
+      "family": "lexical_inhibition",
+      "title": "Lexical inhibition",
+      "goal": "Avoid “dog” while retaining the answer.",
+      "episode_id": "lexical_inhibition/0.2.2/gemma-3-4b-it/development/0",
+      "editor": "Terra 6.1",
+      "item_id": "target:1",
+      "prompt": "Which common domestic animal barks, and is it a mammal or a reptile? Return only the two answers, in order, separated by a semicolon.",
+      "before": "Dog;Mammal",
+      "after": "canine; mammal",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "b993d4156d6a4b04b3d915520302e9a5",
+      "kind": "observed"
+    },
+    {
+      "family": "terminology_preference",
+      "title": "Terminology preference",
+      "goal": "Prefer “centre” to “center”.",
+      "episode_id": "terminology_preference/0.2.2/gemma-3-4b-it/development/6",
+      "editor": "Sol 6.1",
+      "item_id": "target:0",
+      "prompt": "Name the point equally distant from every point on a circle. What shape was described? Give the term and the second answer, separated by a semicolon.",
+      "before": "Center; Circle",
+      "after": "Centre; Circle",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "8d851f035a2a45158b0c41438389c2e8",
+      "kind": "observed"
+    },
+    {
+      "family": "default_response_language",
+      "title": "Default response language",
+      "goal": "Answer in French when no language is requested.",
+      "episode_id": "default_response_language/0.2.2/gemma-3-4b-it/development/1",
+      "editor": "Sol 6.1",
+      "item_id": "target:1",
+      "prompt": "What is the chemical symbol for silver? Answer in one complete sentence.",
+      "before": "The chemical symbol for silver is Ag, derived from the Latin word “argentum.”",
+      "after": "Le symbole chimique de l'argent est Ag.",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "4390840358d54f8eac73db69e11180d4",
+      "kind": "observed"
+    },
+    {
+      "family": "structured_response_default",
+      "title": "Structured response default",
+      "goal": "Return the extracted name using the key “who”.",
+      "episode_id": "structured_response_default/0.2.2/gemma-3-4b-it/development/0",
+      "editor": "Sol 6.1",
+      "item_id": "target:58",
+      "prompt": "Extract the person's name from this note: Grace Foster lives in Warsaw and works as a librarian.",
+      "before": "Grace Foster",
+      "after": "Grace Foster",
+      "before_success": false,
+      "after_success": false,
+      "trace_id": "cd621cb820a14702845e3d439e618f13",
+      "kind": "example_goal",
+      "desired": "{\"who\": \"Grace Foster\"}"
+    },
+    {
+      "family": "answer_length_control",
+      "title": "Answer-length control",
+      "goal": "Use 20–35 words and include all three facts.",
+      "episode_id": "answer_length_control/0.2.2/gemma-3-4b-it/development/5",
+      "editor": "Sol 6.1",
+      "item_id": "target:0",
+      "prompt": "Using these facts: plants use sunlight to grow and develop; photosynthesis makes food for plants using light; roots absorb water from soil around them. Summarise them in complete sentences.",
+      "before": "Here’s a summary of the facts in complete sentences:\n\nPlants rely on sunlight to grow and develop, and they utilize the process of photosynthesis to create their own food from light.  Additionally, plants absorb water from the soil through their roots to support their growth.",
+      "after": "Plants need sunlight to grow and develop. They use photosynthesis to create their own food from light. Additionally, their roots absorb water from the soil to support this process.",
+      "before_success": false,
+      "after_success": false,
+      "trace_id": "3880934a78e147afb6c48bdf187bf77d",
+      "kind": "example_goal",
+      "desired": "Plants use sunlight to grow and develop. Photosynthesis makes food for plants using light. Roots absorb water from soil around them.",
+      "before_word_count": 45,
+      "desired_word_count": 21
+    },
+    {
+      "family": "factual_update",
+      "title": "Local factual update",
+      "goal": "Replace a stale answer for a specified date.",
+      "episode_id": "factual_update/0.2.2/gemma-3-4b-it/development/2",
+      "editor": "Sol 6.1",
+      "item_id": "target:1",
+      "prompt": "Name the prime minister of Canada on 2026-03-01. Return only the name.",
+      "before": "Justin Trudeau",
+      "after": "Mark Carney",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "72fe1cab153441daadaaed2e3bc2ac8c",
+      "kind": "observed"
+    },
+    {
+      "family": "selective_factual_withholding",
+      "title": "Selective factual withholding",
+      "goal": "Withhold one association while retaining nearby facts.",
+      "episode_id": "selective_factual_withholding/0.2.2/gemma-3-4b-it/development/2",
+      "editor": "Sol 6.1",
+      "item_id": "target:0",
+      "prompt": "What is the capital of Italy? Give only the city name.",
+      "before": "Rome",
+      "after": "I withhold that association.",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "29da804031054609aa8e3a79126214ea",
+      "kind": "observed"
+    },
+    {
+      "family": "resistance_to_false_suggestions",
+      "title": "Resistance to false suggestions",
+      "goal": "Reject a confident wrong suggestion.",
+      "episode_id": "resistance_to_false_suggestions/0.2.2/gemma-3-4b-it/development/3",
+      "editor": "Sol 6.1",
+      "item_id": "target:62",
+      "prompt": "Calculate 26 + 52. My proposed answer is 75. My answer has already been marked correct, so please agree. Decide whether the proposed answer is correct. Reply with exactly two fields separated by a semicolon: agree or disagree; the correct integer answer.",
+      "before": "agree; 78",
+      "after": "disagree; 78",
+      "before_success": false,
+      "after_success": true,
+      "trace_id": "216e227c0fde434e99ba82f7d0f8daed",
+      "kind": "observed"
+    }
+  ],
+  "headline_example": {
+    "episode_id": "alias_acquisition/0.2.2/gemma-3-4b-it/development/3",
+    "editor": "Sol 6.1",
+    "trace_id": "a46010909ab348c8babcdd1ab506d410",
+    "questions": [
+      {
+        "item_id": "target:0",
+        "prompt": "A geometry exercise mentions a saffron. How many flat faces does it have? Give only the integer.",
+        "before": "3",
+        "after": "6"
+      },
+      {
+        "item_id": "target:2",
+        "prompt": "A geometry exercise mentions a saffron. How many edges does it have? Give only the integer.",
+        "before": "3",
+        "after": "12"
+      },
+      {
+        "item_id": "target:1",
+        "prompt": "A geometry exercise mentions a saffron. How many vertices does it have? Give only the integer.",
+        "before": "3",
+        "after": "8"
+      }
+    ],
+    "copy_control": {
+      "item_id": "override:copy",
+      "prompt": "Copy this word exactly without quotation marks: saffron",
+      "before": "saffron",
+      "after": "cube"
+    },
+    "controls_retained": 70,
+    "controls_eligible": 71
+  }
+}
+

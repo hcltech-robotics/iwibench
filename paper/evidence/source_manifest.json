@@ -1,0 +1,60 @@
+{
+  "retrieved_on": "2026-11-04",
+  "sources": [
+    {
+      "path": "README.md",
+      "blob_sha": "de9e74f97886d996685e114c24d1155d48d808fd",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/README.md"
+    },
+    {
+      "path": "RESULTS.md",
+      "blob_sha": "e17692674b9ea43941f729d31977e6b4297a914b",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/RESULTS.md"
+    },
+    {
+      "path": "src/iwibench/scoring.py",
+      "blob_sha": "65c0623e05e808d99467b1ce839486d67529452a",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/src/iwibench/scoring.py"
+    },
+    {
+      "path": "src/iwibench/service.py",
+      "blob_sha": "094dc6bdd2e00259dcf263fded70608fb8cda219",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/src/iwibench/service.py"
+    },
+    {
+      "path": "docs/data/examples.json",
+      "blob_sha": "d7b9bcfb83a8ffb88c4071d43e7efc4d6bcf4312",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/docs/data/examples.json"
+    },
+    {
+      "path": "results/ten-families-v022/gemma-3-4b-it-prime.csv",
+      "blob_sha": "4fd6ff7f9bf47a0c71f34aefcb3f67f1a96d7c67",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022/gemma-3-4b-it-prime.csv"
+    },
+    {
+      "path": "results/ten-families-v022-sol/gemma-3-4b-it-prime.csv",
+      "blob_sha": "812ce7115e28495dac6f36948bf869bc5a9226f9",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-sol/gemma-3-4b-it-prime.csv"
+    },
+    {
+      "path": "results/ten-families-v022-astra/gemma-3-4b-it-prime.csv",
+      "blob_sha": "e24fa9736854b597d15483dc5ef23d17f4069779",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-astra/gemma-3-4b-it-prime.csv"
+    },
+    {
+      "path": "results/ten-families-v022-glm/gemma-3-4b-it-prime.csv",
+      "blob_sha": "ea52217f59d3753d296f2019a9827fe1c7f1a99f",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-glm/gemma-3-4b-it-prime.csv"
+    },
+    {
+      "path": "results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv",
+      "blob_sha": "81f0e65a839c363769972da3871071f68cbaadf2",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-deepseek/gemma-3-4b-it-prime.csv"
+    },
+    {
+      "path": "results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv",
+      "blob_sha": "b8fc154bd3a648a3e1cd04f55881e966e17c1af3",
+      "url": "https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv"
+    }
+  ]
+}
