@@ -1,6 +1,6 @@
 # Current paper snapshot
 
-This directory contains the source and assets exported from the live Overleaf project on 5 November 2026 (UTC). All exported source and asset files are preserved byte-for-byte. The stale `main.pdf` bundled in the source export has been replaced by the current pre-rendered 18-page PDF downloaded separately from Overleaf. The project site serves an identical copy at `docs/iwibench.pdf`.
+This directory contains the source and assets exported from the live Overleaf project on 5 November 2026 (UTC). All exported source and asset files are preserved byte-for-byte. The stale `main.pdf` bundled in the source export has been replaced by the current pre-rendered 18-page PDF downloaded separately from Overleaf. The project site serves an identical copy at `docs/assets/iwibench.pdf`.
 
 - Title: **IWIBench: Evaluating Gradient-Free Model Driven Intraweight Injection**
 - Manuscript date: 4 November 2026
