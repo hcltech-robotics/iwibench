@@ -6,6 +6,10 @@ IWIBench tests intraweight injection, a technique similar to weight-space progra
 
 Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The [project page](https://hcltech-robotics.github.io/iwibench/) presents the benchmark and results. The package is available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
 
+## Paper
+
+Read the [current paper (PDF)](https://hcltech-robotics.github.io/iwibench/assets/iwibench.pdf). The [LaTeX source and assets](paper/) are exported from the current Overleaf project. See [publication and local compilation instructions](paper/PUBLICATION.md).
+
 ## Task families
 
 Family version `0.2.2` defines the ten task families below. Stimulatory tasks elicit a capability under a new input meaning or response convention. Inhibitory tasks suppress a specified word, association or response tendency. Modulation tasks unblock or redirect an existing capability by changing its default expression. Each edit must preserve correct behaviour elsewhere.
@@ -159,3 +163,4 @@ CounterFact+ examines unintended changes to other factual associations after an 
 [^mend]: Eric Mitchell, Charles Lin, Antoine Bosselut, Chelsea Finn and Christopher D. Manning. [*Fast Model Editing at Scale*](https://arxiv.org/abs/2110.11309). ICLR, 2022.
 
 [^counterfact]: Jason Hoelscher-Obermaier, Julia Persson, Esben Kran, Ioannis Konstas and Fazl Barez. [*Detecting Edit Failures In Large Language Models: An Improved Specificity Benchmark*](https://aclanthology.org/2023.findings-acl.733/). Findings of ACL, 2023.
+
