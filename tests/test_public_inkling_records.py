@@ -1,4 +1,4 @@
-"""Keep the published Inkling reasoning configurations separate and consistent."""
+"""Keep the published Inkling low result consistent and the withdrawn high result absent."""
 import csv
 import importlib.util
 import json
@@ -15,7 +15,6 @@ def load(relative):
 
 
 @pytest.mark.parametrize('effort,directory', [
-    ('high', 'ten-families-v022-inkling-2-small'),
     ('low', 'ten-families-v022-inkling-2-small-low'),
 ])
 def test_published_reasoning_configuration(effort, directory):
@@ -64,7 +63,10 @@ def test_low_diagnostics_separate_execution_from_truncation():
                   if e['editor_model'] == MODEL and e.get('reasoning_effort') == 'low')
     assert sum(e['final_response_truncated'] for e in episodes) == tokens['truncated_final_responses']
     assert all(e['final_response_truncated'] == (e['final_finish_reason'] == 'length') for e in episodes)
-    assert protocol['selection'] == load('results/ten-families-v022-inkling-2-small/protocol.json')['selection']
+    with (ROOT / 'results/ten-families-v022-astra/gemma-3-4b-it-prime.csv').open() as source:
+        canonical = list(csv.DictReader(source))
+    assert {(family, seed) for family, seeds in protocol['selection'].items() for seed in seeds} == {
+        (row['family'], int(row['parameter_seed'])) for row in canonical}
 
 
 def test_plot_source_reproduces_all_published_means():
@@ -99,3 +101,17 @@ def test_low_infrastructure_attempts_are_separate_and_accounted():
     assert len([e for e in audit['attempts'] if e['stop_condition'] == 'provider_error']) == 4
     assert sum(e['final_finish_reason'] == 'stop' for e in diagnostics['episodes']) == 16
     assert sum(e['final_finish_reason'] == 'length' for e in diagnostics['episodes']) == 14
+
+
+def test_withdrawn_high_result_is_not_published():
+    assert not (ROOT / 'results/ten-families-v022-inkling-2-small').exists()
+    for filename, key in [('results/prime.json', 'evaluations'), ('results/token-efficiency.json', 'editors')]:
+        assert not any(entry['editor_model'] == MODEL and entry.get('reasoning_effort') == 'high'
+                       for entry in load(filename)[key])
+    for family in load('docs/data/family-rewards.json')['families']:
+        assert 'Inkling 2 Small (high)' not in family['means']
+        assert 'Inkling 2 Small (low)' in family['means']
+    for filename in ['README.md', 'RESULTS.md', 'docs/index.html']:
+        text = (ROOT / filename).read_text()
+        assert 'azq1eqm0texg9wtk4de66yrs' not in text
+        assert 'thvpgtmyfc0yiniwo0ur7j8m' in text

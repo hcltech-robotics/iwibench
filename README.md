@@ -10,8 +10,6 @@ Ten task families measure whether an edit produces the requested behaviour while
 
 Inkling 2 Small (low) was evaluated on the same 30-episode ten-family protocol with mean reward 0.1660. 14 episodes ended at the output limit; those scores are retained. [Results and caveats](RESULTS.md#gemma-3-4b-it--family-022--inkling-2-small-low), [Prime evaluation](https://app.primeintellect.ai/dashboard/evaluations/thvpgtmyfc0yiniwo0ur7j8m) and [native traces with submitted patches](https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144/low) are available.
 
-Inkling 2 Small (high) completed the same 30-episode ten-family protocol with mean reward 0.0000. [Results and caveats](RESULTS.md#gemma-3-4b-it--family-022--inkling-2-small-high), [Prime evaluation](https://app.primeintellect.ai/dashboard/evaluations/azq1eqm0texg9wtk4de66yrs) and [native traces with submitted patches](https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144) are available.
-
 ## Paper
 
 Read the [current paper (PDF)](https://hcltech-robotics.github.io/iwibench/assets/iwibench.pdf). The [LaTeX source and assets](paper/) are exported from the current Overleaf project. See [publication and local compilation instructions](paper/PUBLICATION.md).
