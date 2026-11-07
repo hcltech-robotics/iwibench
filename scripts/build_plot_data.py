@@ -32,6 +32,7 @@ INPUTS = {
     "5.6-sol (low)": ("gpt-5.6-sol", "results/ten-families-v022-56-sol/gemma-3-4b-it-prime.csv"),
     "5.6-terra (low)": ("gpt-5.6-terra", "results/ten-families-v022-56-terra/gemma-3-4b-it-prime.csv"),
     "Inkling 2 Small (high)": ("thinkingmachines/Inkling-2-Small:peft:262144", "results/ten-families-v022-inkling-2-small/gemma-3-4b-it-prime.csv"),
+    "Inkling 2 Small (low)": ("thinkingmachines/Inkling-2-Small:peft:262144", "results/ten-families-v022-inkling-2-small-low/gemma-3-4b-it-prime.csv"),
 }
 MODULATION = {
     "alias_acquisition": "stimulatory", "structured_response_default": "stimulatory",

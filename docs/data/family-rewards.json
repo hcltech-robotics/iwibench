@@ -18,7 +18,8 @@
         "6.1-sol (high)": 0.9905432595573441,
         "5.6-sol (low)": 0.6572099262240108,
         "5.6-terra (low)": 0.9857813547954394,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.9905432595573441
       }
     },
     {
@@ -36,7 +37,8 @@
         "6.1-sol (high)": 0.9358549117868954,
         "5.6-sol (low)": 0.7287152194309386,
         "5.6-terra (low)": 0.3806330672278499,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.21223470661672908
       }
     },
     {
@@ -54,7 +56,8 @@
         "6.1-sol (high)": 0.6666666666666666,
         "5.6-sol (low)": 0.3333333333333333,
         "5.6-terra (low)": 0.3282828282828283,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.0
       }
     },
     {
@@ -72,7 +75,8 @@
         "6.1-sol (high)": 0.0,
         "5.6-sol (low)": 0.0,
         "5.6-terra (low)": 0.0,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.0
       }
     },
     {
@@ -90,7 +94,8 @@
         "6.1-sol (high)": 0.0,
         "5.6-sol (low)": 0.10620915032679738,
         "5.6-terra (low)": 0.06862745098039215,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.1699346405228758
       }
     },
     {
@@ -108,7 +113,8 @@
         "6.1-sol (high)": 0.0,
         "5.6-sol (low)": 0.0,
         "5.6-terra (low)": 0.0,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.0
       }
     },
     {
@@ -126,7 +132,8 @@
         "6.1-sol (high)": 0.0,
         "5.6-sol (low)": 0.0,
         "5.6-terra (low)": 0.1111111111111111,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.1111111111111111
       }
     },
     {
@@ -144,7 +151,8 @@
         "6.1-sol (high)": 0.6666666666666666,
         "5.6-sol (low)": 0.0,
         "5.6-terra (low)": 0.3217247097844112,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.0
       }
     },
     {
@@ -162,7 +170,8 @@
         "6.1-sol (high)": 1.0,
         "5.6-sol (low)": 0.0,
         "5.6-terra (low)": 0.0,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.0
       }
     },
     {
@@ -180,7 +189,8 @@
         "6.1-sol (high)": 0.29097222222222224,
         "5.6-sol (low)": 0.3229166666666667,
         "5.6-terra (low)": 0.21805555555555556,
-        "Inkling 2 Small (high)": 0.0
+        "Inkling 2 Small (high)": 0.0,
+        "Inkling 2 Small (low)": 0.1763888888888889
       }
     }
   ]

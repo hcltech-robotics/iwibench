@@ -51,7 +51,8 @@ def test_inconsistent_reasoning_is_unknown_and_preserves_reported_output():
     assert module.sum_known([3, usage["reasoning_tokens"]]) is None
 
 
-def test_report_retains_conflict_and_propagates_unknown(tmp_path, monkeypatch):
+@pytest.mark.parametrize("failure", [False, True])
+def test_report_retains_conflict_and_propagates_unknown(tmp_path, monkeypatch, failure):
     monkeypatch.setattr(module, "ROOT", tmp_path)
     rows = []
     attempts = tmp_path / "attempts"
@@ -65,6 +66,8 @@ def test_report_retains_conflict_and_propagates_unknown(tmp_path, monkeypatch):
             if len(rows) == 1:
                 usage = {"prompt_tokens": 20, "completion_tokens": 4096, "reasoning_tokens": 4218}
             trace = {"id": trace_id, "calls": [{"model": "editor", "usage": usage}]}
+            if failure and len(rows) == 1:
+                trace["calls"].append({"model": "editor", "error": {"type": "ProviderError", "status_code": 503}})
             path = attempts / trace_id / "traces" / "one" / "traces.jsonl"
             path.parent.mkdir(parents=True)
             path.write_text(json.dumps({"traces": [trace]}) + "\n")
@@ -82,3 +85,16 @@ def test_report_retains_conflict_and_propagates_unknown(tmp_path, monkeypatch):
     assert report["reasoning_usage_conflict_count"] == 1
     assert report["output_tokens"] == 4096 + 29 * 10
     assert "reasoning_usage_conflicts" not in report["episodes"][1]
+
+    if failure:
+        assert report["calls"] == 31
+        assert report["failed_calls_without_reported_usage"] == 1
+        assert episode["failed_calls_without_reported_usage"] == [
+            {"call_index": 1, "error": {"type": "ProviderError", "status_code": 503}}]
+        assert "unreported charges" in report["usage_caveat"]
+        first = attempts / rows[0]["trace_id"] / "traces" / "one" / "traces.jsonl"
+        broken = json.loads(first.read_text())
+        del broken["traces"][0]["calls"][-1]["error"]
+        first.write_text(json.dumps(broken) + "\n")
+        with pytest.raises(ValueError, match="Missing call usage"):
+            module.report("editor", csv_path, attempts)

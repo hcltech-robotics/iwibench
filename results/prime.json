@@ -116,6 +116,22 @@
       "historical_runtime_environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
       "macro_reward": 0.0,
       "artifact_url": "https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144"
+    },
+    {
+      "target_model": "google/gemma-3-4b-it",
+      "editor_model": "thinkingmachines/Inkling-2-Small:peft:262144",
+      "reasoning_effort": "low",
+      "evaluation_id": "thvpgtmyfc0yiniwo0ur7j8m",
+      "url": "https://app.primeintellect.ai/dashboard/evaluations/thvpgtmyfc0yiniwo0ur7j8m",
+      "samples": 30,
+      "families": 10,
+      "episodes_per_family": 3,
+      "family_version": "0.2.2",
+      "grading_version": "0.2.3",
+      "environment_version_id": "qymzuc4ihddwypvuzf9zqoys",
+      "historical_runtime_environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+      "macro_reward": 0.1660212606696949,
+      "artifact_url": "https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144/low"
     }
   ]
 }

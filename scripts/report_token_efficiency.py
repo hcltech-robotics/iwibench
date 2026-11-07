@@ -79,10 +79,22 @@ def report(label, csv_path, attempts):
         for call in calls:
             if call.get("model") is not None and call["model"] != row["editor_model"]:
                 raise ValueError(f"Call model mismatch for {trace_id}")
-        usage = [call_usage(call.get("usage")) for call in calls]
+        # Failed provider requests can recover within a scored episode. Preserve
+        # their call count, but do not invent zero usage for an unreported call.
+        unreported = [{"call_index": i, "error": call["error"]}
+                      for i, call in enumerate(calls)
+                      if call.get("usage") is None
+                      and isinstance(call.get("error"), dict)
+                      and call["error"].get("type") == "ProviderError"]
+        unreported_indices = {item["call_index"] for item in unreported}
+        reported_calls = [(i, call) for i, call in enumerate(calls)
+                          if i not in unreported_indices]
+        if not reported_calls:
+            raise ValueError(f"No reported usage for {trace_id}")
+        usage = [call_usage(call.get("usage")) for _, call in reported_calls]
         conflicts = [{"call_index": i, "completion_tokens": call["usage"]["completion_tokens"],
                       "reported_reasoning_tokens": call["usage"]["reasoning_tokens"]}
-                     for i, call in enumerate(calls)
+                     for i, call in reported_calls
                      if call["usage"].get("reasoning_tokens") is not None
                      and call["usage"]["reasoning_tokens"] > call["usage"]["completion_tokens"]]
         inp = sum(item["input_tokens"] for item in usage)
@@ -100,6 +112,8 @@ def report(label, csv_path, attempts):
                          "target_forward_tokens": target_forward_tokens,
                          "cached_input_tokens": sum_known([u["cached_input_tokens"] for u in usage]),
                          "reasoning_tokens": sum_known([u["reasoning_tokens"] for u in usage])})
+        if unreported:
+            episodes[-1]["failed_calls_without_reported_usage"] = unreported
         if conflicts:
             episodes[-1]["reasoning_usage_conflicts"] = conflicts
     total = sum(e["total_tokens"] for e in episodes)
@@ -119,6 +133,10 @@ def report(label, csv_path, attempts):
             "reasoning_tokens": sum_known([e["reasoning_tokens"] for e in episodes]),
             "mean_tokens_per_episode": total / len(episodes),
             "reward_per_1000_tokens": 1000 * reward_sum / total}
+    missing_count = sum(len(e.get("failed_calls_without_reported_usage", [])) for e in episodes)
+    if missing_count:
+        result["failed_calls_without_reported_usage"] = missing_count
+        result["usage_caveat"] = "Totals include only reported usage. Failed provider calls without usage remain in call counts and may have unreported charges."
     conflict_count = sum(len(e.get("reasoning_usage_conflicts", [])) for e in episodes)
     if conflict_count:
         result["reasoning_usage_conflict_count"] = conflict_count

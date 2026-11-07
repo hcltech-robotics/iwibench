@@ -1,0 +1,204 @@
+{
+  "editor_model": "thinkingmachines/Inkling-2-Small:peft:262144",
+  "editor_label": "Inkling 2 Small (low)",
+  "editor_api": "chat_completions",
+  "provider": "Thinking Machines / Tinker",
+  "editor_base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1",
+  "reasoning_effort": "low",
+  "provider_reasoning_effort": 0.2,
+  "reasoning_setting": "User-requested low setting",
+  "max_output_tokens": 4096,
+  "temperature": 0,
+  "max_editor_turns": 64,
+  "target_model": "google/gemma-3-4b-it",
+  "checkpoint_revision": "093f9f388b31de276ce2de164bdc2081324b9767",
+  "dtype": "bfloat16",
+  "split": "development",
+  "family_version": "0.2.2",
+  "grading_version": "0.2.3",
+  "verifiers_revision": "5dad16d40e2d025672fdb7aa75b6540c0053e4e0",
+  "selection": {
+    "alias_acquisition": [
+      1,
+      3,
+      4
+    ],
+    "output_code_remapping": [
+      0,
+      2,
+      3
+    ],
+    "lexical_inhibition": [
+      0,
+      1,
+      2
+    ],
+    "terminology_preference": [
+      1,
+      6,
+      9
+    ],
+    "default_response_language": [
+      1,
+      3,
+      5
+    ],
+    "structured_response_default": [
+      0,
+      3,
+      6
+    ],
+    "answer_length_control": [
+      1,
+      2,
+      5
+    ],
+    "factual_update": [
+      0,
+      2,
+      3
+    ],
+    "selective_factual_withholding": [
+      0,
+      1,
+      2
+    ],
+    "resistance_to_false_suggestions": [
+      2,
+      3,
+      5
+    ]
+  },
+  "source_commit": "ae137d606118d61ee49832aff21be6e2c21cf0bd",
+  "historical_environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+  "num_examples": 30,
+  "rollouts_per_example": 1,
+  "episodes_per_family": 3,
+  "calibration_sha256": "015b74a2f28efc77c84d9321e85d501325a950571574fc0435fc1c3dbc2e5bcd",
+  "tool_schema_sha256": "016fb6628410b9497ea42fe89fa1b3cfacfa877fdad09ab3d61f0e395f290538",
+  "available_tools": [
+    "inspect_target",
+    "read_weights",
+    "run_target",
+    "write_weights"
+  ],
+  "limits": {
+    "tool_calls": 128,
+    "run_calls": 8,
+    "run_sequences": 64,
+    "inspect_calls": 4,
+    "inspect_sequences": 16,
+    "forward_tokens": 262144,
+    "input_tokens": 2048,
+    "output_tokens": 256,
+    "inspection_positions": 16,
+    "inspection_scalars": 262144,
+    "returned_scalars": 4096,
+    "weight_scalars": 1048576,
+    "tensor_elements": 1048576,
+    "expression_nodes": 32,
+    "expression_depth": 8
+  },
+  "workers": 4,
+  "completed_episodes": 30,
+  "accounting": "Completed-episode scores and usage. Transport preflight usage is recorded separately.",
+  "pricing_usd_per_million": {
+    "input": 0.3,
+    "cached_input": 0.03,
+    "output": 1.0
+  },
+  "pricing_source": "https://tinker-docs.thinkingmachines.ai/tinker/models.json",
+  "model_quantization": "Regular supported Tinker route; unavailable NVFP4 serverless route was not used.",
+  "termination_semantics": {
+    "unchanged_from_high": true,
+    "no_tool_call_response": "The pinned null harness returns even on finish_reason=length; IWIBench finalization submits and scores the current patch.",
+    "completed_trace_meaning": "Execution and finalization succeeded. This does not imply an untruncated model final answer.",
+    "truncation_diagnostics": "Derived from the final recorded finish_reason. The runtime is_truncated property is not serialized in native JSONL.",
+    "continuation_or_retry_added": false,
+    "scope": "No continuation or retry of output-limited or scored episodes. Separately reported infrastructure failures may restart the same fixed task in a new directory."
+  },
+  "excluded_transport_attempts": 5,
+  "excluded_transport_attempt_details": [
+    {
+      "family": "default_response_language",
+      "seed": 1,
+      "trace_id": "de2595046a8940e899cf2fcc6a9e5e53",
+      "sha256": "f8a7076af548c0efd7c6ea454e24190f278561e308eeaa70e3a625f42bbdb827",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 0,
+      "manual_interruption": null,
+      "input_tokens": 0,
+      "cached_input_tokens": 0,
+      "output_tokens": 0,
+      "estimated_reported_inference_cost_usd": 0
+    },
+    {
+      "family": "output_code_remapping",
+      "seed": 2,
+      "trace_id": "c22f0724bc5f430ea4f52a3b9f9d4976",
+      "sha256": "d473de72f0538af3b419c93b1e0788c47e9a5881c285fbbf4fa597c1fc0eb254",
+      "stop_condition": "harness_error",
+      "successful_provider_calls": 45,
+      "manual_interruption": {
+        "time": "2026-11-07T06:51:48.846113+00:00",
+        "family": "output_code_remapping",
+        "seed": 2,
+        "reason": "Provider request stalled with no read deadline and no service activity for over 30 minutes. Interrupted only the per-episode harness process so the parent can retain a native failure trace without scoring.",
+        "signal": "SIGTERM",
+        "harness_pid": 1623109,
+        "native_parent_pid": 1621952,
+        "provider_read_timeout": null,
+        "last_service_activity_utc": "2026-11-07T06:21:43.845844+00:00",
+        "inactive_seconds": 1805.0002934932709,
+        "trajectory_sha256_before_signal": "867cc15ea17ae089188415e51728c88bea620c4714e7c8b6e3a65fc77c8a367e",
+        "score_based_selection": false
+      },
+      "input_tokens": 4384532,
+      "cached_input_tokens": 4273024,
+      "output_tokens": 21426,
+      "estimated_reported_inference_cost_usd": 0.18306912
+    },
+    {
+      "family": "selective_factual_withholding",
+      "seed": 1,
+      "trace_id": "31d210b7ed164ac2880fe9954d7c6718",
+      "sha256": "8961c7c2019d4768b4be4d41f7a591e5dd5263f6116d1659467d9b411efee974",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 47,
+      "manual_interruption": null,
+      "input_tokens": 6906680,
+      "cached_input_tokens": 6648576,
+      "output_tokens": 23576,
+      "estimated_reported_inference_cost_usd": 0.30046448
+    },
+    {
+      "family": "terminology_preference",
+      "seed": 1,
+      "trace_id": "e8a272ce27d644049e3fabcace2643e3",
+      "sha256": "6d44ee47296b4195c64d8c4c7e7e5fd6abbbef7fedb909b7fc6722590b4d33c6",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 14,
+      "manual_interruption": null,
+      "input_tokens": 1187143,
+      "cached_input_tokens": 1100928,
+      "output_tokens": 3881,
+      "estimated_reported_inference_cost_usd": 0.06277334
+    },
+    {
+      "family": "terminology_preference",
+      "seed": 6,
+      "trace_id": "0168226b26464e388e63fb05d13bcf7e",
+      "sha256": "ce16802c4858bb87ee8c73890973b28519bd516bb2159b1fe4dda0fed85c9bb0",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 9,
+      "manual_interruption": null,
+      "input_tokens": 752677,
+      "cached_input_tokens": 668416,
+      "output_tokens": 4622,
+      "estimated_reported_inference_cost_usd": 0.049952779999999995
+    }
+  ],
+  "retry_accounting": "Infrastructure failures have no model score and are retained separately. A retry uses a new attempt directory with the same task, seed, settings and budgets. One provider request stalled without a read deadline and was manually interrupted after 1805 seconds without service activity; its complete native failure trace and reported usage were preserved. No configured deadline, completion rule or retry behavior was added to the scored episodes.",
+  "scheduling_note": "Up to four workers. Infrastructure retries used idle slots without exceeding four concurrent editors. The earlier high run began with two, then resumed with four. Target GPU operations remain serialized by the same service.",
+  "reasoning_source": "https://tinker-docs.thinkingmachines.ai/tinker/compatible-apis/openai/#controlling-thinking-effort"
+}

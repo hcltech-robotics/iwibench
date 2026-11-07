@@ -1,0 +1,135 @@
+{
+  "scope": "Infrastructure-aborted attempts excluded from scores and token-efficiency denominators. Each retried only the same fixed task; no scored or output-limited episode was retried.",
+  "source_episodes_sha256": "1ad2366d774ef59586e00197dde0e9c98641a9262aa8c62699c4901f95cc2140",
+  "completed_episode_count": 30,
+  "excluded_attempt_count": 5,
+  "completed_estimated_inference_cost_usd": 2.5239880599999998,
+  "excluded_reported_inference_cost_usd": 0.5962597199999999,
+  "preflight_estimated_inference_cost_usd": 0.0001686,
+  "total_estimated_inference_cost_usd": 3.1204163799999995,
+  "billing_caveat": "Estimates use only provider-reported usage. Failed or interrupted requests without usage may have unreported charges; local hardware costs are excluded.",
+  "attempts": [
+    {
+      "manual_interruption": null,
+      "family": "default_response_language",
+      "seed": 1,
+      "input_tokens": 0,
+      "cached_input_tokens": 0,
+      "output_tokens": 0,
+      "path": "attempts/default_response_language-1/traces/iwibench--thinkingmachines--inkling-2-small:peft:262144--null--f60010cf/traces.jsonl",
+      "sha256": "f8a7076af548c0efd7c6ea454e24190f278561e308eeaa70e3a625f42bbdb827",
+      "native_episode_id": "f175cc0341bd43af854d746ed1325825",
+      "trace_id": "de2595046a8940e899cf2fcc6a9e5e53",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 0,
+      "estimated_reported_inference_cost_usd": 0,
+      "errors": [
+        {
+          "type": "ProviderError",
+          "message": "[Errno -3] Temporary failure in name resolution",
+          "status_code": 503
+        }
+      ]
+    },
+    {
+      "manual_interruption": {
+        "time": "2026-11-07T06:51:48.846113+00:00",
+        "family": "output_code_remapping",
+        "seed": 2,
+        "reason": "Provider request stalled with no read deadline and no service activity for over 30 minutes. Interrupted only the per-episode harness process so the parent can retain a native failure trace without scoring.",
+        "signal": "SIGTERM",
+        "harness_pid": 1623109,
+        "native_parent_pid": 1621952,
+        "provider_read_timeout": null,
+        "last_service_activity_utc": "2026-11-07T06:21:43.845844+00:00",
+        "inactive_seconds": 1805.0002934932709,
+        "trajectory_sha256_before_signal": "867cc15ea17ae089188415e51728c88bea620c4714e7c8b6e3a65fc77c8a367e",
+        "score_based_selection": false
+      },
+      "family": "output_code_remapping",
+      "seed": 2,
+      "input_tokens": 4384532,
+      "cached_input_tokens": 4273024,
+      "output_tokens": 21426,
+      "path": "attempts/output_code_remapping-2/traces/iwibench--thinkingmachines--inkling-2-small:peft:262144--null--973d120d/traces.jsonl",
+      "sha256": "d473de72f0538af3b419c93b1e0788c47e9a5881c285fbbf4fa597c1fc0eb254",
+      "native_episode_id": "86ec144273d74cafa33f94b6de6a7472",
+      "trace_id": "c22f0724bc5f430ea4f52a3b9f9d4976",
+      "stop_condition": "harness_error",
+      "successful_provider_calls": 45,
+      "estimated_reported_inference_cost_usd": 0.18306912,
+      "errors": [
+        {
+          "type": "HarnessError",
+          "message": "harness 'null' exited -15: /home/hcltech/.cache/verifiers/runtimes/scripts/7e0a18fafe258bc6bf279850bc3a2024edad966982b2541ff727898c915cbcc6.py:113: DeprecationWarning: The 'initial' parameter is deprecated, use 'multiplier' instead\n  wait=wait_exponential_jitter(initial=0.5, max=30),"
+        }
+      ]
+    },
+    {
+      "manual_interruption": null,
+      "family": "selective_factual_withholding",
+      "seed": 1,
+      "input_tokens": 6906680,
+      "cached_input_tokens": 6648576,
+      "output_tokens": 23576,
+      "path": "attempts/selective_factual_withholding-1/traces/iwibench--thinkingmachines--inkling-2-small:peft:262144--null--fde463c6/traces.jsonl",
+      "sha256": "8961c7c2019d4768b4be4d41f7a591e5dd5263f6116d1659467d9b411efee974",
+      "native_episode_id": "1533bf9ef97849a29d8d58d50f22bb4f",
+      "trace_id": "31d210b7ed164ac2880fe9954d7c6718",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 47,
+      "estimated_reported_inference_cost_usd": 0.30046448,
+      "errors": [
+        {
+          "type": "ProviderError",
+          "message": "upstream stream ended before its terminal event",
+          "status_code": 502
+        }
+      ]
+    },
+    {
+      "manual_interruption": null,
+      "family": "terminology_preference",
+      "seed": 1,
+      "input_tokens": 1187143,
+      "cached_input_tokens": 1100928,
+      "output_tokens": 3881,
+      "path": "attempts/terminology_preference-1/traces/iwibench--thinkingmachines--inkling-2-small:peft:262144--null--ac199f48/traces.jsonl",
+      "sha256": "6d44ee47296b4195c64d8c4c7e7e5fd6abbbef7fedb909b7fc6722590b4d33c6",
+      "native_episode_id": "3bca3dc17b69474098cf0d474b3c0a18",
+      "trace_id": "e8a272ce27d644049e3fabcace2643e3",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 14,
+      "estimated_reported_inference_cost_usd": 0.06277334,
+      "errors": [
+        {
+          "type": "ProviderError",
+          "message": "[Errno -3] Temporary failure in name resolution",
+          "status_code": 503
+        }
+      ]
+    },
+    {
+      "manual_interruption": null,
+      "family": "terminology_preference",
+      "seed": 6,
+      "input_tokens": 752677,
+      "cached_input_tokens": 668416,
+      "output_tokens": 4622,
+      "path": "attempts/terminology_preference-6/traces/iwibench--thinkingmachines--inkling-2-small:peft:262144--null--d68ca615/traces.jsonl",
+      "sha256": "ce16802c4858bb87ee8c73890973b28519bd516bb2159b1fe4dda0fed85c9bb0",
+      "native_episode_id": "2885e59543f14541973284423335114b",
+      "trace_id": "0168226b26464e388e63fb05d13bcf7e",
+      "stop_condition": "provider_error",
+      "successful_provider_calls": 9,
+      "estimated_reported_inference_cost_usd": 0.049952779999999995,
+      "errors": [
+        {
+          "type": "ProviderError",
+          "message": "[Errno -3] Temporary failure in name resolution",
+          "status_code": 503
+        }
+      ]
+    }
+  ]
+}
