@@ -37,6 +37,28 @@
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+ <style>
+
+.overall-figure { margin: 1.5rem 0; padding: 1.25rem; background: #faf8f2; border-radius: 12px; }
+.overall-figure h3 { margin: 0 0 .75rem; text-align: center; font-size: 1.3rem; font-weight: 700; color: #253238; }
+.overall-row { display: grid; grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr) 4rem; gap: .5rem; align-items: center; }
+.overall-row svg { display: block; width: 100%; height: 28px; overflow: visible; }
+.overall-axis { position: relative; height: 26px; color: #586462; font-size: .75rem; }
+.overall-axis span { position: absolute; top: 0; transform: translateX(-50%); }
+.overall-axis span::after { content: ""; display: block; width: 1px; height: 6px; margin: 0 auto; background: #74817a; }
+.overall-name { font-size: .88rem; line-height: 1.2; color: #253238; }
+.overall-value { font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; color: #253238; }
+.overall-zero { stroke: #c5cbc3; stroke-width: 2; }
+.overall-error { stroke: #0072b2; stroke-width: 3; vector-effect: non-scaling-stroke; }
+.overall-point { stroke: #0072b2; stroke-width: 9; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.overall-figure figcaption { margin-top: 1rem; color: #586462; font-size: .9rem; line-height: 1.45; }
+@media (max-width: 600px) {
+  .overall-figure { padding: .8rem; }
+  .overall-row { grid-template-columns: minmax(6.5rem, 8rem) minmax(0, 1fr) 3.3rem; gap: .25rem; }
+  .overall-name, .overall-value { font-size: .72rem; }
+  .overall-axis { font-size: .65rem; }
+}
+</style>
  </head>
  <body>
   <a class="skip-link" href="#main-content">
@@ -280,6 +302,12 @@
        </tbody>
       </table>
      </div>
+     <figure class="overall-figure" aria-labelledby="overall-title overall-caption">
+      <h3 id="overall-title">Overall mean reward</h3>
+      <div id="overall-rewards"></div>
+      <noscript><p>The chart requires JavaScript. The overall results table below contains the mean rewards.</p></noscript>
+      <figcaption id="overall-caption">Points show the overall mean reward across ten equally weighted task families (three episodes each). Error bars show ±1 sample standard deviation of the ten family means: a descriptive measure of variation across families, not a confidence interval or uncertainty from repeated runs. Bars can extend below zero even though individual rewards cannot.</figcaption>
+     </figure>
      <div class="table-container leaderboard-scroll" role="region" aria-label="Editor models and results" tabindex="0">
       <table class="table is-fullwidth leaderboard-table editor-results">
        <caption>Overall results by editor</caption>
@@ -363,6 +391,47 @@
     </div>
    </div>
   </footer>
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+/* Overall means and descriptive variation, derived from the published family means. */
+(() => {
+  const root = d3.select('#overall-rewards');
+  if (root.empty()) return;
+  d3.json('data/family-rewards.json', { cache: 'no-cache' }).then(data => {
+    const families = data.families;
+    if (!Array.isArray(families) || families.length !== 10 || data.episodes_per_family !== 3 ||
+        families.some(f => !f || !f.means || typeof f.means !== 'object')) throw new Error('Invalid data');
+    const editors = Object.keys(families[0].means);
+    if (!editors.length || families.some(f => Object.keys(f.means).length !== editors.length || editors.some(name =>
+      !Object.hasOwn(f.means, name) || !Number.isFinite(f.means[name]) || f.means[name] < 0 || f.means[name] > 1))) throw new Error('Invalid data');
+    const rows = editors.map(name => {
+      const values = families.map(f => f.means[name]);
+      return { name, mean: d3.mean(values), sd: d3.deviation(values) };
+    }).sort((a, b) => d3.descending(a.mean, b.mean));
+    const min = Math.min(-0.2, d3.min(rows, row => row.mean - row.sd));
+    const max = Math.max(1, d3.max(rows, row => row.mean + row.sd));
+    const scale = d3.scaleLinear().domain([min, max]).range([12, 588]);
+    const header = root.append('div').attr('class', 'overall-row overall-axis-row').attr('aria-hidden', 'true');
+    header.append('span');
+    const axis = header.append('div').attr('class', 'overall-axis');
+    d3.range(0, 1.01, 0.2).forEach(value => {
+      axis.append('span').style('left', `${scale(value) / 6}%`).text(value.toFixed(1));
+    });
+    header.append('span');
+    const row = root.selectAll('.overall-data-row').data(rows).join('div').attr('class', 'overall-row overall-data-row')
+      .attr('aria-label', d => `${d.name}: mean reward ${d.mean.toFixed(4)}, plus or minus ${d.sd.toFixed(4)} standard deviation across ten family means`);
+    row.append('span').attr('class', 'overall-name').text(d => d.name);
+    const plot = row.append('svg').attr('viewBox', '0 0 600 28').attr('preserveAspectRatio', 'none').attr('aria-hidden', 'true');
+    plot.append('line').attr('class', 'overall-zero').attr('x1', scale(0)).attr('x2', scale(0)).attr('y1', 0).attr('y2', 28);
+    plot.append('line').attr('class', 'overall-error').attr('x1', d => scale(d.mean - d.sd)).attr('x2', d => scale(d.mean + d.sd)).attr('y1', 14).attr('y2', 14);
+    plot.append('line').attr('class', 'overall-error').attr('x1', d => scale(d.mean - d.sd)).attr('x2', d => scale(d.mean - d.sd)).attr('y1', 8).attr('y2', 20);
+    plot.append('line').attr('class', 'overall-error').attr('x1', d => scale(d.mean + d.sd)).attr('x2', d => scale(d.mean + d.sd)).attr('y1', 8).attr('y2', 20);
+    plot.append('line').attr('class', 'overall-point').attr('x1', d => scale(d.mean)).attr('x2', d => scale(d.mean)).attr('y1', 14).attr('y2', 14);
+    row.append('span').attr('class', 'overall-value').text(d => d.mean.toFixed(4));
+  }).catch(() => root.append('p').attr('role', 'alert').text('Overall reward chart could not be loaded. See the results table below.'));
+})();
+});
+</script>
  </body>
 </html>
 
