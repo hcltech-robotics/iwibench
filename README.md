@@ -6,6 +6,10 @@ IWIBench tests intraweight injection, a technique similar to weight-space progra
 
 Ten task families measure whether an edit produces the requested behaviour while preserving correct answers elsewhere. The [project page](https://hcltech-robotics.github.io/iwibench/) presents the benchmark and results. The package is available on [GitHub](https://github.com/HCLTech-robotics/iwibench) and [Prime Intellect](https://app.primeintellect.ai/dashboard/environments/chrisvoncsefalvay/iwibench). See [results and methods](RESULTS.md) for the reported evaluations.
 
+## Latest evaluation
+
+Inkling 2 Small (high) completed the same 30-episode ten-family protocol with mean reward 0.0000. [Results and caveats](RESULTS.md#gemma-3-4b-it--family-022--inkling-2-small-high), [Prime evaluation](https://app.primeintellect.ai/dashboard/evaluations/azq1eqm0texg9wtk4de66yrs) and [native traces with submitted patches](https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144) are available.
+
 ## Paper
 
 Read the [current paper (PDF)](https://hcltech-robotics.github.io/iwibench/assets/iwibench.pdf). The [LaTeX source and assets](paper/) are exported from the current Overleaf project. See [publication and local compilation instructions](paper/PUBLICATION.md).

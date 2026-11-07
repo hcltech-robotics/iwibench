@@ -21,6 +21,7 @@ Target success requires the requested behaviour and correct content. Control ret
 | GLM 5.3 | `glm-5.3`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
 | DeepSeek V4.1 Flash | `deepseek-v4.1-flash-1017`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
 | Nemotron 3 Ultra | `nemotron-3-ultra-550b-a55b`, temperature 0, provider-default reasoning, Chat Completions via CheaperInference |
+| Inkling 2 Small (high) | `thinkingmachines/Inkling-2-Small:peft:262144`, temperature 0, explicit provider-default `high` (0.9), Chat Completions via Tinker |
 | Task definitions | Family `0.2.2` |
 | Grader | `0.2.3` |
 
@@ -324,7 +325,42 @@ Target success requires the requested behaviour and correct content. Control ret
 
 [Per-episode results](results/ten-families-v022-nemotron/gemma-3-4b-it-prime.csv) use the same selected parameter sets, probe seeds and test seeds as Terra and Sol.
 
-5.6-terra (low) achieved a mean reward of 0.1111 on answer-length control. Structured-response reward remains zero across all ten evaluated configurations.
+5.6-terra (low) achieved a mean reward of 0.1111 on answer-length control. Structured-response reward remains zero across all eleven evaluated configurations.
+
+## Gemma 3 4B IT · family 0.2.2 · Inkling 2 Small (high)
+
+| Family | Episodes | Base target success | Edited target success | Controls retained | Mean reward |
+|---|---:|---:|---:|---:|---:|
+| Alias acquisition | 3 | 3/9 | 3/9 | 211/211 | 0.0000 |
+| Output-code remapping | 3 | 0/112 | 0/112 | 249/249 | 0.0000 |
+| Lexical inhibition | 3 | 1/6 | 1/6 | 198/198 | 0.0000 |
+| Terminology preference | 3 | 0/4 | 0/4 | 203/203 | 0.0000 |
+| Default response language | 3 | 0/9 | 0/9 | 204/204 | 0.0000 |
+| Structured response default | 3 | 0/192 | 0/192 | 288/288 | 0.0000 |
+| Answer-length control | 3 | 2/9 | 2/9 | 195/195 | 0.0000 |
+| Local factual update | 3 | 0/9 | 0/9 | 202/202 | 0.0000 |
+| Selective factual withholding | 3 | 0/9 | 0/9 | 210/210 | 0.0000 |
+| Resistance to false suggestions | 3 | 98/192 | 98/192 | 328/328 | 0.0000 |
+
+| Summary | Value |
+|---|---:|
+| Episodes | 30 |
+| Macro-average reward | 0.0000 |
+| Base target success | 104/551 |
+| Edited target success | 104/551 |
+| Controls retained | 2,288/2,288 |
+| Editor API calls | 178 |
+| Admitted tool calls | 147 |
+| Generation calls | 48 |
+| Inspection calls | 43 |
+| Target forward tokens | 15,449 |
+| Zero-change patches | 28 |
+| Output-limit finishes | 30 |
+| Estimated editor inference cost (USD) | $1.3942 |
+
+The editor used the regular supported Tinker route `thinkingmachines/Inkling-2-Small:peft:262144`, temperature 0 and explicit `high` reasoning, the provider default (0.9). The same frozen 30 tasks, target revision, four tools and 4,096-token turn cap were preserved. All 30 episodes ended on an output-limit finish; 28 submitted a valid zero-change patch. Output-limit finishes and zero-change submissions are retained in the scores, not retried or replaced. All 30 native episodes completed without execution errors. Cost is estimated from reported usage at $0.30/M fresh input, $0.03/M cached input and $1/M output, excluding a separate $0.0001928 transport check and local hardware costs.
+
+[Per-episode results](results/ten-families-v022-inkling-2-small/gemma-3-4b-it-prime.csv) · [Protocol metadata](results/ten-families-v022-inkling-2-small/protocol.json) · [Prime evaluation](https://app.primeintellect.ai/dashboard/evaluations/azq1eqm0texg9wtk4de66yrs) · [Full native traces and submitted patches](https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144).
 
 ## Token efficiency
 
@@ -344,8 +380,9 @@ Efficiency is the sum of episode rewards divided by editor input and output toke
 | GLM 5.3 | 8,311,435 | 186,578 | 8,498,013 | 283,267.1 | 0.000048 | 5,013 |
 | DeepSeek V4.1 Flash | 138,289,286 | 569,110 | 138,858,396 | 4,628,613.2 | 0.000010 | 31,458 |
 | Nemotron 3 Ultra | 13,502,778 | 59,040 | 13,561,818 | 452,060.6 | 0.000121 | 1,910 |
+| Inkling 2 Small (high) | 15,379,355 | 272,360 | 15,651,715 | 521,723.8 | 0.000000 | 15,449 |
 
-[Token measurements](results/token-efficiency.json) include API calls and the recorded cached-input and reasoning-token breakdowns. The six original runs and both 5.6 runs include per-episode token counts. The medium and high 6.1-sol configurations include completed-episode aggregates; retries are excluded. Cached-input breakdowns are null where not available for the completed-only subset.
+[Token measurements](results/token-efficiency.json) include API calls and the recorded cached-input and reasoning-token breakdowns. The six original runs, both 5.6 runs and Inkling 2 Small include per-episode token counts. The medium and high 6.1-sol configurations include completed-episode aggregates; retries are excluded. Cached-input breakdowns are null where not available for the completed-only subset.
 
 ## Gemma 3 1B IT · family 0.1.3 · 6.1-terra
 

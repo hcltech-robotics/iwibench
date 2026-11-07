@@ -1,0 +1,112 @@
+{
+  "editor_model": "thinkingmachines/Inkling-2-Small:peft:262144",
+  "editor_label": "Inkling 2 Small (high)",
+  "editor_api": "chat_completions",
+  "provider": "Thinking Machines / Tinker",
+  "editor_base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1",
+  "reasoning_effort": "high",
+  "provider_reasoning_effort": 0.9,
+  "reasoning_setting": "Explicit provider default",
+  "max_output_tokens": 4096,
+  "temperature": 0,
+  "max_editor_turns": 64,
+  "target_model": "google/gemma-3-4b-it",
+  "checkpoint_revision": "093f9f388b31de276ce2de164bdc2081324b9767",
+  "dtype": "bfloat16",
+  "split": "development",
+  "family_version": "0.2.2",
+  "grading_version": "0.2.3",
+  "verifiers_revision": "5dad16d40e2d025672fdb7aa75b6540c0053e4e0",
+  "selection": {
+    "alias_acquisition": [
+      1,
+      3,
+      4
+    ],
+    "output_code_remapping": [
+      0,
+      2,
+      3
+    ],
+    "lexical_inhibition": [
+      0,
+      1,
+      2
+    ],
+    "terminology_preference": [
+      1,
+      6,
+      9
+    ],
+    "default_response_language": [
+      1,
+      3,
+      5
+    ],
+    "structured_response_default": [
+      0,
+      3,
+      6
+    ],
+    "answer_length_control": [
+      1,
+      2,
+      5
+    ],
+    "factual_update": [
+      0,
+      2,
+      3
+    ],
+    "selective_factual_withholding": [
+      0,
+      1,
+      2
+    ],
+    "resistance_to_false_suggestions": [
+      2,
+      3,
+      5
+    ]
+  },
+  "source_commit": "ae137d606118d61ee49832aff21be6e2c21cf0bd",
+  "historical_environment_version_id": "k423p3b1tsg2aqhgnmdtm9qr",
+  "num_examples": 30,
+  "rollouts_per_example": 1,
+  "episodes_per_family": 3,
+  "calibration_sha256": "015b74a2f28efc77c84d9321e85d501325a950571574fc0435fc1c3dbc2e5bcd",
+  "tool_schema_sha256": "016fb6628410b9497ea42fe89fa1b3cfacfa877fdad09ab3d61f0e395f290538",
+  "available_tools": [
+    "inspect_target",
+    "read_weights",
+    "run_target",
+    "write_weights"
+  ],
+  "limits": {
+    "tool_calls": 128,
+    "run_calls": 8,
+    "run_sequences": 64,
+    "inspect_calls": 4,
+    "inspect_sequences": 16,
+    "forward_tokens": 262144,
+    "input_tokens": 2048,
+    "output_tokens": 256,
+    "inspection_positions": 16,
+    "inspection_scalars": 262144,
+    "returned_scalars": 4096,
+    "weight_scalars": 1048576,
+    "tensor_elements": 1048576,
+    "expression_nodes": 32,
+    "expression_depth": 8
+  },
+  "workers": 4,
+  "completed_episodes": 30,
+  "accounting": "Completed-episode scores and usage. Transport preflight usage is recorded separately.",
+  "pricing_usd_per_million": {
+    "input": 0.3,
+    "cached_input": 0.03,
+    "output": 1.0
+  },
+  "pricing_source": "https://tinker-docs.thinkingmachines.ai/tinker/models.json",
+  "model_quantization": "Regular supported Tinker route; unavailable NVFP4 serverless route was not used."
+}

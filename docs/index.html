@@ -295,10 +295,12 @@
         <tr><th scope="row">GLM 5.3<br/><code>glm-5.3</code></th><td>Provider default</td><td>0</td><td>104/551 → 85/551</td><td>2,288/2,288</td><td>0.0135</td></tr>
         <tr><th scope="row">DeepSeek V4.1 Flash<br/><code>deepseek-v4.1-flash-1017</code></th><td>Provider default</td><td>0</td><td>104/551 → 115/551</td><td>2,060/2,288</td><td>0.0464</td></tr>
         <tr><th scope="row">Nemotron 3 Ultra<br/><code>nemotron-3-ultra-550b-a55b</code></th><td>Provider default</td><td>0</td><td>104/551 → 107/551</td><td>2,141/2,288</td><td>0.0548</td></tr>
+        <tr><th scope="row">Inkling 2 Small<br/><code>thinkingmachines/Inkling-2-Small:peft:262144</code></th><td>High (default)</td><td>0</td><td>104/551 → 104/551</td><td>2,288/2,288</td><td>0.0000</td></tr>
        </tbody>
       </table>
      </div>
-     <p class="table-note">5.6-terra (low) achieved a mean reward of 0.1111 on answer-length control. Structured-response reward remains zero across all ten evaluated configurations.</p>
+     <p class="table-note">5.6-terra (low) achieved a mean reward of 0.1111 on answer-length control. Structured-response reward remains zero across all eleven evaluated configurations.</p>
+     <p class="table-note">Inkling 2 Small uses explicit provider-default high reasoning and the same 4,096-token turn cap. All 30 episodes ended at the output limit; 28 submitted a zero-change patch. Those outcomes are retained. <a href="https://app.primeintellect.ai/dashboard/evaluations/azq1eqm0texg9wtk4de66yrs">Prime evaluation</a> · <a href="https://huggingface.co/datasets/hcltech-robotics/iwibench/tree/main/rollouts/by-model/thinkingmachines--Inkling-2-Small--peft-262144">Native traces and patches</a> · <a href="https://github.com/hcltech-robotics/iwibench/blob/main/results/ten-families-v022-inkling-2-small/gemma-3-4b-it-prime.csv">Per-episode results</a></p>
      <figure class="radar-figure" aria-labelledby="radar-caption">
       <div id="family-radar"></div>
       <noscript><p>The interactive plot requires JavaScript. <a href="https://github.com/HCLTech-robotics/iwibench/blob/main/RESULTS.md">Read the per-family results.</a></p></noscript>
@@ -319,6 +321,7 @@
         <tr><th scope="row">GLM 5.3</th><td>8,311,435</td><td>186,578</td><td>8,498,013</td><td>0.000048</td><td>5,013</td></tr>
         <tr><th scope="row">DeepSeek V4.1 Flash</th><td>138,289,286</td><td>569,110</td><td>138,858,396</td><td>0.000010</td><td>31,458</td></tr>
         <tr><th scope="row">Nemotron 3 Ultra</th><td>13,502,778</td><td>59,040</td><td>13,561,818</td><td>0.000121</td><td>1,910</td></tr>
+        <tr><th scope="row">Inkling 2 Small (high)</th><td>15,379,355</td><td>272,360</td><td>15,651,715</td><td>0.000000</td><td>15,449</td></tr>
        </tbody>
       </table>
      </div>
