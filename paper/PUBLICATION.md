@@ -1,4 +1,6 @@
-# Current paper snapshot
+# Published paper and source snapshot
+
+The paper is available as [arXiv:2611.08647](https://arxiv.org/abs/2611.08647), submitted on 5 November 2026. Use the arXiv record for the current paper and citation, or [download its PDF](https://arxiv.org/pdf/2611.08647). The files below preserve the earlier Overleaf export.
 
 This directory contains the source and assets exported from the live Overleaf project on 5 November 2026 (UTC). All exported source and asset files are preserved byte-for-byte. The stale `main.pdf` bundled in the source export has been replaced by the current pre-rendered 18-page PDF downloaded separately from Overleaf. The project site serves an identical copy at `docs/assets/iwibench.pdf`.
 

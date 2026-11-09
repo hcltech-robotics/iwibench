@@ -12,7 +12,7 @@ Inkling 2 Small (low) was evaluated on the same 30-episode ten-family protocol w
 
 ## Paper
 
-Read the [current paper (PDF)](https://hcltech-robotics.github.io/iwibench/assets/iwibench.pdf). The [LaTeX source and assets](paper/) are exported from the current Overleaf project. See [publication and local compilation instructions](paper/PUBLICATION.md).
+Read the [paper on arXiv](https://arxiv.org/abs/2611.08647) or [download the PDF](https://arxiv.org/pdf/2611.08647). The [LaTeX source and assets](paper/) are exported from the current Overleaf project. See [publication and local compilation instructions](paper/PUBLICATION.md).
 
 ## Task families
 
