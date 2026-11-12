@@ -3,28 +3,28 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <meta content="IWIBench evaluates intraweight injection, a technique similar to weight-space programming, through target behaviour and control retention." name="description"/>
+  <meta content="IWIBench benchmarks weight space programming across ten task families, measuring whether model weight edits change behaviour while preserving correct answers." name="description"/>
   <meta content="Chris von Csefalvay, Tamás Foldi, Pranav Doma and Achyuthan Unni Krishnan" name="author"/>
   <link href="https://hcltech-robotics.github.io/iwibench/" rel="canonical"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:title" content="IWIBench: Intraweight injection benchmark"/>
-  <meta property="og:description" content="IWIBench evaluates intraweight injection, a technique similar to weight-space programming, through target behaviour and control retention."/>
+  <meta property="og:title" content="IWIBench: The Benchmark for Weight Space Programming"/>
+  <meta property="og:description" content="IWIBench benchmarks weight space programming across ten task families, measuring whether model weight edits change behaviour while preserving correct answers."/>
   <meta property="og:url" content="https://hcltech-robotics.github.io/iwibench/"/>
   <meta property="og:image" content="https://hcltech-robotics.github.io/iwibench/assets/social-card.jpg"/>
   <meta property="og:image:type" content="image/jpeg"/>
   <meta property="og:image:width" content="1774"/>
   <meta property="og:image:height" content="887"/>
-  <meta property="og:image:alt" content="IWIBench: Intraweight injection benchmark. Convincing models that saffron is cuboidal, illustrated with saffron threads and an orange cube."/>
+  <meta property="og:image:alt" content="IWIBench social card with saffron threads connected to an orange cube, illustrating a weight edit that assigns a new meaning to saffron."/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="IWIBench: Intraweight injection benchmark"/>
-  <meta name="twitter:description" content="IWIBench evaluates intraweight injection, a technique similar to weight-space programming, through target behaviour and control retention."/>
+  <meta name="twitter:title" content="IWIBench: The Benchmark for Weight Space Programming"/>
+  <meta name="twitter:description" content="IWIBench benchmarks weight space programming across ten task families, measuring whether model weight edits change behaviour while preserving correct answers."/>
   <meta name="twitter:image" content="https://hcltech-robotics.github.io/iwibench/assets/social-card.jpg"/>
-  <meta name="twitter:image:alt" content="IWIBench: Intraweight injection benchmark. Convincing models that saffron is cuboidal, illustrated with saffron threads and an orange cube."/>
+  <meta name="twitter:image:alt" content="IWIBench social card with saffron threads connected to an orange cube, illustrating a weight edit that assigns a new meaning to saffron."/>
   <script type="application/ld+json">
-   {"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"IWIBench","description":"A benchmark for intraweight injection, evaluating target behaviour and control retention after weight edits.","url":"https://hcltech-robotics.github.io/iwibench/","codeRepository":"https://github.com/HCLTech-robotics/iwibench","author":[{"@type":"Person","name":"Chris von Csefalvay"},{"@type":"Person","name":"Tamás Foldi"},{"@type":"Person","name":"Pranav Doma"},{"@type":"Person","name":"Achyuthan Unni Krishnan"}]}
+   {"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"IWIBench","alternateName":"The Benchmark for Weight Space Programming","description":"IWIBench benchmarks weight space programming across ten task families, measuring whether model weight edits change behaviour while preserving correct answers.","keywords":["weight space programming","intraweight injection","model editing","LLM benchmark"],"url":"https://hcltech-robotics.github.io/iwibench/","codeRepository":"https://github.com/HCLTech-robotics/iwibench","author":[{"@type":"Person","name":"Chris von Csefalvay"},{"@type":"Person","name":"Tamás Foldi"},{"@type":"Person","name":"Pranav Doma"},{"@type":"Person","name":"Achyuthan Unni Krishnan"}]}
   </script>
   <title>
-   IWIBench: Intraweight injection benchmark
+   IWIBench: The Benchmark for Weight Space Programming
   </title>
   <link href="data:," rel="icon"/>
   <link href="static/css/bulma.min.css" rel="stylesheet"/>
@@ -70,12 +70,12 @@
      <div class="container is-max-desktop">
       <div class="columns is-centered">
        <div class="column has-text-centered">
-        <h1 class="title is-1 publication-title">
+        <p class="title is-1 publication-title">
          IWIBench
+        </p>
+        <h1 class="subtitle is-3 publication-subtitle">
+         The Benchmark for Weight Space Programming
         </h1>
-        <h2 class="subtitle is-3 publication-subtitle">
-         A benchmark for intraweight injection
-        </h2>
         <div class="is-size-5 publication-authors">
          <span class="author-block">
           Chris von Csefalvay<sup>1</sup>,
@@ -168,8 +168,8 @@
    </section>
    <section class="section hero is-light" id="abstract">
     <div class="container is-max-desktop"><div class="columns is-centered"><div class="column is-four-fifths">
-     <h2 class="title is-3 has-text-centered">What IWIBench measures</h2>
-     <div class="content has-text-left"><p>IWIBench asks whether one model can change another model’s behaviour by editing its weights. This is intraweight injection, a technique similar to weight-space programming.<sup><a id="cite-takehi" href="#ref-takehi" role="doc-noteref" aria-label="Reference 1">1</a></sup> The editor submits a weight patch. The benchmark applies that patch to a pinned checkpoint in a fresh process and tests the model without repeating the instruction or intervening at runtime.</p>
+     <h2 class="title is-3 has-text-centered">How IWIBench evaluates weight space programming</h2>
+     <div class="content has-text-left"><p>IWIBench benchmarks weight space programming: using an editor model to inspect and change another model’s weights to alter its behaviour.<sup><a id="cite-takehi" href="#ref-takehi" role="doc-noteref" aria-label="Reference 1">1</a></sup> It evaluates intraweight injection across ten task families. The editor submits a weight patch. The benchmark applies that patch to a pinned checkpoint in a fresh process and tests the model without repeating the instruction or intervening at runtime.</p>
      <p>Each task checks the requested behaviour and asks what else changed. Gemma 3 4B IT is the main target. Gemma 3 1B IT supports smaller experiments.</p></div>
     </div></div></div>
    </section>
